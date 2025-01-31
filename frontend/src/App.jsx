@@ -11,6 +11,7 @@ function App() {
     .then((response) => setUsers(response.data))
     .catch((err) => console.log(err))
   },[])
+  console.log(Users);
   return (
     <div>
       <h1>Users List :</h1>
