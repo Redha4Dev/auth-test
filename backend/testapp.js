@@ -27,6 +27,7 @@ const users = [{
 
 
 app.get('/',(req,res) =>{
+    //sending the data
     res.status(200).json({
         message : 'test',
         users
