@@ -1,22 +1,25 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
+const PORT = 5003;
 
-app.use(cors());
-//app.use(express.json());
+// Middleware
+app.use(cors()); // Enable CORS for frontend requests
+app.use(express.json()); // Parse JSON request bodies
 
+// Sample Data
 const users = [
-    {id : 1, name : "Ali", age : 25},
-    {id : 2, name : "Mohamed", age : 20}
+  { id: 1, name: "Alice", email: "alice@example.com" },
+  { id: 2, name: "Bob", email: "bob@example.com" },
 ];
 
-app.get('/users',(req, res) => {
-    res.json(users);
+// API Route
+app.get("/api/users", (req, res) => {
+  res.json(users);
 });
 
-const port = 5000;
- 
-app.listen(port, () => {
-    console.log(`listen form port ${port}`);
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
