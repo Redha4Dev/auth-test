@@ -1,6 +1,6 @@
 const express = require('express');
 // const mongoose = require('mongoose');
-const cors = require('cors');
+z
 
 const app = express();
 console.log('test2');
