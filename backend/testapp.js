@@ -1,6 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 // const mongoose = require('mongoose');
-z
+
 
 const app = express();
 console.log('test2');
@@ -31,15 +32,16 @@ const users = [{
 
 
 app.get('/',(req,res) =>{
-    //sending the data
+    const {name,age,id} = req.body
+    // sending the data
     res.status(200).json({
         message : 'test',
         users
     })
 });
-// const port = 5000
-// app.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
+const port = 5000
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
 
 module.exports = app;
