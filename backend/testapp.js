@@ -2,10 +2,9 @@ const express = require('express');
 const cors = require('cors');
 // const mongoose = require('mongoose');
 
-
 const app = express();
 console.log('test2');
-
+const cors = require("cors");
 
 app.use(cors());
 console.log('test3');
@@ -38,10 +37,12 @@ app.get('/',(req,res) =>{
         message : 'test',
         users
     })
-});
-const port = 5000
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+})
+
+ const port = 5000
+ app.listen(port, () => {
+         console.log(`Server is running on port ${port}`);
+ });
+
 
 module.exports = app;

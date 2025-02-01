@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [dataF, setDataF] = useState({name: '' , email: ''});
+  const [response, setResponse] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost:5003/api/users")
-      .then((response) => response.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  const handleChange = (e) => {
+    setDataF({...data, [e.target.name] : e.target.value});
+  }
+  const handleSubmit = async (e) => {
+    e.prevnetDefualt();
 
+    try {
+      const res = await axios.post("https://localhost:5000/", dataF, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+    } catch(err) {
+      console.log(err);
+    }
+  } 
+
+  console.log(dataF);
   return (
     <div>
-      <h1>User List</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.name} - {user.email}
-          </li>
-        ))}
-      </ul>
+      <form onSubmit={handleSubmit}>
+        <h1>Sending Data :</h1>
+        <input type="text" name="name" value={dataF.name} onChange={handleChange} />
+        <input type="email" name="email" value={dataF.email} onChange={handleChange} />
+        <button type="submit">submit</button>
+      </form>
     </div>
   );
 }
