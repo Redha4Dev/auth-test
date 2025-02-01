@@ -7,6 +7,8 @@ console.log('test2');
 
 
 app.use(cors());
+console.log('test3');
+
 
 const users = [{
     name: 'John Doe',
