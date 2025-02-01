@@ -3,7 +3,7 @@ const express = require('express');
 const app = require('./testapp')
 
 //connect to mongodb
- mongoose.connect('mongodb://localhost:27017/childre_Nuersery')
+ mongoose.connect('mongodb://localhost:27017/Children_Gardery')
 .then(() => {
     console.log('Connected to database!');
 })
