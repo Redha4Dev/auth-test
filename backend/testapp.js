@@ -1,10 +1,9 @@
 const express = require('express');
 // const mongoose = require('mongoose');
-z
 
 const app = express();
 console.log('test2');
-
+const cors = require("cors");
 
 app.use(cors());
 console.log('test3');
@@ -37,9 +36,9 @@ app.get('/',(req,res) =>{
         users
     })
 });
-// const port = 5000
-// app.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
+ const port = 5000
+ app.listen(port, () => {
+         console.log(`Server is running on port ${port}`);
+ });
 
 module.exports = app;
