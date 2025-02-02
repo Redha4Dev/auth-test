@@ -1,10 +1,10 @@
 const express = require('express');
 // const mongoose = require('mongoose');
-
+const cors = require('cors')
 const app = express();
 console.log('test2');
 
-//app.use(cors());
+app.use(cors());
 app.use(express.json());
 console.log('test3');
 
