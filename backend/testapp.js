@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 // const mongoose = require('mongoose');
 
 const app = express();
@@ -31,7 +30,8 @@ const users = [{
 
 
 app.get('/',(req,res) =>{
-    const {name,age,id} = req.body
+    console.log('sending data ...');
+    
     // sending the data
     res.status(200).json({
         message : 'test',
@@ -39,7 +39,7 @@ app.get('/',(req,res) =>{
     })
 })
 //post data to the backend
-app.post('/', (rea,res) =>{
+app.post('/', (req,res) =>{
     //getting the data from the user
     const data = req.body
     //logging the data
