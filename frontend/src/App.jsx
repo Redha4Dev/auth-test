@@ -7,7 +7,7 @@ function App() {
   const [response, setResponse] = useState(null);
 
   const handleChange = (e) => {
-    setDataF({...data, [e.target.name] : e.target.value});
+    setDataF({...dataF, [e.target.name] : e.target.value});
   }
   const handleSubmit = async (e) => {
     e.prevnetDefualt();
