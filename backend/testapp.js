@@ -39,6 +39,21 @@ app.get('/',(req,res) =>{
     })
 })
 
+//post soemthing to the backend
+
+app.post('/', (req,res) =>{
+    // getting the data
+    const data = req.body;
+    // logging the data
+    console.log(data);
+    // sending the data
+    res.status(200).json({
+        message : 'Data received',
+        data
+    })
+    
+})
+
  const port = 5000
  app.listen(port, () => {
          console.log(`Server is running on port ${port}`);
