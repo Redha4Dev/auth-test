@@ -3,9 +3,9 @@ const express = require('express');
 
 const app = express();
 console.log('test2');
-const cors = require("cors");
 
 app.use(cors());
+app.use(express.json());
 console.log('test3');
 
 
@@ -49,6 +49,21 @@ app.post('/', (req,res) =>{
         message : 'test',
         data
     })
+})
+
+//post soemthing to the backend
+
+app.post('/', (req,res) =>{
+    // getting the data
+    const data = req.body;
+    // logging the data
+    console.log(data);
+    // sending the data
+    res.status(200).json({
+        message : 'Data received',
+        data
+    })
+    
 })
 
  const port = 5000
