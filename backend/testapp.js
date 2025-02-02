@@ -38,6 +38,18 @@ app.get('/',(req,res) =>{
         users
     })
 })
+//post data to the backend
+app.post('/', (rea,res) =>{
+    //getting the data from the user
+    const data = req.body
+    //logging the data
+    console.log(data);
+    //sending the data back to the user
+    res.status(200).json({
+        message : 'test',
+        data
+    })
+})
 
  const port = 5000
  app.listen(port, () => {
