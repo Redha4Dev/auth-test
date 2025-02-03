@@ -19,6 +19,7 @@ function App() {
       console.log('Data sent:', res.data);
     } catch (err) {
       console.error('Error sending data:', err);
+      //thid just commment 
     }
   };
 
