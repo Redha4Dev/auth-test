@@ -7,9 +7,22 @@ const app = require('./testapp')
 .then(() => {
     console.log('Connected to database!');
 })
+.catch(() => {
+    console.log('Connection failed!');
+});
+const userschema = new mongoose.Schema({
+    name: String,
+    // age: Number,
+    // id: Number
+    email: String,
+});
+
+const user = mongoose.model('Users_information', userschema);
+
+module.exports = user;
 
 //start the server
-const port = 8000
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// const port = 8000
+// app.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });

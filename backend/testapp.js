@@ -1,12 +1,13 @@
 const express = require('express');
-// const mongoose = require('mongoose');
+const cors = require('cors');
+const Users_information = require('./testserver');
+
 
 const app = express();
-console.log('test2');
+
 
 app.use(cors());
 app.use(express.json());
-console.log('test3');
 
 
 const users = [{
@@ -39,27 +40,34 @@ app.get('/',(req,res) =>{
     })
 })
 //post data to the backend
-app.post('/', (req,res) =>{
-    //getting the data from the user
-    const data = req.body
-    //logging the data
-    console.log(data);
-    //sending the data back to the user
-    res.status(200).json({
-        message : 'test',
-        data
-    })
-})
+// app.post('/', (req,res) =>{
+//     //getting the data from the user
+//     const data = req.body
+//     //logging the data
+//     console.log(data);
+//     //sending the data back to the user
+//     res.status(200).json({
+//         message : 'test',
+//         data
+//     })
+// })
 
 //post soemthing to the backend
 
-app.post('/', (req,res) =>{
+app.post('/',  async(req,res) =>{
     // getting the data
     const data = req.body;
+
+
+    const user =  await (await Users_information.create(req.body))
+    user.save();
+    
+
+
     // logging the data
-    console.log(data);
+    console.log(user);
     // sending the data
-    res.status(200).json({
+    res.status(201).json({
         message : 'Data received',
         data
     })
