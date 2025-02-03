@@ -11,24 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-<<<<<<< HEAD
     "cors": "^2.8.5",
-=======
->>>>>>> a3d5716e285e6826b7f13f7777a88bd754b046aa
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.6",
     "morgan": "^1.10.0",
     "nodemailer": "^6.10.0",
-<<<<<<< HEAD
     "nodemon": "^3.1.9",
     "validator": "^13.12.0"
-=======
-    "validator": "^13.12.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.9"
->>>>>>> a3d5716e285e6826b7f13f7777a88bd754b046aa
   }
 }

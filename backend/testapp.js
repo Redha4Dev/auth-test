@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const Users_information = require('./testserver');
+const Users = require('./testserver');
+const user = require('./testserver');
+const { mongo, default: mongoose } = require('mongoose');
 
 
 const app = express();
@@ -40,39 +42,62 @@ app.get('/',(req,res) =>{
     })
 })
 //post data to the backend
-// app.post('/', (req,res) =>{
-//     //getting the data from the user
-//     const data = req.body
-//     //logging the data
-//     console.log(data);
-//     //sending the data back to the user
-//     res.status(200).json({
-//         message : 'test',
-//         data
-//     })
-// })
+app.post('/', (req,res) =>{
+    
+    new Users({ 
+        name: req.body.name,
+        email: req.body.email
+    }).save().then((data) => {
+        console.log('Data saved');
+        console.log( mongoose.connection.db.databaseName);
+        
+        res.status(200).json({
+            message : 'Data saved',
+            data
+        })
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({
+            message : 'An error occured',
+            error
+        })
+    })
+})
 
 //post soemthing to the backend
 
-app.post('/',  async(req,res) =>{
-    // getting the data
-    const data = req.body;
-
-
-    const user =  await (await Users_information.create(req.body))
-    user.save();
+// app.post('/',  async(req,res) =>{
+//     try {
+//     // getting the data
+//     const data = req.body;
+//     console.log(data);
     
 
-
-    // logging the data
-    console.log(user);
-    // sending the data
-    res.status(201).json({
-        message : 'Data received',
-        data
-    })
+//     await Users.create(data)
     
-})
+    
+//     console.log('user info saved');
+    
+
+//     // logging the data
+//     console.log(user);
+//     // sending the data
+//     res.status(201).json({
+//         message : 'Data received',
+//         data
+//     })
+
+        
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({
+//             message : 'An error occured',
+//             error : error
+//         })
+        
+//     }
+    
+// })
 
  const port = 5000
  app.listen(port, () => {

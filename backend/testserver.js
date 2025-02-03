@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const app = require('./testapp')
+const bcrypt = require('bcrypt');
 
 //connect to mongodb
- mongoose.connect('mongodb://localhost:27017/Children_Gardery')
+ mongoose.connect('mongodb://localhost:27017/Children',)
 .then(() => {
     console.log('Connected to database!');
 })
@@ -16,8 +17,16 @@ const userschema = new mongoose.Schema({
     // id: Number
     email: String,
 });
+userschema.pre('save', async function (next){
+    //only run if password was modified
+    //hash the password with the coast 12
+    this.name = await bcrypt.hash(this.name, 12 )
 
-const user = mongoose.model('Users_information', userschema);
+    //delete the password confirm field
+    next()
+})
+
+const user = mongoose.model('User', userschema);
 
 module.exports = user;
 
