@@ -1,33 +1,32 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import React from 'react'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import ProtectedRouters from "./utils/ProtectedRouters";
 import Home from "./Pages/Home";
-import Porfiles from "./Pages/Porfiles";
+import Profiles from "./Pages/Profiles";
 
 function App() {
   const [dataF, setDataF] = useState({ name: '', email: '' });
   const [response, setResponse] = useState(null);
 
-  const handleChange = (e) => {
-    setDataF({ ...dataF, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setDataF({ ...dataF, [e.target.name]: e.target.value });
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent page reload
-    try {
-      const res = await axios.post("http://localhost:5000/", dataF, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      setResponse(res.data);  // Save response
-      console.log('Data sent:', res.data);
-    } catch (err) {
-      console.error('Error sending data:', err);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();  // Prevent page reload
+  //   try {
+  //     const res = await axios.post("http://localhost:5000/", dataF, {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     });
+  //     setResponse(res.data);  // Save response
+  //     console.log('Data sent:', res.data);
+  //   } catch (err) {
+  //     console.error('Error sending data:', err);
       
-    }
-  };
+  //   }
+  // };
 
   return (
     // <div className="bg-white h-screen p-20 w-screen">
@@ -51,7 +50,7 @@ function App() {
           <Route element={<Login/>} path="/Login"/>
           <Route element={<ProtectedRouters/>} >
             <Route element={<Home/>} path="/"/>
-            <Route element={<Porfiles/>} path="/Profiles"/>
+            <Route element={<Profiles/>} path="/Profiles"/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "node",
+    "target": "ES6",
+    "module": "ESNext",
+    "allowJs": true,
+    "checkJs": false,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true ,
+    "esModuleInterop": true
+  },
+  "include": ["src" , "vite.config.ts"],
+  "exclude": ["node_modules"]
+}
