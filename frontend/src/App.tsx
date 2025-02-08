@@ -36,7 +36,7 @@ function App() {
     //     <input className="bg-white border-black border-[1px] rounded-xl text-xl outline-none text-black px-4" type="text" name="name" value={dataF.name} onChange={handleChange} />
     //     <label className="font-xl text-black font-medium">Email :</label>
     //     <input className="bg-white border-black border-[1px] rounded-xl text-xl outline-none text-black px-4" type="email" name="email" value={dataF.email} onChange={handleChange} />
-    //     <button className="ouline-none" type="submit">Submit</button>
+    //     <button className="outline-none" type="submit">Submit</button>
     //   </form>
 
     //   {response && (
