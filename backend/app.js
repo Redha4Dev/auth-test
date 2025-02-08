@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const Users = require('./server');
 const user = require('./server');
-const registre = require('../routes/registration');
+const registre = require('../routes/adminroutes');
 const { mongo, default: mongoose } = require('mongoose');
 
 
