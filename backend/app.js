@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const Users = require('./server');
 const user = require('./server');
-const registre = require('../routes/adminroutes');
-const { mongo, default: mongoose } = require('mongoose');
+const admin = require('./Routes/adminroutes');
 
 
 const app = express();
@@ -37,6 +36,6 @@ app.get('/',(req,res) =>{
     
 })
 //post data to the backend
-// app.use('/api/v1/SignUP', registre);
+ app.use('/', admin);
 // app.use('/api/v1/LogIn', registre);
-const port = 8000
+module.exports = app; 
