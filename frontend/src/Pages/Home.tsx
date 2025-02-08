@@ -1,8 +1,11 @@
+import { Button } from '@/components/ui/button'
 import React from 'react'
 
 function Home() {
   return (
-    <div>Home</div>
+    <div>
+      <Button>Home</Button>
+    </div>
   )
 }
 
