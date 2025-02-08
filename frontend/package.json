@@ -10,13 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "axios": "^1.7.9",
-=======
-    "@tailwindcss/vite": "^4.0.3",
-    "axios": "^1.7.9",
-    "nodemon": "^3.1.9",
->>>>>>> 51d708fa363856f04c74cd4e5a1dac09b9c17e4f
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.5",
