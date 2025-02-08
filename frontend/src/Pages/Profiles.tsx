@@ -7,7 +7,7 @@ function Profiles() {
   React.useEffect(() => {
     const fetchKids = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/Admin/manage-kids");
+        const response = await axios.get("http://localhost:5000/Admin/manage-kids");
         console.log(response.data);
         setKids(response.data);
       } catch (err) {
