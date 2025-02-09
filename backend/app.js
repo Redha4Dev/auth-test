@@ -36,5 +36,11 @@ app.get('/',(req,res) =>{
     
 })
 //post data to the backend
+<<<<<<< HEAD
 app.use('/', admin);
 // app.use('/api/v1/LogIn', registre);
+=======
+ app.use('/', admin);
+// app.use('/api/v1/LogIn', registre);
+module.exports = app; 
+>>>>>>> ef22df95cc6932953d7798d9d4039bf261955bb7
