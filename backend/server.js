@@ -3,7 +3,7 @@ const app = require('./app')
 const dotenv = require('dotenv');
 
 //connect to DB
- mongoose.connect('mongodb://localhost:27017/Children',)
+ mongoose.connect('mongodb://localhost:27017/Children')
 .then(() => {
     console.log('Connected to database!');
 })

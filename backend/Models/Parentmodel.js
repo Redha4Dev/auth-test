@@ -49,7 +49,7 @@ ParentSchema.pre('save', async(req,res,next) =>{
     // crypt the password using the hash method
 
 
-    this.password = await bcrypt.hash(this.password , 12)
+    this.password = await bcrypt.hash(this.password , 10)
 
     //delete the confirm password
     this.confirmPassword = undefined
