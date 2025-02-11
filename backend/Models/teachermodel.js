@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 
-const ParentSchema = new mongoose.Schema({
+const TeacherSchema = new mongoose.Schema({
     name :{
         type : String ,
         required : [true , 'please enter youe name']
@@ -43,10 +43,10 @@ const ParentSchema = new mongoose.Schema({
     passwordChangedAt: Date,
 });
 
-const Parent = mongoose.model('Parent', ParentSchema)
+const Teacher = mongoose.model('Teacher',   TeacherSchema)
 
 //to crypt the password before it is saved in the db while sign up
-ParentSchema.pre('save', async(req,res,next) =>{
+TeacherSchema.pre('save', async(req,res,next) =>{
     //to see if the user changed the password before the save
     if (!this.ismodified('password')) {
         return next()
@@ -63,11 +63,11 @@ ParentSchema.pre('save', async(req,res,next) =>{
 
 //logIn process (compare the user password with the typed password)
 
-ParentSchema.methods.correctPassword = async (currentpassword , userPassword) => {
+TeacherSchema.methods.correctPassword = async (currentpassword , userPassword) => {
     //returns true if they are the same
     return await bcrypt.compare(currentpassword,userPassword)
 }
 
 
 //export the schema 
-module.exports = Parent;
+module.exports = Teacher;

@@ -39,6 +39,7 @@ const Schoolschema = mongoose.Schema ({
 })
 
 const school = mongoose.model('School', Schoolschema)
+
 //crypt the password
 
 Schoolschema.pre('save', async (req,res,next) =>{
