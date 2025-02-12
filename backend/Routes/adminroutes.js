@@ -34,7 +34,7 @@ router
 
 router 
     .route('/admin/manage-kids')
-    .get()
+    .get(authController.restrictTo(['admin']))
     .post()
     .patch()
     .delete()

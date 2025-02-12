@@ -1,24 +1,23 @@
 const mongoose = require('mongoose');
 
-const Kidschema = mongoose.Schema ({
-    fullname : {
+const kidschema = mongoose.Schema({
+    name: {
         type : String,
-        required : [true, 'Please enter the name of youe child']
+        required : [true, 'Please enter your son name']
     },
-    age : {
-        type : Integer ,
-        required : [true , 'enter the age of your child']
+    parent: {
+        type : String,
+        required : [true, 'Please enter your name']
     },
-    dateOfBirth: String,
-    placeOfBirth: String,
-    //classes and marks
-    classes : String,
-    progress : String,
-    teacher : String,
-    medical_status : String,
-    photo : String,
-
+    age: {
+        type : String,
+        required: [true, 'enter your sons age']
+    },
+    code: String,
+    marks: String,
+    medicalStatus : String,
 })
 
-const Kid = mongoose.model('Kid', Kidschema)
-module.exports = Kid
+const Kid = mongoose.model('Kid', kidschema)
+
+module.exports = kid

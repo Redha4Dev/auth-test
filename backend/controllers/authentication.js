@@ -1,9 +1,8 @@
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../Models/uermodel')
 const email = require ('../utils/email')
 const {promisify} = require('util')
-
+const crypto = require('crypto');
 //signUp authentication
 //admin
 exports.signUpAdmin = async (req,res) => {
@@ -70,7 +69,7 @@ exports.logIn = async (req,res) =>{
 
 //protect routes
 
-exports.protect = async (req,res,next) => {
+exports.protectroute = async (req,res,next) => {
     //check if the token exists
     let token;
     if (req.headers.authorization && req.header.authorization.startsWith('Bearer')) {
@@ -144,5 +143,11 @@ exports.forgotPassword = async (req,res,next) => {
             err
         })
     }
+}
+
+//reset the password
+
+exports.resetPassword = async (req,res,next) => {
+    
 }
 

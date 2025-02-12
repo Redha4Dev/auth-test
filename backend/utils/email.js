@@ -33,4 +33,4 @@ const sendemail = async options => {
     await transporter.sendMail(mailoptions)
 }
 
-module.exports = transporter
+module.exports = sendemail
