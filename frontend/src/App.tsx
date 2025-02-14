@@ -5,6 +5,7 @@ import Login from "./Pages/Login";
 import ProtectedRouters from "./utils/ProtectedRouters";
 import Home from "./Pages/Home";
 import Profiles from "./Pages/Profiles";
+import SignUp from "./Pages/SignUp"; 
 
 function App() {
   const [dataF, setDataF] = useState({ name: '', email: '' });
@@ -48,6 +49,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<Login/>} path="/Login"/>
+          <Route element={<SignUp/>} path="/SignUp"/>
           <Route element={<ProtectedRouters/>} >
             <Route element={<Home/>} path="/"/>
             <Route element={<Profiles/>} path="/Profiles"/>
