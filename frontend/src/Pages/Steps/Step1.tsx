@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Select,
@@ -11,9 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useFormData } from './FormContext'
 
 
 function Step1() {
+  const { formData, setFormData } = useFormData();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   return (
     <Card>
         <CardHeader>
@@ -29,17 +34,23 @@ function Step1() {
                 <Input
                   id="email"
                   type="email"
+                  name='email'
+                  value={formData.email}
                   placeholder="m@example.com"
                   required
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="Username">Username</Label>
                 <Input
                   id="Username"
+                  name='username'
                   type="text"
+                  value={formData.username}
                   placeholder="User_1234"
                   required
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
@@ -47,7 +58,7 @@ function Step1() {
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input id="password" name='password' value={formData.password} type="password" required onChange={handleChange} />
                 </div>
                 <div className='grid gap-2'>
                   <div className="flex items-center">

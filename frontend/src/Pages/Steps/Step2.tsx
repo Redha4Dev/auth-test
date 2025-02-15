@@ -11,9 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useFormData } from './FormContext'
 
 
 function Step2() {
+  const {formData} = useFormData();
+  console.log(formData)
   return (
     <Card>
         <CardHeader>

@@ -6,6 +6,7 @@ import Step3 from './Steps/Step3'
 import { Button } from '@/components/ui/button'
 import { School, Shield, User } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
+import { FormProvider } from './Steps/FormContext'
 
 const StepDescription = ['Personal Informations', 'Kindergarten Informations', 'Account Conformation']
 
@@ -40,13 +41,15 @@ function SignUp() {
           </div>
         </div>
       </div>
-      <form className='flex flex-col gap-2 items-center' onSubmit={onSubmit}>
-      {step}
-        <div className='flex gap-4'>
-          <Button variant='outline' onClick={prevStep} disabled={currentStepIndex === 0}>Back</Button>
-          <Button type='submit'>{currentStepIndex === 2 ? 'Finish' : 'Next'}</Button>
-        </div>
-      </form>
+      <FormProvider>
+        <form onSubmit={onSubmit} className='flex flex-col gap-4 w-full md:w-96'>
+          {step}
+          <div className='flex gap-4'>
+            <Button onClick={prevStep} disabled={currentStepIndex === 0} className='flex-1' variant='outline'>Previous</Button>
+            <Button type='submit' className='flex-1'>{currentStepIndex === 2 ? 'Finish' : 'Next'}</Button>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   )
 }
