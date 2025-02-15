@@ -13,75 +13,104 @@ import {
 } from "@/components/ui/select"
 import { useFormData } from './FormContext'
 
-
 function Step2() {
-  const {formData} = useFormData();
-  console.log(formData)
+  const { formData, setFormData } = useFormData();
+
+  // Handle text input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      Kindergarten: {
+        ...formData.Kindergarten,
+        [e.target.name]: e.target.value
+      }
+    });
+  };
+
+  // Handle select changes separately
+  const handleSelectChange = (value: string) => {
+    setFormData({
+      ...formData,
+      Kindergarten: {
+        ...formData.Kindergarten,
+        SpecialNeeds: value
+      }
+    });
+  };
+
+  console.log(formData);
+
   return (
     <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Kindergarten Informations</CardTitle>
-          <CardDescription>
-            You can edit this later
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-            <div className="flex flex-col gap-3">
-              <div className="grid gap-2">
-                <Label htmlFor="Kindergarten_Name">Name</Label>
-                <Input
-                  id="Kindergarten_Name"
-                  type="text"
-                  placeholder="Kindergarten Name"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="Adress">Adress</Label>
-                <Input
-                  id="Adress"
-                  type="adress"
-                  placeholder=""
-                  required
-                />
-              </div>
-              
-                <div className='grid gap-2'>
-                  <div className="flex items-center">
-                    <Label htmlFor="Key">Secrete Key</Label>
-                  </div>
-                  <Input id="Key" type="text" required />
-                </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <Label htmlFor="picture">Documents</Label>
-                  <Input id="picture" type="file" required/>
-                </div>
-              <div className='grid gap-2'>
-                  <div className="flex items-center">
-                    <Label htmlFor="">Special Needs Includes ?</Label>
-                  </div>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="special needs" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Male">No</SelectItem>
-                      <SelectItem value="Female">Only</SelectItem>
-                      <SelectItem value="Bird">Both</SelectItem>
-                      <SelectItem value="Mouad">Mouad</SelectItem>
-                    </SelectContent>
-                  </Select>
+      <CardHeader>
+        <CardTitle className="text-2xl">Kindergarten Informations</CardTitle>
+        <CardDescription>
+          You can edit this later
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col gap-3">
+          <div className="grid gap-2">
+            <Label htmlFor="Kindergarten_Name">Name</Label>
+            <Input
+              id="Kindergarten_Name"
+              type="text"
+              name="Name"
+              placeholder="Kindergarten Name"
+              required
+              onChange={handleChange}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="Adress">Address</Label>
+            <Input
+              id="Adress"
+              type="text"
+              name="Adress"
+              placeholder="Kindergarten Address"
+              required
+              onChange={handleChange}
+            />
+          </div>
 
-              </div>
-              
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link to="/login" className="text-violet-600 hover:underline">Log In</Link>
-            </div>
-        </CardContent>
-      </Card>
+          <div className="grid gap-2">
+            <Label htmlFor="Key">Secret Key</Label>
+            <Input
+              id="Key"
+              name="Key"
+              type="text"
+              required
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="picture">Documents</Label>
+            <Input id="picture" name="Picture" type="file" required />
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="special-needs">Special Needs Includes?</Label>
+            <Select onValueChange={handleSelectChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="No">No</SelectItem>
+                <SelectItem value="Only">Only</SelectItem>
+                <SelectItem value="Both">Both</SelectItem>
+                <SelectItem value="Mouad">Mouad</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link to="/login" className="text-violet-600 hover:underline">Log In</Link>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
-export default Step2
+export default Step2;

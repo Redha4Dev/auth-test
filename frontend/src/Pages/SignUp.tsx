@@ -46,7 +46,7 @@ function SignUp() {
           {step}
           <div className='flex gap-4'>
             <Button onClick={prevStep} disabled={currentStepIndex === 0} className='flex-1' variant='outline'>Previous</Button>
-            <Button type='submit' className='flex-1'>{currentStepIndex === 2 ? 'Finish' : 'Next'}</Button>
+            <Button type='submit' className='flex-1'  disabled={currentStepIndex === 2}>{currentStepIndex === 2 ? 'Finish' : 'Next'}</Button>
           </div>
         </form>
       </FormProvider>
