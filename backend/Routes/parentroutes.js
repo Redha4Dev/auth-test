@@ -12,6 +12,14 @@ router
     })
     .post(authController.logIn)
 
+
+router
+    .route('/signup')
+    .get((req,res) =>{
+        res.sendFile('../../frontend/src/Pages/SignUp.tsx')
+    })
+    .post(authController.signUp)
+
 router
     .route('/parent/profile')
     .get()
