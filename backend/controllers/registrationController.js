@@ -3,7 +3,7 @@ const User = require('../Models/usermodel');
 
 //signUp part
 
-exports.SignUp = async (req, res) => {
+exports.SignUp = async (req, res,next) => {
     try {
         //successfull sign up page
         //1. getting user data 
@@ -12,7 +12,7 @@ exports.SignUp = async (req, res) => {
             email : req.body.email,
             password : req.body.password,
             passwordconfirm : req.body.passwordconfirm,
-            // role : req.body.role
+            role : req.body.role
         }
         //this will be addes later
         if (newuser.role === 'admin') {
@@ -20,7 +20,7 @@ exports.SignUp = async (req, res) => {
         }
     
         //the create methose will create and save the newdocument into the db
-        await Users.create(newuser) 
+        await User.create(newuser) 
     
         // sending the data
         res.status(201).json({

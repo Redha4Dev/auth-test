@@ -20,4 +20,4 @@ const kidschema = mongoose.Schema({
 
 const Kid = mongoose.model('Kid', kidschema)
 
-module.exports = kid
+module.exports = Kid

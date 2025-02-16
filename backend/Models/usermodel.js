@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const crypto = require('crypto');
 
-const Userschema = mongoose.Schema ({
+const Userschema =  mongoose.Schema ({
     name: {
         type : String ,
         required : [true , 'please enter youe User name']
@@ -13,7 +13,23 @@ const Userschema = mongoose.Schema ({
         required :[true , 'please enter youe email'],
         unique : true,
         lowercase: true,
-        validate: [validator.isEmail,'not valid email']
+        validate: {
+            //to validate the email
+            validator: async function(email) {
+                //to see if the email exists in the db already default true
+              const user = await this.constructor.findOne({ email });
+              if(user) {
+                //check if the existing email is the same as the one written
+                if(this.id === user.id) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            },
+            message: 'The specified email address is already exists.'
+          },
+        
     },
     role: {
         type: String,
@@ -25,16 +41,15 @@ const Userschema = mongoose.Schema ({
         type :String ,
         required : [true ,'please enter youe password'],
         select : false,
-        validate :{
-            validator: function (el) {
-                return validator.isStrongPassword(el, {
-                    minLength: 8,
-                    minUppercase : 1,
-                    minNumbers : 1,
-                })
-            },
-            message : 'Password is not strong enough. It must be at least 8 characters long, with at least 1 lowercase, 1 uppercase and 1 number'
-        }
+        // validate :{
+        //     validator: function (el) {
+        //         return validator.isStrongPassword(el, {
+        //             minLength: 5,
+        //             // minUppercase : 1,
+        //         })
+        //     },
+        //     message : 'Password is not strong enough.'
+        // }
     },
     confirmPassword :{
         type : String,
@@ -57,21 +72,20 @@ const Userschema = mongoose.Schema ({
 
 //crypt the password
 
-Userschema.pre('save', async (req,res,next) =>{
-    //sees if the admin changed his password
-    if (!this.ismodified(this.password)) {
+Userschema.pre('save', async function (req,res,next) {
+    //check if the user cahnged the password
+    if (!this.isModified('password')) {
         return next()
     }
-    //crypt the password
-    this.password = await bcrypt.hash(this.password, 12)
-    //delete the confirmpassword
-    this.confirmPassword = undefined
-})
-
-Userschema.pre('save', function (next) {
-    if (!this.ismodified('password') || this.isnew) {
+    //  try {
+         //crypt the password
+         this.password = await bcrypt.hash(this.password , 12);
+         this.confirmPassword = undefined
+         
         
-    }
+    //  } catch (error) {
+    //     next(error)
+    //  }
 })
 
 //used to logIn the user
