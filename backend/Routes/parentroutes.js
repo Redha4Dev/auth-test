@@ -6,9 +6,11 @@ const kidControllers = require('../controllers/kidcontroller')
 const router = express.Router()
 
 router
-    .route('/signup')
-    .get()
-    .post(authController.signUp)
+    .route('/login')
+    .get((req,res) =>{
+        res.sendFile('../../frontend/src/Pages/SignUp.tsx')
+    })
+    .post(authController.logIn)
 
 router
     .route('/parent/profile')
@@ -25,7 +27,7 @@ router
     .delete()
 
 router 
-    .route('/parent/kids/:name')
+    .route('/parent/kids/one')
     .get(kidControllers.getKid)
     .post()
     .patch(kidControllers.updatekidinfo)

@@ -10,13 +10,13 @@ const Kid = require('../Models/kidmodel');
 exports.getAllKids = async (req,res,next) =>{
     console.log('start');
     //get kids baesd on some info
-    const kids = await Kid.aggregate([
-        {
-            $match : {age : {$gte: 3}}
-        }
-    ])
-    // console.log(kids);
-    
+    // const kids = await Kid.aggregate([
+    //     {
+    //         $match : {age : {$gte: 3}}
+    //     }
+    // ])
+
+    const kids = await Kid.find({})
     try {
         res.status(200).json({
             size : kids.length,

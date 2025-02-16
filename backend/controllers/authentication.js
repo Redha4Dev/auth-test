@@ -3,6 +3,7 @@ const User = require('../Models/usermodel')
 const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 //signUp authentication
 //admin
 exports.signUp = async (req,res) => {
@@ -35,7 +36,11 @@ exports.signUp = async (req,res) => {
 //logIn authentication
 
 exports.logIn = async (req,res) =>{
+    console.log('start');
+    
     const {email , password} = req.body;
+    console.log(email);
+    
     try {
         //check if user and email field are not empty
         if(!email || !password){
@@ -44,24 +49,29 @@ exports.logIn = async (req,res) =>{
             })
         }
         //check if the user exists
+        console.log(email);
         
         const user = await User.findOne({email}).select('+password');
-        
+        // console.log(user);
         //check if the password is correct
-        const correct = await User.correctPassword(password , user.password);
-        if( !correct|| !user){
-            return res.status(401).json({
-                message : 'incorrect email or password'
-            })
+
+        const correct = user.correctPassword(password , user.password)
+        // console.log(correct);
+        
+        if(!user){
+            return next(console.error('please enter your email and password'))
         }
+        console.log(password);
+        
 
         //create the token for the user
-        const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET , {expiresIn : JWT_EXPIRES_IN})
-
+        const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        console.log(user.password);
+        
         //send the response
         res.status(200).json({
-            message : 'login success',
-            token
+            message : 'login successk',
+            user
         })
     } catch (err) {
         res.status(404).json({

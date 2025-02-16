@@ -89,7 +89,7 @@ Userschema.pre('save', async function (req,res,next) {
 })
 
 //used to logIn the user
-Userschema.methods.correctPassword = async (currentpassword, userpassword) =>{
+Userschema.methods.correctPassword = async  function (currentpassword, userpassword) {  
     return await bcrypt.compare (currentpassword,userpassword)
 }
 
