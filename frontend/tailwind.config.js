@@ -52,7 +52,16 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+			  keyframes: {
+				"caret-blink": {
+				  "0%,70%,100%": { opacity: "1" },
+				  "20%,50%": { opacity: "0" },
+				},
+			  },
+			  animation: {
+				"caret-blink": "caret-blink 1.25s ease-out infinite",
+			  },
   		}
   	}
   },
