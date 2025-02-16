@@ -1,14 +1,46 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
+const kidControllers = require('../controllers/kidcontroller')
+const User = require('../controllers/registrationController')
 
 //start the route
 const router = express.Router()
 
 //admin routes
 router
-    .route('/SignUpAdmin')
-    .get()
-    .post(authController.signUpAdmin)
+    .route('/signin')
+    .get((req,res)=>{
+        res.send([{
+            name: 'John Doe',
+            age: 25,
+            id: 1
+        },{
+            name: 'Jane Doe',
+            age: 24,
+            id: 2
+        },
+        {
+            name: 'John Smith',
+            age: 30,
+            id: 3
+        },{
+            name: 'Jane Smith',
+            age: 29,
+            id: 4
+        }])
+    })
+    .post(
+        // (req,res) =>{
+        // const user = {
+        //     name : "ilyes",
+        // email : "sdf@sfs",
+        // password : "12345",
+        // confirmPassword : "12345",
+        // role : "admin"
+        // }
+        // res.send(user)}
+        authController.signUp
+    )
 
 
 router
@@ -18,6 +50,7 @@ router
     .patch()
     .delete()
 
+
 router 
     .route('/admin/manage-teachers')
     .get()
@@ -26,25 +59,25 @@ router
     .delete()
 
 router 
-    .route('/admin/manage-teachers/: id')
+    .route('/admin/manage-teachers/: name')
     .get()
     .post()
     .patch()
     .delete()
 
 router 
-    .route('/admin/manage-kids')
-    .get(authController.restrictTo(['admin']))
+    .route('/admin/kids')
+    .get(kidControllers.getAllKids)
     .post()
     .patch()
-    .delete()
+    .delete(kidControllers.removeKid , authController.restrictTo(['admin']))
 
  router 
     .route('/admin/manage-kids/: id')
     .get()
     .post()
     .patch()
-    .delete()
+    .delete(kidcontroller.removeKid , authController.restrictTo(['admin', req.body.parent]))
 
 router 
     .route('/admin/manage-classes')

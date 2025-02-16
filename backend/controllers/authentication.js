@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-const User = require('../Models/uermodel')
+const User = require('../Models/usermodel')
 const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
 //signUp authentication
 //admin
-exports.signUpAdmin = async (req,res) => {
+exports.signUp = async (req,res) => {
     const newUser = await User.create({
         name : req.body.name,
         email : req.body.email,
@@ -14,13 +14,16 @@ exports.signUpAdmin = async (req,res) => {
         role : req.body.role
 
     })
+    console.log(newUser);
+    
     try{
-        //create the token for the user
-        const token = jwt.sign({id : newUser._id}, process.env.JWT_SECRET , {expiresIn : JWT_EXPIRES_IN})
-        //send the response
+        // //create the token for the user
+        const token = jwt.sign({id : newUser._id}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        // //send the response
         res.status(201).json({
             message : 'admin created the dashboard will be sent later',
-            token
+            token,
+            newUser
         })
     } catch (err) {
         res.status(404).json({
@@ -147,7 +150,7 @@ exports.forgotPassword = async (req,res,next) => {
 
 //reset the password
 
-exports.resetPassword = async (req,res,next) => {
+// exports.resetPassword = async (req,res,next) => {
     
-}
+// }
 

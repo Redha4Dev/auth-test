@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const app = require('./app')
-const express = require('express');
 const dotenv = require('dotenv');
+dotenv.config({path : './config.env'})
+const app = require('./app')
+
 
 //connect to DB
  mongoose.connect('mongodb://localhost:27017/Children')
@@ -12,9 +13,9 @@ const dotenv = require('dotenv');
     console.log('Connection failed!');
 });
 
-//
+
 // start the server
-const port = 5000
+const port = process.env.PORT || 8000
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

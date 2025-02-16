@@ -1,11 +1,16 @@
 const express = require('express');
 const cors = require('cors');
-const Users = require('./server');
-const user = require('./server');
-const admin = require('./Routes/adminroutes');
+// const admin = require('./Routes/adminroutes');
+const parent = require('./Routes/parentroutes');
+const morgan = require('morgan');
 
 
 const app = express();
+
+
+if (process.env.NODE_ENV === 'development') {
+    app.use (morgan('dev'))
+}
 
 
 app.use(cors());
@@ -32,10 +37,11 @@ const users = [{
 }];
 
 
-app.get('/',(req,res) =>{
+// app.get('/',(req,res) =>{
     
-})
+// })
 //post data to the backend
-app.use('/', admin);
+// app.use('/', admin);
+app.use('/', parent);
 // app.use('/api/v1/LogIn', registre);
 module.exports = app

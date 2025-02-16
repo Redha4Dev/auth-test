@@ -1,13 +1,14 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
+const kidControllers = require('../controllers/kidcontroller')
 
 //start the route
 const router = express.Router()
 
 router
-    .route('/SignUpAdmin')
+    .route('/signup')
     .get()
-    .post()
+    .post(authController.signUp)
 
 router
     .route('/parent/profile')
@@ -17,18 +18,18 @@ router
     .delete()
 
 router 
-    .route('/parent/kids')
-    .get()
-    .post()
-    .patch()
+    .route('/kids')
+    .get(kidControllers.getAllKids)
+    .post(kidControllers.addKid)
+    .patch(kidControllers.updatekidinfo)
     .delete()
 
 router 
-    .route('/parent/kids/: id')
-    .get()
+    .route('/parent/kids/:name')
+    .get(kidControllers.getKid)
     .post()
-    .patch()
-    .delete()
+    .patch(kidControllers.updatekidinfo)
+    .delete(kidControllers.removeKid , authController.restrictTo(['admin' ]))
 
 router 
     .route('/parent/chats')
