@@ -1,23 +1,24 @@
-import { Button } from '@/components/ui/button'
-import { logout } from '@/Services/authService'
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { logout } from "@/Services/authService";
+import { useNavigate } from "react-router-dom";
+import { AppSidebar } from "@/components/app-sidebar";
+import { FormProvider } from "./Steps/FormContext";
 
 function Home() {
   const navigate = useNavigate();
-  const Logout = async () => {
-    try {
-      await logout()
-      navigate("/Login");
-    } catch (error) {
-      console.log("Logout failed", error)
-    }
-  }
   return (
-    <div>
-      <Button onClick={Logout}>Log out</Button>
+    <div className="w-screen min-h-screen h-fit">
+      <FormProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <SidebarTrigger />
+          </main>
+        </SidebarProvider>
+      </FormProvider>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
