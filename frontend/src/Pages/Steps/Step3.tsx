@@ -8,10 +8,27 @@ import {
 } from "@/components/ui/input-otp"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { signUpAdmin } from '@/Services/authService';
+import { useNavigate } from 'react-router-dom';
 
 function Step3() {
   const { formData, setFormData } = useFormData();
+  const navigate = useNavigate();
   console.log(formData);
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    const name  = formData.username;
+    const email = formData.email;
+    const password = formData.password;
+
+    try {
+      await signUpAdmin({name, email, password , password , 'admin': String});
+      navigate("/"); 
+    } catch (error) {
+      console.log( "Login failed" ,error);
+    }
+    
+  }
   return (
     <div>
       <Card>
@@ -37,7 +54,7 @@ function Step3() {
         </InputOTPGroup>
       </InputOTP>
         <Button variant='link'>Resend Code</Button>
-      <Button>Submit</Button>
+      <Button onClick={handleSignUp}>Submit</Button>
         </div>
         </CardContent>
       </Card>
