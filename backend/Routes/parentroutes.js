@@ -6,11 +6,11 @@ const kidControllers = require('../controllers/kidcontroller')
 const router = express.Router()
 
 router
-    .route('/signup')
+    .route('/login')
     .get((req,res) =>{
         res.sendFile('../../frontend/src/Pages/SignUp.tsx')
     })
-    .post(authController.signUp)
+    .post(authController.logIn)
 
 
 // router

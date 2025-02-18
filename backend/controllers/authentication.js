@@ -165,3 +165,8 @@ exports.forgotPassword = async (req,res,next) => {
     
 // }
 
+exports.verificationCode = async (req,res,next) =>{
+    //get the user based on the data sent
+    
+}
+

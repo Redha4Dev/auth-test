@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const crypto = require('crypto');
+const { parsePhoneNumberFromString } = require('libphonenumber-js');
 
 const Userschema =  mongoose.Schema ({
     name: {
@@ -30,6 +31,21 @@ const Userschema =  mongoose.Schema ({
             message: 'The specified email address is already exists.'
           },
         
+    },
+    phone: {
+        type : String,
+        validate :{
+            validator : function (el) {
+                const phone = parsePhoneNumberFromString(el);
+                return phone && phone.isValid()
+            },
+            message : 'phone number is not valid'
+        }        
+    }, 
+    gender :{
+        type : String,
+        required : [true ,'please enter youe gender'],
+        enum: ['Male', 'Female', 'Mouad']
     },
     role: {
         type: String,
