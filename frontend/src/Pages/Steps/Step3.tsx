@@ -25,6 +25,9 @@ function Step3() {
     const email = formData.email;
     const password = formData.password;
     const confirmPassword = formData.confirmPassword;
+    const role = "admin";
+    const kids = [{}];
+    const gender = 'male';
 
     try {
       await signUpAdmin({
@@ -32,11 +35,13 @@ function Step3() {
         email,
         password,
         confirmPassword,
-        admin: String,
+        role,
+        kids,
+        gender,
       });
       navigate("/");
     } catch (error) {
-      console.log("Login failed", error);
+      console.log("Sign Up failed", error);
     }
   };
   return (
