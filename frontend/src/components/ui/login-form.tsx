@@ -1,28 +1,27 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import form from "../../assets/Email.svg"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { logIn} from "../../Services/authService"
-import { Link } from "react-router-dom"
-export function LoginForm(
-  {
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import form from "../../assets/Email.svg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { logIn } from "../../Services/authService";
+import { Link } from "react-router-dom";
+export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const handleLogin = async (e:any) => {
-    e.preventDefault()
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
     try {
       await logIn({ email, password });
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
-      console.log( "Login failed" ,error);
+      console.log("Login failed", error);
     }
   };
 
@@ -30,12 +29,12 @@ export function LoginForm(
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form onSubmit={handleLogin}  className="p-6 md:p-8">
+          <form onSubmit={handleLogin} className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-balance text-muted-foreground">
-                  Login to your Kindergarten  account
+                  Login to your Kindergarten account
                 </p>
               </div>
               <div className="grid gap-2">
@@ -59,12 +58,13 @@ export function LoginForm(
                     Forgot your password?
                   </a>
                 </div>
-                <Input 
-                id="password" 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} 
-                required />
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
               <Button type="submit" className="w-full">
                 Login
@@ -105,7 +105,7 @@ export function LoginForm(
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <Link to={'/SignUp'} className="underline underline-offset-4">
+                <Link to={"/SignUp"} className="underline underline-offset-4">
                   Sign up
                 </Link>
               </div>
@@ -125,5 +125,5 @@ export function LoginForm(
         and <a href="#">Privacy Policy</a>.
       </div>
     </div>
-  )
+  );
 }
