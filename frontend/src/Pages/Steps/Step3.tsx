@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 function Step3() {
   const { formData } = useFormData();
   const navigate = useNavigate();
-  const handleSignUp = async (e) => {
+  const handleSignUp = async (e:any) => {
     e.preventDefault();
     const name = formData.username;
     const email = formData.email;
