@@ -72,6 +72,7 @@ function SignUp() {
         </div>
       </div>
       <FormProvider>
+        //this is form provider
       <form onSubmit={onSubmit} className="flex flex-col gap-4 w-full md:w-96">
         {step}
         <div className="flex gap-4">
