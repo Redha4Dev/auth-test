@@ -61,7 +61,7 @@ const Userschema =  mongoose.Schema ({
             message : 'passwords are not the same'
         }
     },
-    kids: String,
+    kids: [],
     passwordchangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -75,7 +75,7 @@ const Userschema =  mongoose.Schema ({
 Userschema.pre('save', async function (req,res,next) {
     //check if the user cahnged the password
     if (!this.isModified('password')) {
-        return next()
+        return next
     }
     //  try {
          //crypt the password
@@ -119,15 +119,15 @@ const User = mongoose.model('User', Userschema);
 //teacher extra fields
 
 const teacherschema = new mongoose.Schema({
-    room: String
+    room: Number
 })
 
 exports.teacher = User.discriminator('teacher', teacherschema)
 
 //school extra fields
 const schoolschema = new mongoose.Schema({
-    teachers: String,
-    code: String
+    teachers: Array,
+    code: Number
 })
 
 const school = User.discriminator('school', schoolschema)

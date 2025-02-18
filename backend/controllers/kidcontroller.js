@@ -6,35 +6,40 @@ const Kid = require('../Models/kidmodel');
 
 //get all kids
 
-
 exports.getAllKids = async (req,res,next) =>{
-    console.log('start');
-    //get kids baesd on some info
-    // const kids = await Kid.aggregate([
-    //     {
-    //         $match : {age : {$gte: 3}}
-    //     }
-    // ])
+        ////NB : this function used by the all the users types to get the list of all the kids inserted in their document 
 
-    const kids = await Kid.find({})
-    try {
-        res.status(200).json({
-            size : kids.length,
-            kids
-        })
-    } catch (error) {
-        console.log('error');
+        try {
+            //getting user based on the information sent from the from the ftront-end part
+            
+            const user = await User.findOne(
+                {name : req.body.name , _id : req.body.id}
+            )
+    
+            //check if the user exists
+    
+            if (!user) {
+                return next( new console.error('User does not exists'))
+            }
+    
+            //send back the list from the document        
+            res.status(200).json({
+                size : user.kids.length,
+                kids : user.kids
+            })
+        } catch (error) {
+            console.log('error');
+            
+            res.status(404).json({
+                message : error.message
+            })
+        }
         
-        res.status(404).json({
-            message : error.message
-        })
     }
     
-}
-
 //get kid
 exports.getKid = async (req,res,next) =>{
-    //get the kid based on the re params
+    //NB : this function is used by all the users type
 
     const kid = await Kid.findOne({name: req.body.name , _id : req.body.id})
 
@@ -46,7 +51,7 @@ exports.getKid = async (req,res,next) =>{
         }
         // console.log(kid);
         res.status(200).json({
-            message : 'success',
+            message : 'send back the child info',
             kid
         })
         
@@ -58,52 +63,99 @@ exports.getKid = async (req,res,next) =>{
     }
 }
 
+// //to add kid to the db
 
-//to add kid to the db
 exports.addKid = async (req,res,next) => {
-    const code = req.body.code;
-    console.log('start');
+    //NB : this function is accessed only be the kid parent and the admin
+    const {name , code} = req.body;
     
-    try {
+    try { 
         //verify if this kid exists already in the db using his unique code
-        const exists = await Kid.findOne({code});
-        if (exists) {
-            return next( new console.error('this kid already exists'))
+        const exists = await Kid.findOne({code : code , name : name });
+        
+        if (exists != null) {
+            // return next( new console.error('this kid already exists'))
         }
+
         //create and save the newKid
         const newKid = await Kid.create(req.body);
+        
+        //insert the kid to the list of parent kids 
+
+        const parent = await User.findOne(
+            {name : req.body.parent , _id : req.body.id}
+        )
+
+        //if the child exists in the list
+        if (parent.kids.includes(name)) {
+            return next(console.error('kid already exists'))
+        }else {
+            parent.kids.push(name);
+            console.log(name);
+            
+            await parent.save();
+        }
+ 
+        //insert the kid to the school list
+
+        const school = await User.findOne(
+                { role : 'admin' , school : req.body.school}
+        )
+           
+        //to see if the kids exists in the school list
+       if (school.kids.includes(name)) {
+                return next(console.error('kid already exists'))
+            }else {
+                school.kids.push(name);
+                console.log(name);
+                
+                await school.save();
+            }
+        //to see if the child exists in the teacher list (i am not sure about if i ll add it here or in th teacher controllers)
         res.status(201).json({
             message: 'document successfully created',
-            newKid
+            
         })
         
     } catch (err) {
+        console.log(err);
+        
         res.status(404).json({
-            err,
+            erro: err.message,
             message : 'page not found'
         })
     }
 }
 
-
-//to remove a kid from the db
+ //to remove a kid from the db
 exports.removeKid = async (req,res,next) => {
     //find the kid in the db
-    const kid = await Kid.findOne({_id : req.body.id})
+    const kid = await Kid.findOne({name: req.body.name , _id : req.body.id})
+    
     try {
         if (!kid) {
             return next(console.error('this kid does not exists'))
         }
         //delete the kid
 
-         await User.findOneAndUpdate(
-            {_id : kid._id , parent : kid.parent},
-            {$pull: {kids: {name:kid.name}}},
+        //we need to add the full name of the kid or we will change the list item to object containing the id and name of the child
+        const prant =await User.findOneAndUpdate(
+            {kids : kid.name , name : kid.parent},
+            {$pull : {kids : kid.name, _id : kid._id}},
             {new : true}
-           )
+        )
 
-           //delete the kid from the kid collection
+        //delete the child from the school list
+        const school = await User.findOneAndUpdate(
+            {kids : kid.name , school : kid.school},
+            {$pull : {kids : kid.name , _id : kid._id}},
+            {new : true}
+        )
+           
+       //delete the kid from the kid collection
         await Kid.findOneAndDelete({_id : kid._id})
+        //for the teacher document im not sure if  i ll add the delete function here or in the teacher controllers
+        
         res.status(204).json({
             message : 'kid deleted successfully',
             kid : null
@@ -111,19 +163,34 @@ exports.removeKid = async (req,res,next) => {
     } catch (err) {
         res.status(404).json({
             message: 'erroe occured',
-            err
+            erro : err.message
         })
     }
 }
 
 //to update kid info in the db
 exports.updatekidinfo = async (req,res,next) => {
-    // const kidid = req.body.id
+    const updateData = {};
+    if (req.body.name != undefined) {
+        updateData.name = req.body.name
+    }
+    if (req.body.age != undefined) {
+        updateData.age = req.body.age
+    }
+
+    if (req.body.marks != undefined) {
+        updateData.marks = req.body.marks
+    }
+
+    if (req.body.teacher != undefined) {
+        updateData.teacher = req.body.teacher
+    }
+    //basiclly works waiting for other updates
     try {
         
         const kid = await Kid.findOneAndUpdate(
-            { name : req.body.name},
-            { $set :{name :req.body.name, age : req.body.age , mark: req.body.mark} },
+            { _id : req.body.id},
+            { $set : updateData },
             {new : true}
             )
         kid.save

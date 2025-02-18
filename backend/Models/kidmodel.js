@@ -10,11 +10,11 @@ const kidschema = mongoose.Schema({
         required : [true, 'Please enter your name']
     },
     age: {
-        type : String,
+        type : Number,
         required: [true, 'enter your sons age']
     },
-    code: String,
-    marks: String,
+    code: Number,
+    marks: Number,
     medicalStatus : String,
 })
 

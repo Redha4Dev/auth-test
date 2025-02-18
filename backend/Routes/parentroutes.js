@@ -6,19 +6,19 @@ const kidControllers = require('../controllers/kidcontroller')
 const router = express.Router()
 
 router
-    .route('/login')
-    .get((req,res) =>{
-        res.sendFile('../../frontend/src/Pages/SignUp.tsx')
-    })
-    .post(authController.logIn)
-
-
-router
     .route('/signup')
     .get((req,res) =>{
         res.sendFile('../../frontend/src/Pages/SignUp.tsx')
     })
     .post(authController.signUp)
+
+
+// router
+//     .route('/signup')
+//     .get((req,res) =>{
+//         res.sendFile('../../frontend/src/Pages/SignUp.tsx')
+//     })
+//     .post(authController.signUp)
 
 router
     .route('/parent/profile')
@@ -32,14 +32,14 @@ router
     .get(kidControllers.getAllKids)
     .post(kidControllers.addKid)
     .patch(kidControllers.updatekidinfo)
-    .delete()
+    .delete(kidControllers.removeKid)
 
 router 
     .route('/parent/kids/one')
-    .get(kidControllers.getKid)
+    // .get(kidControllers.getKid)
     .post()
-    .patch(kidControllers.updatekidinfo)
-    .delete(kidControllers.removeKid , authController.restrictTo(['admin' ]))
+    // .patch(kidControllers.updatekidinfo)
+    // .delete(kidControllers.removeKid , authController.restrictTo(['admin' ]))
 
 router 
     .route('/parent/chats')

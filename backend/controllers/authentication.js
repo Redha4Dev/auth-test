@@ -12,7 +12,8 @@ exports.signUp = async (req,res) => {
         email : req.body.email,
         password : req.body.password,
         confirmPassword : req.body.confirmPassword,
-        role : req.body.role
+        role : req.body.role,
+        kids : req.body.kids
 
     })
     console.log(newUser);
@@ -52,7 +53,7 @@ exports.logIn = async (req,res) =>{
         console.log(email);
         
         const user = await User.findOne({email}).select('+password');
-        // console.log(user);
+        console.log(user);
         //check if the password is correct
 
         const correct = user.correctPassword(password , user.password)
