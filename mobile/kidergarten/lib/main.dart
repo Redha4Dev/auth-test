@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kidergarten/pages/login_page.dart';
+import 'package:kidergarten/pages/testpage.dart';
 import 'package:kidergarten/pages/welcome_page.dart';
 
 void main() {
@@ -11,7 +13,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: WelcomePage()
+      home: LoginPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

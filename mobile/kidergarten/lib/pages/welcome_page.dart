@@ -36,7 +36,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               Mybutton(
                 title: 'I am a Parent',
-              )
+              ),
             ],
           ),
         ),
