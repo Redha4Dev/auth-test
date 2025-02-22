@@ -60,3 +60,50 @@ exports.updateMe = async (req,res,next)=>{
         })
     }
 }
+exports.getTeacherInfo = async(req,res,next) =>{
+
+    //get the user based on his unique id
+    const user = await User.findById({_id : req.body.id , name: req.body.name})
+
+    try {
+        //check if the use exists
+        if (!user) {
+            return next(console.error('user not found please signup or logIn to continue'))
+        }
+        const teacher = await User.findById({_id : req.body.id, role : 'teacher' , name: req.body.name})
+        if(!teacher){
+            return next( console.error('teacher not found please SinUp or logIn to continue'));
+        }
+
+        //send the response
+        res.status(200).json({
+            teacher
+        })
+        
+    } catch (error) {
+        res.status(404).json({
+            err : error.message,
+            message : 'teacher not found'
+        })
+    }
+}
+
+//this function accessed by the admin only
+exports.getTeacher = async (req,res,next) =>{
+    //get the admin based on his id
+    const admin = await User.find({role : 'teacher', _id : req.body.id})
+    try {
+        //check if teachers exists in the list
+        const teachers = admin.teachers;
+        if(!teachers){
+            return next ( console.error('teachers not found'))
+        }
+
+    } catch (error) {
+        res.status(404).json({
+            err : error.message,
+            message : 'teachers not found'
+        })
+        
+    }
+}
