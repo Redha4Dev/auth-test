@@ -32,27 +32,27 @@ const Userschema =  mongoose.Schema ({
           },
         
     },
-    phone: {
-        type : String,
-        validate :{
-            validator : function (el) {
-                const phone = parsePhoneNumberFromString(el);
-                return phone && phone.isValid()
-            },
-            message : 'phone number is not valid'
-        }        
-    }, 
-    gender :{
-        type : String,
-        required : [true ,'please enter youe gender'],
-        enum: ['Male', 'Female', 'Mouad']
-    },
-    role: {
-        type: String,
-        enum : ['parent', 'teacher', 'admin'],
-        default: 'parent',
-        required: true
-    },
+    // phone: {
+    //     type : String,
+    //     validate :{
+    //         validator : function (el) {
+    //             const phone = parsePhoneNumberFromString(el);
+    //             return phone && phone.isValid()
+    //         },
+    //         message : 'phone number is not valid'
+    //     }        
+    // }, 
+    // gender :{
+    //     type : String,
+    //     required : [true ,'please enter youe gender'],
+    //     enum: ['Male', 'Female', 'Mouad']
+    // },
+    // role: {
+    //     type: String,
+    //     enum : ['parent', 'teacher', 'admin'],
+    //     // default: 'parent',
+    //     required: true
+    // },
     password :{
         type :String ,
         required : [true ,'please enter youe password'],

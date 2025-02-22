@@ -7,40 +7,29 @@ const User = require('../controllers/registrationController')
 const router = express.Router()
 
 //admin routes
-router
-    .route('/signin')
-    .get((req,res)=>{
-        res.send([{
-            name: 'John Doe',
-            age: 25,
-            id: 1
-        },{
-            name: 'Jane Doe',
-            age: 24,
-            id: 2
-        },
-        {
-            name: 'John Smith',
-            age: 30,
-            id: 3
-        },{
-            name: 'Jane Smith',
-            age: 29,
-            id: 4
-        }])
-    })
-    .post(
-        // (req,res) =>{
-        // const user = {
-        //     name : "ilyes",
-        // email : "sdf@sfs",
-        // password : "12345",
-        // confirmPassword : "12345",
-        // role : "admin"
-        // }
-        // res.send(user)}
-        authController.signUp
-    )
+// router
+//     .route('/signup')
+//     .get((req,res)=>{
+//         res.send([{
+//             name: 'John Doe',
+//             age: 25,
+//             id: 1
+//         },{
+//             name: 'Jane Doe',
+//             age: 24,
+//             id: 2
+//         },
+//         {
+//             name: 'John Smith',
+//             age: 30,
+//             id: 3
+//         },{
+//             name: 'Jane Smith',
+//             age: 29,
+//             id: 4
+//         }])
+//     })
+    // .post(authController.signUp )
 
 
 router

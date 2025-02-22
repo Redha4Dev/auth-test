@@ -28,8 +28,10 @@ exports.signUp = async (req,res) => {
             newUser
         })
     } catch (err) {
+        console.log(err.message);
+        
         res.status(404).json({
-            err
+            errr : err.message
         })
     } 
 }
@@ -167,6 +169,6 @@ exports.forgotPassword = async (req,res,next) => {
 
 exports.verificationCode = async (req,res,next) =>{
     //get the user based on the data sent
-    
+
 }
 
