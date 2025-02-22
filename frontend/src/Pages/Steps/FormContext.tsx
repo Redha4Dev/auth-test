@@ -5,6 +5,7 @@ interface FormData {
   username: string;
   password: string;
   confirmPassword: string;
+  gender: string;
   Kindergarten: {
     Name: string;
     Adress: string;
@@ -42,6 +43,7 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     username: "",
     password: "",
     confirmPassword: "",
+    gender: "Male",
     Kindergarten: {
       Name: "",
       Adress: "",
