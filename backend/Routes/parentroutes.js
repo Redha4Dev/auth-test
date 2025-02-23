@@ -5,12 +5,12 @@ const kidControllers = require('../controllers/kidcontroller')
 //start the route
 const router = express.Router()
 
-// router
-//     .route('/login')
-//     .get((req,res) =>{
-//         res.sendFile('../../frontend/src/Pages/Login.tsx')
-//     })
-//     .post(authController.logIn)
+ router
+     .route('/login')
+     .get((req,res) =>{
+         res.sendFile('../../frontend/src/Pages/Login.tsx')
+     })
+     .post(authController.logIn)
 
 
 router

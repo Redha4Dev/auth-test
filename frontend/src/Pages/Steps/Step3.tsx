@@ -27,7 +27,7 @@ function Step3() {
     const confirmPassword = formData.confirmPassword;
     const role = "admin";
     const kids = [{}];
-    const gender = 'male';
+    const gender = formData.gender;
 
     try {
       await signUpAdmin({
