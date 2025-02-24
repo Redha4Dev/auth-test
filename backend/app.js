@@ -3,6 +3,7 @@ const cors = require('cors');
 // const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const morgan = require('morgan');
+const  teacher  = require('./Routes/teacherroute');
 
 
 const app = express();
@@ -43,5 +44,6 @@ const users = [{
 //post data to the backend
 // app.use('/', admin);
 app.use('/', parent);
+app.use('/', teacher);
 // app.use('/api/v1/LogIn', registre);
 module.exports = app
