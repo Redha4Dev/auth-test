@@ -44,7 +44,7 @@ const Userschema =  mongoose.Schema ({
     }, 
     gender :{
         type : String,
-        required : [true ,'please enter your gender'],
+        required : [true ,'please enter youe gender'],
         enum: ['Male', 'Female', 'Mouad']
     },
     role: {
@@ -78,9 +78,11 @@ const Userschema =  mongoose.Schema ({
         }
     },
     kids: [],
+    adress : String,
     passwordchangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
+    verificationCode : String,
 })
 
 
@@ -130,6 +132,15 @@ Userschema.methods.createPasswordResetToken = function (){
     this.passwordResetExpires = date() + 20 * 60 * 1000
     return token
 }
+
+Userschema.methods.createVerificationCode = async  function () {  
+    //create verification code
+    const code = Math.floor(1000 + Math.random())* 900000;
+    //save hashed code in his field
+    this.verificationCode = crypto.createHash('sha256').update(code).digest('hex');
+    //return the code
+
+}
 const User = mongoose.model('User', Userschema);
 
 //teacher extra fields
@@ -143,8 +154,10 @@ exports.teacher = User.discriminator('teacher', teacherschema)
 //school extra fields
 const schoolschema = new mongoose.Schema({
     teachers: Array,
+    parents: Array,
     code: Number
 })
 
 const school = User.discriminator('school', schoolschema)
+
 module.exports = User

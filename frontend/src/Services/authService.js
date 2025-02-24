@@ -17,7 +17,7 @@ export const signUpAdmin = async (userData) => {
 // Login function
 export const logIn = async (credentials) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials);
+    const response = await axios.post(`${API_URL}/logIn`, credentials);
     localStorage.setItem("token", response.data.token); // Save token
     return response.data;
   } catch (error) {
@@ -26,7 +26,7 @@ export const logIn = async (credentials) => {
   }
 };
 
-// Logout function
+// Logout function "Will be removed after using only http cookies"
 export const logout = () => {
   localStorage.removeItem("token"); // Remove token
 };
@@ -35,3 +35,13 @@ export const logout = () => {
 export const getCurrentUser = () => {
   return localStorage.getItem("token");
 };
+
+export const fetchUserData = () => {
+  try {
+    // this to get the user info but the "/user" not ready now
+    const response = await api.get("/user");
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching user data:", error.response?.data?.message);
+  }
+}

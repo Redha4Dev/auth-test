@@ -5,20 +5,20 @@ const kidControllers = require('../controllers/kidcontroller')
 //start the route
 const router = express.Router()
 
+ router
+     .route('/login')
+     .get((req,res) =>{
+         res.sendFile('../../frontend/src/Pages/Login.tsx')
+     })
+     .post(authController.logIn)
+
+
 router
-    .route('/login')
-    .get((req,res) =>{
-        res.sendFile('../../frontend/src/Pages/SignUp.tsx')
-    })
-    .post(authController.logIn)
-
-
-// router
-//     .route('/signup')
-//     .get((req,res) =>{
-//         res.sendFile('../../frontend/src/Pages/SignUp.tsx')
-//     })
-//     .post(authController.signUp)
+    .route('/signup')
+    // .get((req,res) =>{
+    //     res.sendFile('../../frontend/src/Pages/SignUp.tsx')
+    // })
+    .post(authController.signUp)
 
 router
     .route('/parent/profile')

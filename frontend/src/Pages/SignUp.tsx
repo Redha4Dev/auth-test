@@ -71,6 +71,7 @@ function SignUp() {
           </div>
         </div>
       </div>
+      <FormProvider>
       <form onSubmit={onSubmit} className="flex flex-col gap-4 w-full md:w-96">
         {step}
         <div className="flex gap-4">
@@ -91,6 +92,7 @@ function SignUp() {
           </Button>
         </div>
       </form>
+      </FormProvider>
     </div>
   );
 }

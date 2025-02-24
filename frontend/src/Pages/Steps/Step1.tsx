@@ -24,6 +24,12 @@ function Step1() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleSelectChange = (value: string) => {
+    setFormData({
+      ...formData,
+        gender: value
+    });
+  };
   return (
     <Card>
       <CardHeader>
@@ -86,18 +92,13 @@ function Step1() {
               />
             </div>
           </div>
-          <p className="text-red">
-            {formData.password === formData.confirmPassword
-              ? ""
-              : "The passwords should be the SAME!!"}
-          </p>
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="">Your Gendre</Label>
             </div>
-            <Select>
+            <Select onValueChange={handleSelectChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Gendre" />
+                <SelectValue placeholder="Gender" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Male">Male</SelectItem>

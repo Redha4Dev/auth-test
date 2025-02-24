@@ -34,15 +34,54 @@ exports.signUp = async (req,res) => {
         
         // //send the response
         res.status(201).json({
-            message : 'admin created the dashboard will be sent later',
-            token,
-            newUser
+            token
         })
     } catch (err) {
+        console.log(err.message);
+        
         res.status(404).json({
-            err
+            errr : err.message
         })
     } 
+}
+
+//to be verified later on
+
+//verify user email
+exports.verificationCode = async (req,res,next) =>{
+    //get the user based on the data sent
+    const user = await User.findById(req.params.id);
+
+    try {
+        //check if the user exists
+    
+        if (!user) {
+            return res.status(400).json({
+                message : 'user does not exists'
+            })
+        }
+        //generate and save verification code
+        const code = user.createVerificationCode();
+    
+        //disabable validation before save
+        await user.save({validateBeforeSave : false})
+        //send the email to the user email
+        //create the url
+    
+        const url = `${req.protocol}://${req.get('host')}/api/v1/users/verify/${code}`
+        //create the message
+        const message = `Your varification code ids ${code} please follow this link ${url} to verify your account`
+        //send the email
+        await email ({
+            email : user.email,
+            subject : 'Email verification code',
+            message
+        })
+        
+    } catch (error) {
+        mesage: error.message
+    }
+
 }
 
 //logIn authentication
@@ -94,7 +133,7 @@ exports.logIn = async (req,res) =>{
         //send the response
         res.status(200).json({
             message : 'login successk',
-            user
+            token
         })
     } catch (err) {
         res.status(404).json({
@@ -183,12 +222,43 @@ exports.forgotPassword = async (req,res,next) => {
 
 //reset the password
 
-// exports.resetPassword = async (req,res,next) => {
-    
-// }
+exports.resetPassword = async (req,res,next) => {
+    //get the user based on the token sent
+    //hash the token 
+    const hashToken = crypto.createHash('sh256').update(req.params.token).digesy('hex');
 
-exports.verificationCode = async (req,res,next) =>{
-    //get the user based on the data sent
-    
+    const user = await User.findOne({passworResetToken : hashToken , passwordRestExipres : {$gt : Date.now()}});
+
+    try {
+        if (!user) {
+            return res.status(400).json({
+                message : 'token invalid or expired'
+            })
+        }
+        //set the new password
+        user.password = req.body.password;
+        user.confirmPassword = req.body.confirmPassword;
+        //delete the token and the expiration date
+
+        user.passwordRestExipres = undefined;
+        user.passwordResetToken = undefined;
+
+        //save the user to validate the password
+        user.save();
+
+        // login the user and send the new token
+        const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET, { expiration : process.env.JWT_EXPIRES_IN});
+        res.status(200).json({
+            message : 'password changed successfully',
+            token
+        })
+        
+    } catch (error) {
+        res.status(404).json({
+            err : error.message
+        })
+    }
 }
+
+
 
