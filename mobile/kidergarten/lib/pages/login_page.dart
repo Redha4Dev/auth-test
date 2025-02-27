@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kidergarten/components/myButton.dart';
+import 'package:kidergarten/components/textField.dart';
+import 'package:kidergarten/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
         MediaQuery.of(context).size.height; // Gives the height
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: screenWidth,
         decoration: BoxDecoration(
@@ -37,14 +41,14 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: screenHeight * .1,
+                  height: screenHeight * .05,
                 ),
                 Image.asset(
                   "assets/tableau.png",
-                  scale: 1.5,
+                  scale: 1,
                 ),
                 SizedBox(
-                  height: screenHeight * .1,
+                  height: screenHeight * .05,
                 ),
                 Text(
                   "Welcome Back",
@@ -57,9 +61,49 @@ class _LoginPageState extends State<LoginPage> {
                       color: Color.fromARGB(255, 139, 139, 139), fontSize: 15),
                 ),
                 SizedBox(
+                  height: screenHeight * .01,
+                ),
+                myTextField(
+                  labelText: 'Email',
+                  icon: Icons.email,
+                ),
+                SizedBox(
+                  height: screenHeight * .01,
+                ),
+                myTextField(labelText: 'Password', icon: Icons.password),
+                SizedBox(
                   height: screenHeight * .1,
                 ),
-                
+                myOutlinedButton(text: "Submit", onTap: () {}),
+                SizedBox(
+                  height: screenHeight * .02,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: TextStyle(
+                        color: Colors.grey, // Grey text
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "create one",
+                        style: TextStyle(
+                          color: Colors.purple, // Purple text
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
