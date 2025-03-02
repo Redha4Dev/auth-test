@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-// const admin = require('./Routes/adminroutes');
+const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const morgan = require('morgan');
+const  teacher  = require('./Routes/teacherroute');
 
 
 const app = express();
@@ -17,31 +18,16 @@ app.use(cors());
 app.use(express.json());
 
 
-const users = [{
-    name: 'John Doe',
-    age: 25,
-    id: 1
-},{
-    name: 'Jane Doe',
-    age: 24,
-    id: 2
-},
-{
-    name: 'John Smith',
-    age: 30,
-    id: 3
-},{
-    name: 'Jane Smith',
-    age: 29,
-    id: 4
-}];
 
 
-// app.get('/',(req,res) =>{
-    
+app.use('/', parent)
+
+// app.all('*', (req, res, next) => {
+//     res.status(404).json({
+//         status: 'fail',
+//         message: `Can't find ${req.originalUrl} on this server`
+//     })
 // })
-//post data to the backend
-// app.use('/', admin);
-app.use('/', parent);
-// app.use('/api/v1/LogIn', registre);
-module.exports = app
+
+
+module.exports = app;

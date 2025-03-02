@@ -92,16 +92,11 @@ function Step1() {
               />
             </div>
           </div>
-          <p className="text-red">
-            {formData.password === formData.confirmPassword
-              ? ""
-              : "The passwords should be the SAME!!"}
-          </p>
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="">Your Gendre</Label>
             </div>
-            <Select >
+            <Select onValueChange={handleSelectChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Gender" />
               </SelectTrigger>

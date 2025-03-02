@@ -1,5 +1,8 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
+const teacherController = require('../controllers/teachercontrollers');
+
+
 
 //start the route
 const router = express.Router()
@@ -17,18 +20,18 @@ router
     .delete()
 
 router 
-    .route('/teacher/manage-kids')
+    .route('/teacher/kids')
     .get()
     .post()
     .patch()
     .delete()
 
 router 
-    .route('/teacher/manage-kids/: id')
-    .get()
-    .post()
+    .route('/teacher/manage-kids/:id')
+    .get(teacherController.getKids)
+    .post(teacherController.addKid )
     .patch()
-    .delete()
+    .delete(teacherController.deleteKid)
 
  router 
     .route('/teacher/chats')

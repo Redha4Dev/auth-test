@@ -51,24 +51,9 @@ exports.updateSchoolInfo = async(req,res,next) =>{
         if(user.role != 'admin' || !correct){
             return next(console.error('you do not have the permission to change the school info'))
         }
+        
         //get the updated data
-        const updateData = {};
-
-        if (req.body.name != undefined) {
-            updateData.name = req.body.name
-        }
-        if (req.body.email != undefined) {
-            updateData.email = req.body.email
-        }
-        if (req.body.phone != undefined) {
-            updateData.phone = req.body.phone
-        }
-        if (req.body.adress != undefined) {
-            updateData.adress = req.body.adress
-        }
-        if(req.body.photo){
-            updateData.photo = req.body.photo
-        }
+        const updateData = req.body;
 
         //update the school info
         await User.school.findOneAndUpdate(

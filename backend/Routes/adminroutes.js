@@ -1,7 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
-const User = require('../controllers/registrationController')
 
 //start the route
 const router = express.Router()
@@ -66,7 +65,7 @@ router
     .get()
     .post()
     .patch()
-    .delete(kidcontroller.removeKid , authController.restrictTo(['admin', req.body.parent]))
+    .delete(kidControllers.removeKid , authController.restrictTo(['admin', 'parent']))
 
 router 
     .route('/admin/manage-classes')

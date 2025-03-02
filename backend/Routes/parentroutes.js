@@ -1,24 +1,24 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
-
+// const path = require('path');
 //start the route
 const router = express.Router()
 
+ router
+     .route('/login')
+     .get((req,res) =>{
+        //  res.sendFile(path.join(__dirname,'../../frontend/src/Pages/Login.tsx'))
+     })
+     .post(authController.logIn) // <-- the problem is here
+
+
 router
-    .route('/login')
+    .route('/signup')
     // .get((req,res) =>{
-    //     res.sendFile('../../frontend/src/Pages/Login.tsx')
+    //     res.sendFile('../../frontend/src/Pages/SignUp.tsx')
     // })
-    .post(authController.logIn)
-
-
-// router
-//     .route('/signup')
-//     // .get((req,res) =>{
-//     //     res.sendFile('../../frontend/src/Pages/SignUp.tsx')
-//     // })
-//     .post(authController.logIn)
+    .post(authController.signUp)
 
 router
     .route('/parent/profile')
