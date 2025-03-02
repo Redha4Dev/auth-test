@@ -19,7 +19,7 @@ export function LoginForm({
     e.preventDefault();
     try {
       await logIn({ email, password });
-      navigate("/");
+      navigate("/Dashboard");
     } catch (error) {
       console.log("Login failed", error);
     }

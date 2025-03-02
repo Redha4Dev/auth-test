@@ -17,7 +17,7 @@ export const signUpAdmin = async (userData) => {
 // Login function
 export const logIn = async (credentials) => {
   try {
-    const response = await axios.post(`${API_URL}/logIn`, credentials);
+    const response = await axios.post(`${API_URL}/login`, credentials);
     localStorage.setItem("token", response.data.token); // Save token
     return response.data;
   } catch (error) {
@@ -36,12 +36,12 @@ export const getCurrentUser = () => {
   return localStorage.getItem("token");
 };
 
-export const fetchUserData = () => {
-  try {
-    // this to get the user info but the "/user" not ready now
-    const response = await api.get("/user");
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error fetching user data:", error.response?.data?.message);
-  }
-}
+// export const fetchUserData = () => {
+//   try {
+//     // this to get the user info but the "/user" not ready now
+//     const response = await api.get("/user");
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error("Error fetching user data:", error.response?.data?.message);
+//   }
+// }
