@@ -22,14 +22,14 @@ exports.signUp = async (req,res) => {
         // //create the token for the user
         const token = jwt.sign({id : newUser._id}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         
-        const cookieOptions = {
-            expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-            httpOnly: true
-        };
+        // const cookieOptions = {
+        //     expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        //     httpOnly: true
+        // };
     
-        if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+        // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     
-        res.cookie('jwt', token, cookieOptions);
+        // res.cookie('jwt', token, cookieOptions);
         
         
         // //send the response
@@ -120,14 +120,14 @@ exports.logIn = async (req,res) =>{
         console.log(user.password);
         
 
-        const cookieOptions = {
-            expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-            httpOnly: true
-        };
+        // const cookieOptions = {
+        //     expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        //     httpOnly: true
+        // };
     
-        if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+        // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     
-        res.cookie('jwt', token, cookieOptions);
+        // res.cookie('jwt', token, cookieOptions);
 
 
         //send the response

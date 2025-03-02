@@ -10,7 +10,7 @@ const router = express.Router()
      .get((req,res) =>{
          res.sendFile('../../frontend/src/Pages/Login.tsx')
      })
-     .post(authController.logIn)
+     .post(authController.logIn) // <-- the problem is here
 
 
 router
