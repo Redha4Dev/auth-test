@@ -111,6 +111,21 @@ exports.addKid = async (req,res,next) => {
                 
                 await school.save();
             }
+
+        // add the kif to the teacher kids list  
+        const teacher = await User.findOne(
+                { role : 'teacher' , teacher : req.body.teacher}
+        )
+           
+        //to see if the kids exists in the teacher list
+       if (teacher.kids.includes(name)) {
+                return next(console.error('kid already exists'))
+            }else {
+                teacher.kids.push(name);
+                console.log(name);
+                
+                await teacher.save();
+            }
         //to see if the child exists in the teacher list (i am not sure about if i ll add it here or in th teacher controllers)
         res.status(201).json({
             message: 'document successfully created',
@@ -149,6 +164,12 @@ exports.removeKid = async (req,res,next) => {
         const school = await User.findOneAndUpdate(
             {kids : kid.name , school : kid.school},
             {$pull : {kids : kid.name , _id : kid._id}},
+            {new : true}
+        )
+
+        const teacher = await User.findOneAndUpdate(
+            { kids : kid.name , teacher : kid.teacher},
+            {$pull : {kids : kid.name ,_id : kid.id} },
             {new : true}
         )
            

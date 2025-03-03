@@ -12,29 +12,13 @@ exports.updateme = async (req, res , next) =>{
             return next( console.error('user not found please signUp or logIn to continue'))
         }
         //get updated data
-        const updateData = {};
-
-        if (req.body.name != undefined) {
-            updateData.name = req.body.name
-        }
-        if (req.body.email != undefined) {
-            updateData.email = req.body.email
-        }
-        if (req.body.phone != undefined) {
-            updateData.phone = req.body.phone
-        }
-        if (req.body.gender != undefined) {
-            updateData.gender = req.body.gender
-        }
-        if (req.body.adress != undefined) {
-            updateData.adress = req.body.adress
-        }
-
+        const updateData = req.body;
         //update data
         await user.findOneAndUpdate(
             {_id : req.body.id},
             {$set : updateData},
-            {new : true}
+            {new : true, runvalidators : true}
+            // the validators will be run to check if the user changed data are correct
         )
     } catch (error) {
         res.status(404).json({

@@ -11,6 +11,7 @@ const kidschema = mongoose.Schema({
     },
     age: {
         type : Number,
+        max: [4,'your son age is not valid'],
         required: [true, 'enter your sons age']
     },
     code: Number,
