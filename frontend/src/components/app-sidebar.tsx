@@ -3,13 +3,18 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { logout } from "@/Services/authService";
-import { Calendar, ChartBar, CookieIcon, DoorOpen, Home, Inbox, Layers, LogOut, PersonStanding, User } from "lucide-react";
+import { Calendar, ChartBar, ChevronUpSquare, CookieIcon, DoorOpen, Ghost, Home, Inbox, Layers, LogOut, PersonStanding, User, User2 } from "lucide-react";
 import { useFormData } from "@/Pages/Steps/FormContext";
+import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { DropdownMenuContent } from "./ui/dropdown-menu";
 
 export function AppSidebar() {
   const navigate = useNavigate();
@@ -62,7 +67,7 @@ export function AppSidebar() {
               <Button
                 variant="ghost"
                 onClick={() => navigate(`/${route.name}`)}
-                className="flex items-center justify-start"
+                className="flex items-center w-full justify-start"
               >
                 {route.icon}
                 <span className="ml-2">{route.name}</span>
@@ -72,23 +77,35 @@ export function AppSidebar() {
         </ul>
       </SidebarContent>  
       <SidebarFooter>
-        <div className="flex items-center">
-          <div>
-            <h1 className="text-2xl font-bold">{formData.username}</h1>
-            <p className="text-balance text-muted-foreground">
-              {formData.email}
-            </p>
-          </div>
-        </div>
-        <ul className="mx-auto space-y-2">
-          <li>
-            <Button variant="link" onClick={Logout}>
-              <LogOut/>
-              <span className="ml-2">{open == true ? "Logout" : ""}</span>
-            </Button>
-          </li>
-        </ul>
-      </SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> Username
+                    <ChevronUpSquare className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  
+                  <DropdownMenuItem>
+                  <Button className="w-full" variant='ghost'>
+                      Settings
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Button onClick={Logout} className="w-full" variant='ghost'>
+                      SignOut
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
     </Sidebar>
   );
 }
