@@ -3,8 +3,10 @@ import 'package:kidergarten/pages/login_page.dart';
 import 'package:kidergarten/pages/signup_page.dart';
 import 'package:kidergarten/pages/testpage.dart';
 import 'package:kidergarten/pages/welcome_page.dart';
+import 'package:kidergarten/services/api_service.dart';
 
 void main() {
+
   runApp(const MainApp());
 }
 
