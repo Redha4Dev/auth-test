@@ -36,6 +36,13 @@ function Dashboard() {
     blue: "bg-blue-300",
     red: "bg-red-300",
   };
+  const PiechartData = [
+    { browser: "Intact", visitors: 275, fill: "var(--color-chrome)" },
+    { browser: "Attention-Deficit", visitors: 200, fill: "var(--color-safari)" },
+    { browser: "Eating Disorders", visitors: 287, fill: "var(--color-firefox)" },
+    { browser: "ASD", visitors: 173, fill: "var(--color-edge)" },
+    { browser: "Depression", visitors: 190, fill: "var(--color-other)" },
+  ]
   return (
     <FormProvider>
         <SidebarProvider>
@@ -63,11 +70,11 @@ function Dashboard() {
               </div>
             ))}
             <div className='col-span-3 grid gap-3 grid-cols-1 md:grid-cols-5'>
-                <div className='md:col-span-3'>
+                <div className='md:col-span-3 col-span-5'>
                   <MultipleBar/>
                 </div>
-                <div className='md:col-span-2'>
-                  <Piechart/>
+                <div className='md:col-span-2 col-span-5'>
+                  <Piechart chartData={PiechartData} title={'Kids Status'}/>
                 </div>
             <div>
               
@@ -102,7 +109,7 @@ function Dashboard() {
               </div>
             </div>
             </div>
-            <div className='flex xl:flex-col  gap-3 justify-center xl:justify-normal xl:items-center rounded-xl bg-muted/50 p-4 w-fit h-fit '>
+            <div className='flex xl:flex-col  gap-3 justify-center xl:justify-normal xl:items-center rounded-xl  p-4  h-fit '>
             <div className='shadow-lg rounded-xl bg-white'>
             <Calendar/>
             </div>
@@ -133,7 +140,7 @@ function Dashboard() {
             </div>
             </div>
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+         
         </div>
       </SidebarInset>
         </SidebarProvider>
