@@ -48,8 +48,8 @@ function Dashboard() {
           </div>
         </header>
         <div className="flex flex-1 flex-col my-3 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 grid-cols-1 md:grid-cols-4">
-            <div className='md:col-span-3 bg-muted/50 p-3 gap-3  h-fit grid md:grid-cols-3 rounded-xl'>
+          <div className="grid auto-rows-min gap-4 grid-cols-1 xl:grid-cols-4">
+            <div className='xl:col-span-3 bg-muted/50 p-3 gap-3  h-fit grid md:grid-cols-3 rounded-xl'>
             {genral_data.map((data, index) => (
               <div key={index} className={`flex items-center gap-5 shadow-md flex-col justify-center p-4 rounded-xl bg-white`}>
                 <div className={clsx("flex p-4 rounded-full items-center shadow-sm justify-center", colorMap[data.color] || "bg-gray-300")}>
@@ -102,8 +102,35 @@ function Dashboard() {
               </div>
             </div>
             </div>
-            <div className='flex justify-center w-full '>
-            <Calendar className=""/>
+            <div className='flex xl:flex-col  gap-3 justify-center xl:justify-normal xl:items-center rounded-xl bg-muted/50 p-4 w-fit h-fit '>
+            <div className='shadow-lg rounded-xl bg-white'>
+            <Calendar/>
+            </div>
+            <div className='shadow-lg p-4 bg-white rounded-xl'>
+              <h1 className='font-semibold mb-6'>Events Table</h1>
+            <Table>
+                <TableCaption>A list of your recent Events.</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[100px]">Event</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead className="text-right">Date</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">vacation</TableCell>
+                    <TableCell>All</TableCell>
+                    <TableCell className="text-right">01-03-2025</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">vacation</TableCell>
+                    <TableCell>A-1</TableCell>
+                    <TableCell className="text-right">25-02-2025</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
             </div>
           </div>
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
