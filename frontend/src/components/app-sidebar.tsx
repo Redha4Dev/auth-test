@@ -3,17 +3,42 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { logout } from "@/Services/authService";
-import { Calendar, ChartBar, CookieIcon, DoorOpen, Home, Inbox, Layers, LogOut, PersonStanding, User } from "lucide-react";
+import {
+  Calendar,
+  ChartBar,
+  ChevronUpSquare,
+  ChevronDown,
+  ChevronRight,
+  CookieIcon,
+  Home,
+  Inbox,
+  Layers,
+  LogOut,
+  User2,
+  Users,
+} from "lucide-react";
 import { useFormData } from "@/Pages/Steps/FormContext";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "./ui/dropdown-menu";
+import { useState } from "react";
 
 export function AppSidebar() {
   const navigate = useNavigate();
-  const {open} = useSidebar();
+  const { open } = useSidebar();
+  const [usersOpen, setUsersOpen] = useState(false);
+  
   const Logout = async () => {
     try {
       await logout();
@@ -22,37 +47,34 @@ export function AppSidebar() {
       console.log("Logout failed", error);
     }
   };
-  const { formData } = useFormData();
+
   const Routes = [
     {
       name: "Dashboard",
-      icon: <Home/>,
+      icon: <Home />,
     },
     {
       name: "Analyse",
-      icon: <ChartBar/>,
-    },
-    {
-      name: "Users",
-      icon: <User/>,
+      icon: <ChartBar />,
     },
     {
       name: "Meals",
-      icon: <CookieIcon/>,
+      icon: <CookieIcon />,
     },
     {
       name: "Time Manage",
-      icon: <Calendar/>,
+      icon: <Calendar />,
     },
     {
       name: "Inbox",
-      icon: <Inbox/>,
+      icon: <Inbox />,
     },
-  ]
+  ];
+
   return (
-    <Sidebar collapsible="icon" >
+    <Sidebar collapsible="icon">
       <SidebarHeader className="text-center">
-        <h1 className="font-semibold mx-auto "><Layers/></h1>
+        <h1 className="font-semibold mx-auto "><Layers /></h1>
         <hr className="border-gray-300" />
       </SidebarHeader>
       <SidebarContent>
@@ -62,32 +84,75 @@ export function AppSidebar() {
               <Button
                 variant="ghost"
                 onClick={() => navigate(`/${route.name}`)}
-                className="flex items-center justify-start"
+                className="flex items-center w-full justify-start"
               >
                 {route.icon}
                 <span className="ml-2">{route.name}</span>
               </Button>
             </li>
           ))}
-        </ul>
-      </SidebarContent>  
-      <SidebarFooter>
-        <div className="flex items-center">
-          <div>
-            <h1 className="text-2xl font-bold">{formData.username}</h1>
-            <p className="text-balance text-muted-foreground">
-              {formData.email}
-            </p>
-          </div>
-        </div>
-        <ul className="mx-auto space-y-2">
           <li>
-            <Button variant="link" onClick={Logout}>
-              <LogOut/>
-              <span className="ml-2">{open == true ? "Logout" : ""}</span>
+            <Button
+              variant="ghost"
+              onClick={() => setUsersOpen(!usersOpen)}
+              className="flex items-center w-full justify-start"
+            >
+              <Users />
+              <span className="ml-2">Users</span>
+              {usersOpen ? <ChevronDown className="ml-auto" /> : <ChevronRight className="ml-auto" />}
             </Button>
+            {usersOpen && (
+              <ul className="ml-6 space-y-2">
+                <li>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/Users/Parents")}
+                    className="flex items-center w-full justify-start"
+                  >
+                    <User2 />
+                    <span className="ml-2">Parents</span>
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/Users/Kids")}
+                    className="flex items-center w-full justify-start"
+                  >
+                    <User2 />
+                    <span className="ml-2">Kids</span>
+                  </Button>
+                </li>
+              </ul>
+            )}
           </li>
         </ul>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  <User2 /> Username
+                  <ChevronUpSquare className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
+                <DropdownMenuItem>
+                  <Button className="w-full" variant='ghost'>
+                    Settings
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Button onClick={Logout} className="w-full" variant='ghost'>
+                    SignOut
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
