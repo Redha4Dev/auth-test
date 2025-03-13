@@ -5,7 +5,7 @@ const app = require('./app')
 
 
 //connect to DB
- mongoose.connect('mongodb://localhost:27017/Children'//'mongodb+srv://ilyesmekalfa:aIZn7w54qWr51TKZ@cluster0.k7107.mongodb.net/')
+ mongoose.connect('mongodb+srv://ilyesmekalfa:aIZn7w54qWr51TKZ@cluster0.k7107.mongodb.net/')//'mongodb://localhost:27017/Children'
  ).then(() => {
     console.log('Connected to database!');
 })
