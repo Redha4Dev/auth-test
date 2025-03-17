@@ -20,7 +20,7 @@ exports.signUp = async (req,res) => {
     
     try{
         // //create the token for the user
-        const token = jwt.sign({id : newUser._id}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        const token = jwt.sign({id : newUser._id, name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -116,7 +116,7 @@ exports.logIn = async (req,res) =>{
         
 
         //create the token for the user
-        const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        const token = jwt.sign({id : user._id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         console.log(user.password);
         
 

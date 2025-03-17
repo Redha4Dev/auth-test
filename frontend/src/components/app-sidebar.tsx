@@ -32,12 +32,22 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "./ui/dropdown-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+
 
 export function AppSidebar() {
   const navigate = useNavigate();
   const { open } = useSidebar();
   const [usersOpen, setUsersOpen] = useState(false);
+  const [username , setUsername] = useState("Username");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decode = jwtDecode(token);
+      setUsername(decode.name);
+    }
+  }, []);
   
   const Logout = async () => {
     try {
@@ -134,7 +144,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> { username }
                   <ChevronUpSquare className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
