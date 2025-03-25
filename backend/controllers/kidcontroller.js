@@ -66,7 +66,7 @@ exports.getKid = async (req,res,next) =>{
 // //to add kid to the db
 
 exports.addKid = async (req,res,next) => {
-    //NB : this function is accessed only be the kid parent and the admin
+    //NB : this function is accessed only be the kid parent and the admin the kid will be added auomatically to the teacher kids list
     const {name , code} = req.body;
     
     try { 
@@ -90,7 +90,7 @@ exports.addKid = async (req,res,next) => {
         if (parent.kids.includes(name)) {
             return next(console.error('kid already exists'))
         }else {
-            parent.kids.push(name);
+            parent.kids.push({name , id : newKid._id});
             console.log(name);
             
             await parent.save();
@@ -106,13 +106,11 @@ exports.addKid = async (req,res,next) => {
        if (school.kids.includes(name)) {
                 return next(console.error('kid already exists'))
             }else {
-                school.kids.push(name);
-                console.log(name);
-                
+                school.kids.push({name , id : newKid._id});                
                 await school.save();
             }
 
-        // add the kif to the teacher kids list  
+        // add the kid to the teacher kids list  
         const teacher = await User.findOne(
                 { role : 'teacher' , teacher : req.body.teacher}
         )
@@ -121,12 +119,13 @@ exports.addKid = async (req,res,next) => {
        if (teacher.kids.includes(name)) {
                 return next(console.error('kid already exists'))
             }else {
-                teacher.kids.push(name);
+                teacher.kids.push({name , id : newKid._id});
                 console.log(name);
                 
                 await teacher.save();
             }
-        //to see if the child exists in the teacher list (i am not sure about if i ll add it here or in th teacher controllers)
+
+
         res.status(201).json({
             message: 'document successfully created',
             
@@ -153,22 +152,21 @@ exports.removeKid = async (req,res,next) => {
         }
         //delete the kid
 
-        //we need to add the full name of the kid or we will change the list item to object containing the id and name of the child
         const prant =await User.findOneAndUpdate(
-            {kids : kid.name , name : kid.parent},
+            {'kids.name' : kid.name , 'kids.id' : kid._id , name : kid.parent},
             {$pull : {kids : kid.name, _id : kid._id}},
             {new : true}
         )
 
         //delete the child from the school list
         const school = await User.findOneAndUpdate(
-            {kids : kid.name , school : kid.school},
+            {'kids.name' : kid.name , 'kids.id' : kid._id , school : kid.school},
             {$pull : {kids : kid.name , _id : kid._id}},
             {new : true}
         )
 
         const teacher = await User.findOneAndUpdate(
-            { kids : kid.name , teacher : kid.teacher},
+            { 'kids.name' : kid.name , 'kids.id' : kid._id , teacher : kid.teacher},
             {$pull : {kids : kid.name ,_id : kid.id} },
             {new : true}
         )
