@@ -4,59 +4,59 @@ const validator = require('validator');
 const crypto = require('crypto');
 const { parsePhoneNumberFromString } = require('libphonenumber-js');
 
-const Userschema =  mongoose.Schema ({
+const Userschema = mongoose.Schema({
     name: {
-        type : String ,
-        required : [true , 'please enter youe User name']
+        type: String,
+        required: [true, 'please enter youe User name']
     },
     email: {
-        type : String,
-        required :[true , 'please enter youe email'],
-        unique : true,
+        type: String,
+        required: [true, 'please enter youe email'],
+        unique: true,
         lowercase: true,
         validate: {
             //to validate the email
-            validator: async function(email) {
+            validator: async function (email) {
                 //to see if the email exists in the db already default true
-              const user = await this.constructor.findOne({ email });
-              if(user) {
-                //check if the existing email is the same as the one written
-                if(this.id === user.id) {
-                  return true;
+                const user = await this.constructor.findOne({ email });
+                if (user) {
+                    //check if the existing email is the same as the one written
+                    if (this.id === user.id) {
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-              }
-              return true;
+                return true;
             },
             message: 'The specified email address is already exists.'
-          },
-        
+        },
+
     },
     phone: {
-        type : String,
-        validate :{
-            validator : function (el) {
+        type: String,
+        validate: {
+            validator: function (el) {
                 const phone = parsePhoneNumberFromString(el);
                 return phone && phone.isValid()
             },
-            message : 'phone number is not valid'
-        }        
-    }, 
-    gender :{
-        type : String,
-        required : [true ,'please enter youe gender'],
-        enum: ['Male', 'Female', 'Mouad']
+            message: 'phone number is not valid'
+        }
     },
+    // gender :{
+    //     type : String,
+    //     required : [true ,'please enter youe gender'],
+    //     enum: ['Male', 'Female', 'Mouad']
+    // },
     role: {
         type: String,
-        enum : ['parent', 'teacher', 'admin'],
+        enum: ['parent', 'teacher', 'admin'],
         default: 'parent',
         required: true
     },
-    password :{
-        type :String ,
-        required : [true ,'please enter youe password'],
-        select : false,
+    password: {
+        type: String,
+        required: [true, 'please enter youe password'],
+        select: false,
         // validate :{
         //     validator: function (el) {
         //         return validator.isStrongPassword(el, {
@@ -67,22 +67,22 @@ const Userschema =  mongoose.Schema ({
         //     message : 'Password is not strong enough.'
         // }
     },
-    confirmPassword :{
-        type : String,
-        validate : {
+    confirmPassword: {
+        type: String,
+        validate: {
             //to validate the password
-            validator : function (el) {
+            validator: function (el) {
                 return this.password == el
             },
-            message : 'passwords are not the same'
+            message: 'passwords are not the same'
         }
     },
     kids: [],
-    adress : String,
+    adress: String,
     passwordchangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
-    verificationCode : String,
+    verificationCode: String,
 })
 
 
@@ -90,31 +90,31 @@ const Userschema =  mongoose.Schema ({
 
 //crypt the password
 
-Userschema.pre('save', async function (req,res,next) {
+Userschema.pre('save', async function (req, res, next) {
     //check if the user cahnged the password
     if (!this.isModified('password')) {
         return next
     }
     //  try {
-         //crypt the password
-         this.password = await bcrypt.hash(this.password , 12);
-         this.confirmPassword = undefined
-         
-        
+    //crypt the password
+    this.password = await bcrypt.hash(this.password, 12);
+    this.confirmPassword = undefined
+
+
     //  } catch (error) {
     //     next(error)
     //  }
 })
 
 //used to logIn the user
-Userschema.methods.correctPassword = async  function (currentpassword, userpassword) {  
-    return await bcrypt.compare (currentpassword,userpassword)
+Userschema.methods.correctPassword = async function (currentpassword, userpassword) {
+    return await bcrypt.compare(currentpassword, userpassword)
 }
 
 //to check if the user changed  password after the token was sent
 Userschema.methods.changedPasswordAfter = function (JWTTimestamp) {
     if (this.passwordchangedAt) {
-        const changed = parseInt(this.passwordchangedAt.getTime() / 1000 , 10)
+        const changed = parseInt(this.passwordchangedAt.getTime() / 1000, 10)
         return changed > JWTTimestamp
     }
     return false
@@ -122,7 +122,7 @@ Userschema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
 //create the reset token for in the reset password
 
-Userschema.methods.createPasswordResetToken = function (){
+Userschema.methods.createPasswordResetToken = function () {
     //create the token using the crypto module
     const token = crypto.randomBytes(32).toString('hex');
     //save the hashed token in the resettoken field
@@ -133,9 +133,9 @@ Userschema.methods.createPasswordResetToken = function (){
     return token
 }
 
-Userschema.methods.createVerificationCode = async  function () {  
+Userschema.methods.createVerificationCode = async function () {
     //create verification code
-    const code = Math.floor(1000 + Math.random())* 900000;
+    const code = Math.floor(1000 + Math.random()) * 900000;
     //save hashed code in his field
     this.verificationCode = crypto.createHash('sha256').update(code).digest('hex');
     //return the code
