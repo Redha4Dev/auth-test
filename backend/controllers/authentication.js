@@ -20,7 +20,11 @@ exports.signUp = async (req,res) => {
     
     try{
         // //create the token for the user
+<<<<<<< HEAD
         const token = jwt.sign({id : newUser._id ,  name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+=======
+        const token = jwt.sign({id : newUser._id, name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+>>>>>>> 132ba727487b7d82c4a5a082286f487d60ae7762git
         
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -32,7 +36,7 @@ exports.signUp = async (req,res) => {
         res.cookie('jwt', token, cookieOptions);
         
         
-        // //send the response
+        //send the response
         res.status(201).json({
             token
         })
@@ -111,20 +115,35 @@ exports.logIn = async (req,res) =>{
             return next(console.error('please enter your email and password'))
         }        
         //create the token for the user
+<<<<<<< HEAD
         const token = jwt.sign({id : user._id ,name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         
         //create the cookies for the user
+=======
+        const token = jwt.sign({id : user._id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        console.log(user.password);
+        
+
+>>>>>>> 132ba727487b7d82c4a5a082286f487d60ae7762
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             httpOnly: true
         };
     
+<<<<<<< HEAD
         
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     
         res.cookie('jwt', token, cookieOptions);
           
         
+=======
+        if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    
+        res.cookie('jwt', token, cookieOptions);
+
+
+>>>>>>> 132ba727487b7d82c4a5a082286f487d60ae7762
         //send the response
         res.status(200).json({
             message : 'login successk',
