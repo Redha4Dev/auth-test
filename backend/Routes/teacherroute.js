@@ -1,16 +1,17 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
 const teacherController = require('../controllers/teachercontrollers');
+const kidcontroller = require('../controllers/kidcontroller');
 
 
 
 //start the route
 const router = express.Router()
 
-router
-    .route('/SignUpAdmin')
-    .get()
-    .post()
+// router
+//     .route('/SignUpAdmin')
+//     .get()
+//     .post()
 
 router
     .route('/teacher/dashboard')
@@ -21,17 +22,17 @@ router
 
 router 
     .route('/teacher/kids')
-    .get()
+    .get(kidcontroller.getAllKids)
     .post()
     .patch()
     .delete()
 
 router 
     .route('/teacher/manage-kids/:id')
-    .get(teacherController.getKids)
-    .post(teacherController.addKid )
-    .patch()
-    .delete(teacherController.deleteKid)
+    .get(kidcontroller.getKid)
+    .post(kidcontroller.addKid )
+    // .patch()
+    .delete(kidcontroller.removeKid)
 
  router 
     .route('/teacher/chats')

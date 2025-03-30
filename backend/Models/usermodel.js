@@ -77,7 +77,10 @@ const Userschema =  mongoose.Schema ({
             message : 'passwords are not the same'
         }
     },
-    kids: [],
+    kids: [{
+        name: String,
+        id: String,
+    }],
     adress : String,
     passwordchangedAt: Date,
     passwordResetToken: String,
