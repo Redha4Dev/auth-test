@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kidergarten/components/myButton.dart';
 import 'package:kidergarten/components/textField.dart';
 import 'package:kidergarten/pages/signup_page.dart';
+import 'package:kidergarten/pages/teacher.dart';
+import 'package:kidergarten/pages/welcome_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -74,7 +76,15 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: screenHeight * .1,
                 ),
-                myOutlinedButton(text: "Submit", onTap: () {}),
+                myOutlinedButton(
+                    text: "Submit",
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TeacherHomePage(),
+                          ));
+                    }),
                 SizedBox(
                   height: screenHeight * .02,
                 ),
