@@ -7,6 +7,7 @@ import Home from "./Pages/Home";
 import Profiles from "./Pages/Profiles";
 import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
+import Kids from "./Pages/Users/Kids";
 
 function App() {
   const [dataF, setDataF] = useState({ name: "", email: "" });
@@ -39,6 +40,7 @@ function App() {
           <Route element={<Home />} path="/" />
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
+          <Route element={<Kids/>} path="/Users/Kids"/>
         </Route>
       </Routes>
     </BrowserRouter>

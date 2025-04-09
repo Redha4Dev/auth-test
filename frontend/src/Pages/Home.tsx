@@ -11,7 +11,7 @@ function Home() {
   const token = localStorage.getItem("token");
   if (token) {
     const decode = jwtDecode(token);
-    console.log("User ID: ", decode.name);
+    console.log("User ID: ", decode.id);
   }
   return (
     <div className="w-screen min-h-screen h-fit">
