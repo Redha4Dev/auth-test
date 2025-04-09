@@ -4,15 +4,36 @@ const api = axios.create({
   baseURL: "http://localhost:5000",
 });
 
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+export const getKids = async (name, id) => {
+  try {
+    const response = await api.get(`/kids`, {
+      params: { name, id }, // Send parameters in the query string
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching kids data:", error.response?.data?.message || error.message);
+    throw error;
+  }
+};
 
-export default api;
+export const getKid = (name, id) => {
+  try{
+    const response = api.get(`/kids/${id}`, {
+      params: { name, id }, // Send parameters in the query string
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching kid data:", error.response?.data?.message || error.message);
+    throw error;
+  }
+}
+
+export const addKid = async (kidData) => {
+  try {
+    const response = await api.post("/kids", kidData);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding kid:", error.response?.data?.message || error.message);
+    throw error;
+  }
+}

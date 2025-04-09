@@ -6,6 +6,7 @@ interface FormData {
   password: string;
   confirmPassword: string;
   gender: string;
+  school: string;
   Kindergarten: {
     Name: string;
     Adress: string;

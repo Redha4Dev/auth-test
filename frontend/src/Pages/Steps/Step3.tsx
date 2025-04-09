@@ -28,6 +28,7 @@ function Step3() {
     const role = "admin";
     const kids = [{}];
     const gender = formData.gender;
+    const school = formData.Kindergarten.Name;
 
     try {
       await signUpAdmin({
@@ -38,6 +39,7 @@ function Step3() {
         role,
         kids,
         gender,
+        school,
       });
       navigate("/");
     } catch (error) {
