@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const ErrorHandler = require ('./utils/errorhandler');
+const errorMiddleware = require('./controllers/errorcontroller')
 const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const registration = require('./Routes/registrationroutes')
@@ -27,11 +29,10 @@ app.use('/teacher', teacher)
 app.use('/', registration)
 
 app.all('*', (req, res) => {
-    res.status(404).json({
-        status: 'fail',
-        message: `Can't find ${req.originalUrl} on this server`
-    })
+    next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
 })
+app.use(errorMiddleware);
+
 
 
 module.exports = app;

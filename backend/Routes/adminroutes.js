@@ -54,11 +54,11 @@ router
     .delete()
 
 router 
-    .route('/admin/kids')
+    .route('/kids')
     .get(kidControllers.getAllKids)
-    .post()
+    .post(kidControllers.addKid)
     .patch()
-    .delete(kidControllers.removeKid , authController.restrictTo(['admin']))
+    .delete(kidControllers.removeKid)
 
  router 
     .route('/admin/manage-kids/: id')

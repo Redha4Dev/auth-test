@@ -44,7 +44,7 @@ const Userschema =  mongoose.Schema ({
     }, 
     gender :{
         type : String,
-        required : [true ,'please enter youe gender'],
+        // required : [true ,'please enter youe gender'],
         enum: ['Male', 'Female', 'Mouad']
     },
     role: {
@@ -80,6 +80,7 @@ const Userschema =  mongoose.Schema ({
     kids: [{
         name: String,
         id: String,
+        _id : false,
     }],
     adress : String,
     passwordchangedAt: Date,
