@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const ErrorHandler = require ('./utils/errorhandler');
+const Apperror = require ('./utils/apperror');
 const errorMiddleware = require('./controllers/errorcontroller')
 const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
