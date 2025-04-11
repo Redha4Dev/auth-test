@@ -47,7 +47,11 @@ console.log("rrr");
             // }
         //send the response
         res.status(200).json({
+<<<<<<< HEAD
             PARENT :user
+=======
+            parent
+>>>>>>> 65e80d50bb014a0c8179d1ae6f0faa6df1a02f89
         })
     } catch (error) {
         res.status(404).json({
