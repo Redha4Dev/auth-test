@@ -1,14 +1,15 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
+const parentControllers = require('../controllers/parentControllers')
 // const path = require('path');
 //start the route
 const router = express.Router()
 
 
 router
-    .route('/parent/profile')
-    .get()
+    .route('/profile')
+    .get(parentControllers.getParentInfo)
     .post()
     .patch()
     .delete()
