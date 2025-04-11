@@ -44,7 +44,7 @@ exports.getParentInfo = async(req,res,next) =>{
                 return next( console.error('parent not found please SinUp or logIn to continue'));
             }
         //send the response
-        res.status(200)/json({
+        res.status(200).json({
             parent
         })
     } catch (error) {

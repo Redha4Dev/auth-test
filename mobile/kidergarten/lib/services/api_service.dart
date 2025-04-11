@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ApiService {  
- Future<bool> loginUser(String email, String password) async {
-  final url = Uri.parse('http://10.0.2.2:5000/api/v1/users/login'); // replace <your-ip> with actual IP
+class ApiService {
+  Future<Map<String, dynamic>?> loginUser(String email, String password) async {
+    final url = Uri.parse(
+        'http://10.0.2.2:5000/login'); // replace <your-ip> with actual IP
 
-  try {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -17,27 +18,66 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final token = data['token'];
+      // Decode JSON string into a Map
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-      // Save token locally
-      // final prefs = await SharedPreferences.getInstance();
-      // await prefs.setString('token', token);
-      // await prefs.setString('email', email); // Optional
-      // await prefs.setBool('loggedIn', true);
+      // Save the token in shared preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', responseData['token']);
 
-      return true;
+      return responseData;
     } else {
-      print("Login failed: ${response.body}");
-      return false;
+      print('Login failed: ${response.body}');
+      return null;
     }
-  } catch (e) {
-    print("Error during login: $e");
-    return false;
   }
-}
 
-  Future<void> createUser(String name,email,password,confirmPassword,role,phone,gender) async {
+// Function to fetch parent info using the token
+  Future<Map<String, dynamic>?> getParentInfo() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (token == null) {
+        throw Exception('User is not logged in');
+      }
+
+      // Decode the token to get the user ID (or any other information)
+      final decodedToken = JwtDecoder.decode(token);
+      final userId =
+          decodedToken['id']; // Assuming 'id' is stored in the token payload
+      final userName = decodedToken[
+          'name']; // Assuming 'name' is stored in the token payload
+
+      final url = Uri.parse('http://10.0.2.2:5000/parent/profile');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Bearer $token', // Include the token in the Authorization header
+        },
+        body: jsonEncode({
+          'id': userId, // Pass the userId extracted from the token
+          'name': userName, // Pass the userName if required
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the parent data
+        return jsonDecode(response.body)['parent'];
+      } else {
+        print('Failed to fetch parent info: ${response.body}');
+        return null;
+      }
+    } catch (error) {
+      print('Error: $error');
+      return null;
+    }
+  }
+
+  Future<void> createUser(String name, email, password, confirmPassword, role,
+      phone, gender) async {
     final url = Uri.parse(
         'http://10.0.2.2:5000/signup'); // or your actual local IP if on real phone
 
