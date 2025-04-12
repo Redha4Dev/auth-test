@@ -18,6 +18,11 @@ const kidschema = mongoose.Schema({
         max: [4,'your son age is not valid'],
         required: [true, 'enter your sons age']
     },
+    gender :{
+        type : String,
+        required : [true ,'please enter your gender'],
+        enum: ['Boy', 'Girl']
+    },
     code: Number,
     marks: Number,
     medicalStatus : String,

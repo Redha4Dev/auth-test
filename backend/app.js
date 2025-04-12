@@ -1,10 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-<<<<<<< HEAD
 const ErrorHandler = require ('./utils/apperror');
-=======
-const Apperror = require ('./utils/apperror');
->>>>>>> 65e80d50bb014a0c8179d1ae6f0faa6df1a02f89
+
 const errorMiddleware = require('./controllers/errorcontroller')
 const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
@@ -60,6 +57,10 @@ app.use('/admin', admin)
 app.use('/teacher', teacher)
 app.use('/', registration)
 
+app.all('*', (req, res , next) => {
+    next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
+})
+app.use(errorMiddleware);
 // app.all('*', (req, res , next) => {
 //     next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
 // })
