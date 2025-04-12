@@ -66,15 +66,16 @@ exports.getKid = async (req,res,next) =>{
 // //to add kid to the db
 
 exports.addKid = async (req,res,next) => {
-    //NB : this function is accessed only be the kid parent and the admin the kid will be added auomatically to the teacher kids list
+    //NB : this function is accessed only be the kid parent and the admin
     const {name , code} = req.body;
     
     try { 
         //verify if this kid exists already in the db using his unique code
-        const exists = await Kid.findOne({code : code , name : name });
+        const exists = await Kid.findOne({code ,  name });
         
-        if (exists != null) {
-            // return next( new console.error('this kid already exists'))
+        if (exists) {
+             return res.status(400).json({message : 'this kid already exists'})
+
         }
 
         //create and save the newKid
@@ -83,109 +84,124 @@ exports.addKid = async (req,res,next) => {
         //insert the kid to the list of parent kids 
 
         const parent = await User.findOne(
-            {name : req.body.parent , _id : req.body.id}
-        )
+            {name : req.body.parent, 
+        })
+
+        if (!parent) {
+            return res.status(404).json({ message: 'Parent not found' });
+        }
+
+        if (!parent.kids) parent.kids = []; // Initialize if undefined
 
         //if the child exists in the list
         if (parent.kids.includes(name)) {
-            return next(console.error('kid already exists'))
-        }else {
-            parent.kids.push({name , id : newKid._id});
-            console.log(name);
-            
-            await parent.save();
+            return res.status(400).json({ message: 'Kid already exists in parent list' });
         }
 
-         //insert the kid to the school list
-
-         const school = await User.findOne(
-          { role : 'admin' , school : req.body.school}
-  )
-     
-  //to see if the kids exists in the school list
- if (school.kids.includes(name)) {
-          return next(console.error('kid already exists'))
-      }else {
-          school.kids.push({name , id : newKid._id});                
-          await school.save();
-      }
-
-  // add the kid to the teacher kids list  
-  const teacher = await User.findOne(
-          { role : 'teacher' , teacher : req.body.teacher}
-  )
-     
-  //to see if the kids exists in the teacher list
- if (teacher.kids.includes(name)) {
-          return next(console.error('kid already exists'))
-      }else {
-          teacher.kids.push({name , id : newKid._id});
-          console.log(name);
-          
-          await teacher.save();
-      }
-
-      res.status(201).json({
-        message: 'document successfully created',
+            parent.kids.push(name);
+            await parent.save();
         
-    })
-    
-} catch (err) {
-    console.log(err);
-    
-    res.status(404).json({
-        erro: err.message,
-        message : 'page not found'
-    })
-}
-};
+ 
+        //insert the kid to the school list
 
-//to remove a kid from the db
-exports.removeKid = async (req, res, next) => {
-  //find the kid in the db
-  const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
+        const school = await User.findOne(
+                { role : 'admin',
+                 school : req.body.school
+                });
+        
+        
+         if (!school) {
+            return res.status(404).json({ message: 'School not found' });
+        }
 
-  try {
-    if (!kid) {
-      return next(console.error("this kid does not exists"));
+        if (!school.kids) school.kids = [];
+
+        //to see if the kids exists in the school list
+        if (!school.kids.includes(name)) {
+            school.kids.push(name);
+            await school.save();
+        }
+
+        // add the kif to the teacher kids list  
+         if (req.body.teacher) { // Only if teacher is provided
+            const teacher = await User.findOne({
+                role: 'teacher',
+                name: req.body.teacher // Changed from 'teacher' to 'name'?
+            });
+           
+        //to see if the kids exists in the teacher list
+        if (teacher) {
+            if (!teacher.kids) teacher.kids = [];
+            
+            if (!teacher.kids.includes(name)) {
+                teacher.kids.push(name);
+                await teacher.save();
+            }
+        }
     }
-    //delete the kid
+        //to see if the child exists in the teacher list (i am not sure about if i ll add it here or in th teacher controllers)
+        res.status(201).json({
+            message: 'Kid successfully created',
+            kid: newKid
+        });
+        
+    } catch (err) {
+        console.error('Error in addKid:', err);
+        res.status(500).json({
+            
+            error: err.message,
+            message: 'Internal server error'
+        })
+    }
+}
 
-    //we need to add the full name of the kid or we will change the list item to object containing the id and name of the child
-    const prant = await User.findOneAndUpdate(
-      { kids: kid.name, name: kid.parent },
-      { $pull: { kids: kid.name, _id: kid._id } },
-      { new: true }
-    );
 
-    //delete the child from the school list
-    const school = await User.findOneAndUpdate(
-      { kids: kid.name, school: kid.school },
-      { $pull: { kids: kid.name, _id: kid._id } },
-      { new: true }
-    );
+ //to remove a kid from the db
+exports.removeKid = async (req,res,next) => {
+    //find the kid in the db
+    const kid = await Kid.findOne({name: req.body.name , _id : req.body.id})
+    
+    try {
+        if (!kid) {
+            return next(console.error('this kid does not exists'))
+        }
+        //delete the kid
 
-    const teacher = await User.findOneAndUpdate(
-      { kids: kid.name, teacher: kid.teacher },
-      { $pull: { kids: kid.name, _id: kid.id } },
-      { new: true }
-    );
+        //we need to add the full name of the kid or we will change the list item to object containing the id and name of the child
+        const prant =await User.findOneAndUpdate(
+            {kids : kid.name , name : kid.parent},
+            {$pull : {kids : kid.name, _id : kid._id}},
+            {new : true}
+        )
 
-    //delete the kid from the kid collection
-    await Kid.findOneAndDelete({ _id: kid._id });
-    //for the teacher document im not sure if  i ll add the delete function here or in the teacher controllers
+        //delete the child from the school list
+        const school = await User.findOneAndUpdate(
+            {kids : kid.name , school : kid.school},
+            {$pull : {kids : kid.name , _id : kid._id}},
+            {new : true}
+        )
 
-    res.status(204).json({
-      message: "kid deleted successfully",
-      kid: null,
-    });
-  } catch (err) {
-    res.status(404).json({
-      message: "erroe occured",
-      erro: err.message,
-    });
-  }
-};
+        const teacher = await User.findOneAndUpdate(
+            { kids : kid.name , teacher : kid.teacher},
+            {$pull : {kids : kid.name ,_id : kid.id} },
+            {new : true}
+        )
+           
+       //delete the kid from the kid collection
+        await Kid.findOneAndDelete({_id : kid._id})
+        //for the teacher document im not sure if  i ll add the delete function here or in the teacher controllers
+        
+        res.status(204).json({
+            message : 'kid deleted successfully',
+            kid : null
+        })
+    } catch (err) {
+        res.status(404).json({
+            message: 'erroe occured',
+            erro : err.message
+        })
+    }
+}
 
 //to update kid info in the db
 exports.updatekidinfo = async (req,res,next) => {

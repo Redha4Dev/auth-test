@@ -19,6 +19,7 @@
     "libphonenumber-js": "^1.11.20",
     "mongoose": "^8.9.6",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
     "validator": "^13.12.0"
