@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/myButton.dart';
 import 'package:kidergarten/components/textField.dart';
-import 'package:kidergarten/pages/signup_page.dart';
 import 'package:kidergarten/pages/teacher.dart';
-import 'package:kidergarten/pages/welcome_page.dart';
+import 'package:kidergarten/pages/teacherDashboard.dart';
+import 'package:kidergarten/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,8 +18,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width; // Gives the width
-    double screenHeight =
-        MediaQuery.of(context).size.height; // Gives the height
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final ApiService apiService = ApiService();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -68,22 +73,31 @@ class _LoginPageState extends State<LoginPage> {
                 myTextField(
                   labelText: 'Email',
                   icon: Icons.email,
+                  controller: emailController,
                 ),
                 SizedBox(
                   height: screenHeight * .01,
                 ),
-                myTextField(labelText: 'Password', icon: Icons.password),
+                myTextField(
+                    labelText: 'Password',
+                    controller: passwordController,
+                    icon: Icons.password),
                 SizedBox(
                   height: screenHeight * .1,
                 ),
                 myOutlinedButton(
                     text: "Submit",
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TeacherHomePage(),
-                          ));
+                    onTap: () async {
+                      final response =
+                          await apiService.loginUser("log@dz.dz", "aze");
+
+                      final parentInfo = await apiService.getParentInfo();
+  
+  if (parentInfo != null) {
+    print('Parent Info: $parentInfo');
+  } else {
+    print('No parent info found');
+  }
                     }),
                 SizedBox(
                   height: screenHeight * .02,

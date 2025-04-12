@@ -1,6 +1,7 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
+const adminControllers = require('../controllers/adminControllers');
 
 //start the route
 const router = express.Router()
@@ -32,8 +33,8 @@ const router = express.Router()
 
 
 router
-    .route('/admin/dashboard')
-    .get()
+    .route('/dashboard')
+    .get(adminControllers.getschoolinfo)
     .post()
     .patch()
     .delete()

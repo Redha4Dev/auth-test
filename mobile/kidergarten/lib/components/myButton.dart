@@ -44,19 +44,19 @@ class _MybuttonState extends State<Mybutton> {
   }
 }
 
-
-
 class myOutlinedButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const myOutlinedButton({required this.text, required this.onTap, Key? key}) : super(key: key);
+  const myOutlinedButton({required this.text, required this.onTap, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: 30,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.purple, width: 1.5), // Purple border

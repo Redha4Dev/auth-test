@@ -3,20 +3,25 @@ const Kid = require('../Models/kidmodel');
 
 exports.getschoolinfo = async(req, res , next) =>{
     //get the user based on his id
-    const user = await User.findById({_id : req.body.id});
+    console.log(req.body.id);
+    
+    const user = await User.findOne({ name : req.body.name});
+    console.log("user");
+    
     try {
         if (!user) {
-            return next ( console.error('user not exists please signUp or LogIn to continue'))
+            return next ( console.log('user not exists please signUp or LogIn to continue'))
         }
         //get the school info
-        const school = await User.school.findById({_id : req.body.id , name : req.body.name})
-        //check if the school exists
-        if (!school) {
-            return res.status(404).json({
-                err : error.message,
-                messge : 'school not found'
-            })
-        }
+        // const school = await User.school.findById({_id : req.body.id , name : req.body.name})
+        // //check if the school exists
+        // if (!school) {
+        //     return res.status(404).json({
+        //         err : error.message,
+        //         messge : 'school not found'
+        //     })
+        // }
+        console.log(user);
         
         //send the response
         res.status(200).json({

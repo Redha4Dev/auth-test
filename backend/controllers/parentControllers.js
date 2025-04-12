@@ -30,19 +30,21 @@ exports.updateme = async (req, res , next) =>{
 
 
 exports.getParentInfo = async(req,res,next) =>{
+console.log("rrr");
 
     //get the user based on his unique id
     const user = await User.findById({_id : req.body.id , name: req.body.name})
+        console.log(user);
         
     try {
       //check if the use exists
             if (!user) {
-                return next(console.error('user not found please signup or logIn to continue'))
+                return next(console.log('user not found please signup or logIn to continue'))
             }
-            const parent = await User.findById({_id : req.body.id, role : 'parent' , name: req.body.name})
-            if(!parent){
-                return next( console.error('parent not found please SinUp or logIn to continue'));
-            }
+            // const parent = await User.findById({_id : req.body.id, role : 'parent' , name: req.body.name})
+            // if(!parent){
+            //     return next( console.log('parent not found please SinUp or logIn to continue'));
+            // }
         //send the response
         res.status(200).json({
             parent
