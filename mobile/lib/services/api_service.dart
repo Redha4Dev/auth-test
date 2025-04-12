@@ -4,6 +4,28 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
+  Future<Map<String, dynamic>?> getUserFromToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token != null && token.isNotEmpty) {
+      try {
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+        // Assuming your JWT contains 'id' and 'name'
+        return {
+          'id': decodedToken['id'],
+          'name': decodedToken['name'],
+        };
+      } catch (e) {
+        print('Token decoding failed: $e');
+        return null;
+      }
+    } else {
+      print('No token found');
+      return null;
+    }
+  }
+
   Future<Map<String, dynamic>?> loginUser(String email, String password) async {
     final url = Uri.parse(
         'http://10.0.2.2:5000/login'); // replace <your-ip> with actual IP
@@ -32,46 +54,27 @@ class ApiService {
     }
   }
 
-// Function to fetch parent info using the token
-  Future<Map<String, dynamic>?> getParentInfo() async {
+  Future<Map<String, dynamic>?> getParentInfo(String id, String name) async {
+    final url = Uri.parse('http://10.0.2.2:5000/parent/profile');
+
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-
-      if (token == null) {
-        throw Exception('User is not logged in');
-      }
-
-      // Decode the token to get the user ID (or any other information)
-      final decodedToken = JwtDecoder.decode(token);
-      final userId =
-          decodedToken['id']; // Assuming 'id' is stored in the token payload
-      final userName = decodedToken[
-          'name']; // Assuming 'name' is stored in the token payload
-
-      final url = Uri.parse('http://10.0.2.2:5000/parent/profile');
       final response = await http.post(
         url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-              'Bearer $token', // Include the token in the Authorization header
-        },
-        body: jsonEncode({
-          'id': userId, // Pass the userId extracted from the token
-          'name': userName, // Pass the userName if required
-        }),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'id': id, 'name': name}), // ✅ Send as JSON body
       );
 
       if (response.statusCode == 200) {
-        // If the server returns a 200 OK response, parse the parent data
-        return jsonDecode(response.body)['parent'];
+        final data = jsonDecode(response.body);
+        print('✅ Parent found: $data');
+        return data['parent'];
       } else {
-        print('Failed to fetch parent info: ${response.body}');
+        final error = jsonDecode(response.body);
+        print('⚠️ Error: ${error['message']}');
         return null;
       }
-    } catch (error) {
-      print('Error: $error');
+    } catch (e) {
+      print('❌ Request failed: $e');
       return null;
     }
   }
