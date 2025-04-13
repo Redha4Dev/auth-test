@@ -97,8 +97,11 @@ exports.addKid = async (req,res,next) => {
         if (parent.kids.includes(name)) {
             return res.status(400).json({ message: 'Kid already exists in parent list' });
         }
+console.log(req.body.name);
 
-            parent.kids.push(name);
+            parent.kids.push({
+                name : req.body.name , id : req.body.id
+            });
             await parent.save();
         
  
@@ -106,7 +109,7 @@ exports.addKid = async (req,res,next) => {
 
         const school = await User.findOne(
                 { role : 'admin',
-                 school : req.body.school
+                 name : req.body.school
                 });
         
         
@@ -118,7 +121,10 @@ exports.addKid = async (req,res,next) => {
 
         //to see if the kids exists in the school list
         if (!school.kids.includes(name)) {
-            school.kids.push(name);
+            school.kids.push({
+                name : req.body.name 
+            }
+            );
             await school.save();
         }
 
@@ -134,7 +140,13 @@ exports.addKid = async (req,res,next) => {
             if (!teacher.kids) teacher.kids = [];
             
             if (!teacher.kids.includes(name)) {
-                teacher.kids.push(name);
+                teacher.kids.push({
+                    name : req.body.name ,
+                    id : newKid._id ,
+                    age : req.body.age ,
+                    code : req.body.code
+               })
+                                
                 await teacher.save();
             }
         }

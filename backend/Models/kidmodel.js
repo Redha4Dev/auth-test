@@ -11,7 +11,7 @@ const kidschema = mongoose.Schema({
     },
     school: {
         type : String,
-        required : [true, 'Please enter your school']
+        //required : [true, 'Please enter your school']
     },
     age: {
         type : Number,

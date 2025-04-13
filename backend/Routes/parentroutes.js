@@ -8,7 +8,7 @@ const router = express.Router()
 
 
 router
-    .route('/profile/:id/:name')
+    .route('/profile')
     .get(parentControllers.getParentInfo)
     .post(parentControllers.getParentInfo)
     .patch()
