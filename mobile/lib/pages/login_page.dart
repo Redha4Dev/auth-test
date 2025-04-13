@@ -122,6 +122,11 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       print('❌ Login failed, cannot fetch parent info.');
                     }
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TeacherHomePage(),
+                        ));
                   },
                 ),
                 SizedBox(

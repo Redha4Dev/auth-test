@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/studentCard.dart';
 import 'package:kidergarten/components/timetable.dart';
+import 'package:kidergarten/global.dart';
 
 class TeacherDashboard extends StatefulWidget {
   const TeacherDashboard({super.key});
@@ -99,12 +100,13 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> filteredStudents = studentsPerClass[selectedClassIndex]
-        .where((student) => student[selectedSearchCriterion]
-            .toString()
-            .toLowerCase()
-            .contains(searchQuery.toLowerCase()))
-        .toList();
+    List<Map<String, dynamic>> filteredStudents =
+        studentsPerClass[selectedClassIndex]
+            .where((student) => student[selectedSearchCriterion]
+                .toString()
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase()))
+            .toList();
 
     return SingleChildScrollView(
       child: Column(
@@ -120,10 +122,13 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    Text("Name : Benhacene", style: TextStyle(color: Colors.white)),
-                    Text("Email : f.benhachene@gmail.com", style: TextStyle(color: Colors.white)),
-                    Text("Phone Number : 0770504885", style: TextStyle(color: Colors.white)),
+                  children: [
+                    Text("Name: " + globalParentData?['name'],
+                        style: TextStyle(color: Colors.white)),
+                    Text("Email: " + globalParentData?['email'],
+                        style: TextStyle(color: Colors.white)),
+                    Text("Phone Number : 0770504885",
+                        style: TextStyle(color: Colors.white)),
                   ],
                 ),
               ],
@@ -136,8 +141,12 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               children: List.generate(3, (index) {
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedClassIndex == index ? const Color(0xFF7B61FF) : Colors.white,
-                    foregroundColor: selectedClassIndex == index ? Colors.white : Colors.black,
+                    backgroundColor: selectedClassIndex == index
+                        ? const Color(0xFF7B61FF)
+                        : Colors.white,
+                    foregroundColor: selectedClassIndex == index
+                        ? Colors.white
+                        : Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -150,7 +159,8 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             ),
           ),
           ExpansionTile(
-            backgroundColor: showTimetable ? const Color(0xFF7B61FF) : Colors.white,
+            backgroundColor:
+                showTimetable ? const Color(0xFF7B61FF) : Colors.white,
             collapsedBackgroundColor: Colors.white,
             title: Text(
               "Timetable",
@@ -159,13 +169,15 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onExpansionChanged: (expanded) => setState(() => showTimetable = expanded),
+            onExpansionChanged: (expanded) =>
+                setState(() => showTimetable = expanded),
             children: [
               MyTimeTable(days: days, timeSlots: timeSlots, schedule: schedule)
             ],
           ),
           ExpansionTile(
-            backgroundColor: showStudentList ? const Color(0xFF7B61FF) : Colors.white,
+            backgroundColor:
+                showStudentList ? const Color(0xFF7B61FF) : Colors.white,
             collapsedBackgroundColor: Colors.white,
             title: Text(
               "List Of Students",
@@ -174,7 +186,8 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onExpansionChanged: (expanded) => setState(() => showStudentList = expanded),
+            onExpansionChanged: (expanded) =>
+                setState(() => showStudentList = expanded),
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -200,8 +213,10 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                     DropdownButton<String>(
                       value: selectedSearchCriterion,
                       items: const [
-                        DropdownMenuItem(value: "name", child: Text("Search By Name")),
-                        DropdownMenuItem(value: "age", child: Text("Search By Age")),
+                        DropdownMenuItem(
+                            value: "name", child: Text("Search By Name")),
+                        DropdownMenuItem(
+                            value: "age", child: Text("Search By Age")),
                       ],
                       onChanged: (val) {
                         setState(() {
