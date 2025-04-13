@@ -55,19 +55,19 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>?> getParentInfo(String id, String name) async {
-    final url = Uri.parse('http://10.0.2.2:5000/parent/profile');
+    final url = Uri.parse('http://10.0.2.2:5000/parent/profile/$id/$name');
 
     try {
-      final response = await http.post(
+      final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'id': id, 'name': name}), // ✅ Send as JSON body
+        //body: jsonEncode({'id': id, 'name': name}), // ✅ Send as JSON body
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print('✅ Parent found: $data');
-        return data['parent'];
+        return data;
       } else {
         final error = jsonDecode(response.body);
         print('⚠️ Error: ${error['message']}');

@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:kidergarten/components/myButton.dart';
 import 'package:kidergarten/components/textField.dart';
 import 'package:kidergarten/pages/login_page.dart';
+import 'package:kidergarten/pages/teacher.dart';
+import 'package:kidergarten/pages/teacherDashboard.dart';
 import 'package:kidergarten/services/api_service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -172,7 +174,8 @@ class _SignupPageState extends State<SignupPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
+                                  builder: (context) =>
+                                      const TeacherHomePage()),
                             );
                           },
                           child: const Text(
