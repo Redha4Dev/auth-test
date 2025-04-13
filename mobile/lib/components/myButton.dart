@@ -56,19 +56,31 @@ class myOutlinedButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 30,
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        width: 100,
+        height: 40,
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.purple, width: 1.5), // Purple border
+          // Purple border
           borderRadius: BorderRadius.circular(30), // Rounded edges
-          color: Colors.white, // Background color
+          color: const Color(0xFFAF92D8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black
+                  .withOpacity(0.2), // Shadow color with transparency
+              spreadRadius: 1, // How much the shadow spreads
+              blurRadius: 2, // Softness of the shadow
+              offset: Offset(0, 6), // Position: (X, Y)
+            ),
+          ], // Background color
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Colors.purple, // Text color
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: const Color.fromARGB(255, 230, 230, 230), // Text color
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),

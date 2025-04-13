@@ -86,19 +86,44 @@ class _LoginPageState extends State<LoginPage> {
                   height: screenHeight * .1,
                 ),
                 myOutlinedButton(
-                    text: "Submit",
-                    onTap: () async {
-                      final response =
-                          await apiService.loginUser("log@dz.dz", "aze");
+                  text: "Submit",
+                  onTap: () async {
+                    print('🔐 Attempting to log in...');
+                    final response = await apiService.loginUser(
+                      'log@dz.dz',
+                      'aze',
+                    );
 
-                      final parentInfo = await apiService.getParentInfo();
-  
-  if (parentInfo != null) {
-    print('Parent Info: $parentInfo');
-  } else {
-    print('No parent info found');
-  }
-                    }),
+                    if (response != null) {
+                      print('✅ Login successful, token saved.');
+
+                      // Try to extract user info from token
+                      final userData = await apiService.getUserFromToken();
+                      if (userData != null) {
+                        print(
+                            '🧾 User extracted from token: ${userData['id']}, ${userData['name']}');
+
+                        // Use the extracted user data to fetch parent info
+                        final parentInfo = await apiService.getParentInfo(
+                          // '67e865fa467eeb7c40462f0a',
+                          // 'ESI'
+                          userData['id'],
+                          userData['name'],
+                        );
+                        print('👨‍👩‍👧 Parent Info: $parentInfo');
+                        if (parentInfo != null) {
+                          print('👨‍👩‍👧 Parent Info: $parentInfo');
+                        } else {
+                          print('⚠️ No parent info found or error occurred.');
+                        }
+                      } else {
+                        print('❌ Failed to extract user info from token.');
+                      }
+                    } else {
+                      print('❌ Login failed, cannot fetch parent info.');
+                    }
+                  },
+                ),
                 SizedBox(
                   height: screenHeight * .02,
                 ),

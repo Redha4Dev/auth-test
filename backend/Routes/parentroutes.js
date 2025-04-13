@@ -10,43 +10,43 @@ const router = express.Router()
 router
     .route('/profile')
     .get(parentControllers.getParentInfo)
-    .post()
+    .post(parentControllers.getParentInfo)
     .patch()
     .delete()
 
-router 
+router
     .route('/kids')
     .get(kidControllers.getAllKids)
     .post(kidControllers.addKid)
     .patch(kidControllers.updatekidinfo)
     .delete(kidControllers.removeKid)
 
-router 
+router
     .route('/parent/kids/one')
     // .get(kidControllers.getKid)
     .post()
-    // .patch(kidControllers.updatekidinfo)
-    // .delete(kidControllers.removeKid , authController.restrictTo(['admin' ]))
+// .patch(kidControllers.updatekidinfo)
+// .delete(kidControllers.removeKid , authController.restrictTo(['admin' ]))
 
-router 
+router
     .route('/parent/chats')
     .get()
     .post()
     .patch()
     .delete()
 
-router 
+router
     .route('/parent/announcement')
     .get()
-    // .post()
-    // .patch()
-    // .delete()
+// .post()
+// .patch()
+// .delete()
 
-    router 
+router
     .route('/parent/settings')
     .get()
     .post()
     .patch()
     .delete()
 
-    module.exports = router
+module.exports = router
