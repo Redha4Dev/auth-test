@@ -60,54 +60,65 @@ const childrenData = Array.from({ length: 50 }, (_, i) => ({
 }));
 
 function Kids() {
-  const [username, setUsername] = useState("Username");
-  const [id, setId] = useState("id");
+  const [username, setUsername] = useState("");
+  const [id, setId] = useState("");
   const [childs, setChilds] = useState([]);
   const [kids, setKids] = useState({
-    name: "hahaha",
-    code: "69",
-    parent: "Redhaa",
-    id: "67b3377012eb9818ccd61d42",
-    school: "Sunshine School",
-    teacher: "Ms. Smith",
+    name: "",
+    code: "",
+    parent: "",
+    id: "",
+    school: "ESI",
+    teacher: "aaaa",
     age: 3,
-    gender: "Male",
+    gender: "",
   });
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 10;
-
-  const filteredChildren = childrenData.filter(
-    (child) =>
-      child.name.toLowerCase().includes(search.toLowerCase()) ||
-      child.class.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredChildren.length / pageSize);
-  const displayedChildren = filteredChildren.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decode = jwtDecode(token);
+      console.log("Decoded token:", decode); // Verify token structure
       setUsername(decode.name);
-      setId(decode.id);
-      setKids((prev) => ({
+      // Ensure you're using the correct field name for user ID (e.g., _id)
+      setId(decode.id); // Use appropriate field from token
+      setKids(prev => ({
         ...prev,
         parent: decode.name,
         id: decode.id,
       }));
     }
   }, []);
+
+  useEffect(() => {
+    if (id) { // Only call when ID is available
+      ListKids();
+    }
+  }, [id]);
+  
+  const filteredChildren = childs.filter(
+    (child) =>
+      child.name?.toLowerCase().includes(search.toLowerCase()) ||
+      child.class?.toLowerCase().includes(search.toLowerCase())
+  );
+  
+  const totalPages = Math.ceil(filteredChildren.length / pageSize);
+  const displayedChildren = filteredChildren.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
   
 
   const ListKids = async () => {
     try {
       const newkids = await getKids(username, id);
+      console.log(newkids.kids);
       setChilds(newkids.kids);
+      console.log(newkids.kids);
     } catch (error) {
       console.error("Error fetching kids:", error);
     }
@@ -160,29 +171,29 @@ function Kids() {
                     <div className="grid w-full grid-cols-1 md:gird-cols-2 gap-2">
                       <Input
                         placeholder="Name"
-                        // onChange={(e) => {
-                        //   setKids({ ...kids, name: e.target.value });
-                        // }}
+                         onChange={(e) => {
+                           setKids({ ...kids, name: e.target.value });
+                         }}
                       />
                       <Input
                         placeholder="Code"
-                        // onChange={(e) => {
-                        //   setKids({ ...kids, code: e.target.value });
-                        // }}
+                         onChange={(e) => {
+                           setKids({ ...kids, code: e.target.value });
+                         }}
                       />
                     </div>
                     <div className="grid w-full grid-cols-1 md:gird-cols-2 gap-2">
                       <Select
-                        // onValueChange={(v) => {
-                        //   setKids({ ...kids, gender: v });
-                        // }}
+                         onValueChange={(v) => {
+                           setKids({ ...kids, gender: v });
+                         }}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Gender" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Male">Male</SelectItem>
-                          <SelectItem value="Female">Female</SelectItem>
+                          <SelectItem value="Boy">Boy</SelectItem>
+                          <SelectItem value="Girl">Girl</SelectItem>
                         </SelectContent>
                       </Select>
                       <Input placeholder="Birth Date" type="date" />

@@ -11,9 +11,9 @@ exports.getAllKids = async (req,res,next) =>{
 
         try {
             //getting user based on the information sent from the from the ftront-end part
-            
+            const { name, id } = req.query;
             const user = await User.findOne(
-                {name : req.body.name , _id : req.body.id}
+                {name , _id: id.trim()},
             )
     
             //check if the user exists
@@ -100,7 +100,7 @@ exports.addKid = async (req,res,next) => {
 console.log(req.body.name);
 
             parent.kids.push({
-                name : req.body.name , id : req.body.id
+                name : req.body.name , id : newKid._id
             });
             await parent.save();
         
