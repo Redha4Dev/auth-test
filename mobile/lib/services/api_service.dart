@@ -55,37 +55,40 @@ class ApiService {
     }
   }
 
-Future<Map<String, dynamic>?> getParentInfo(String id, String name) async {
-  final url = Uri.parse('http://10.0.2.2:5000/parent/profile/$id/$name');
+  Future<Map<String, dynamic>?> getParentInfo(String id, String name) async {
+    final url = Uri.parse('http://10.0.2.2:5000/parent/profile/$id/$name');
 
-  try {
-    final response = await http.get(
-      url,
-      headers: {'Content-Type': 'application/json'},
-    );
+    try {
+      final response = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print('✅ Parent found: $data');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('✅ Parent found: $data');
 
-      // Store globally
-      globalParentData = data;
+        // Store globally
+        globalParentData = data;
 
-      // Optional: store persistently
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('parentData', jsonEncode(data));
+        // Optional: store persistently
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('parentData', jsonEncode(data));
+        data.forEach((key, value) {
+          print('$key: $value');
+        });
 
-      return data;
-    } else {
-      final error = jsonDecode(response.body);
-      print('⚠️ Error: ${error['message']}');
+        return data;
+      } else {
+        final error = jsonDecode(response.body);
+        print('⚠️ Error: ${error['message']}');
+        return null;
+      }
+    } catch (e) {
+      print('❌ Request failed: $e');
       return null;
     }
-  } catch (e) {
-    print('❌ Request failed: $e');
-    return null;
   }
-}
 
   Future<void> createUser(String name, email, password, confirmPassword, role,
       phone, gender) async {

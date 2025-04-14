@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class StudentCard extends StatelessWidget {
   final String name;
-  final int age;
-  final String gender;
+final int? age ;
+ final  String? gender;
 
   const StudentCard(
-      {super.key, required this.name, required this.age, required this.gender});
+      {super.key, required this.name, this.age, this.gender});
 
   @override
   Widget build(BuildContext context) {

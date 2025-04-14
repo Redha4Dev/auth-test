@@ -30,7 +30,7 @@ exports.updateme = async (req, res, next) => {
 
 
 exports.getParentInfo = async (req, res, next) => {
-    console.log("rrr");
+    console.log("trying to fetch parent info...");
 
     //get the user based on his unique id
     const user = await User.findById({ _id: req.params.id, name: req.params.name })
