@@ -34,30 +34,31 @@ class _myTextFieldState extends State<myTextField> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: Offset(0, 6),
-            ),
-          ],
-          color: Color(0xFFAF92D8),
+          border: Border.all(color: Color(0xFFAF92D8)),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.2),
+          //     spreadRadius: 1,
+          //     blurRadius: 2,
+          //     offset: Offset(0, 6),
+          //   ),
+          // ],
+          color: Color.fromARGB(255, 235, 235, 235),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
           children: [
-            Icon(widget.icon, color: Colors.white),
+            Icon(widget.icon, color: Color(0xFFAF92D8)),
             SizedBox(width: 10),
             Expanded(
               child: TextFormField(
                 controller: widget.controller,
                 obscureText: _obscure,
-                style: TextStyle(color: Colors.white),
-                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.black),
+                cursorColor: Color(0xFFAF92D8),
                 decoration: InputDecoration(
                   labelText: widget.labelText,
-                  labelStyle: TextStyle(color: Colors.white70),
+                  labelStyle: TextStyle(color: Color(0xFFAF92D8)),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   border: InputBorder.none,
                 ),
@@ -72,7 +73,7 @@ class _myTextFieldState extends State<myTextField> {
                 },
                 child: Icon(
                   _obscure ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.white,
+                  color: Color(0xFFAF92D8),
                 ),
               ),
           ],

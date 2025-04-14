@@ -33,8 +33,8 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     final apiService = ApiService();
-    final mediaQuery = MediaQuery.of(context);
-    final screenHeight = mediaQuery.size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.height;
 
     return GestureDetector(
       onTap: () =>
@@ -55,8 +55,6 @@ class _SignupPageState extends State<SignupPage> {
           child: SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   children: [
                     Image.asset(
@@ -65,131 +63,139 @@ class _SignupPageState extends State<SignupPage> {
                           : 'assets/tableau.png',
                       scale: 1.5,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Create an account",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 207, 207, 207),
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    Form(
-                      key: _formKey,
+                    SizedBox(height: screenHeight * .01),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
                       child: Column(
                         children: [
-                          myTextField(
-                            labelText: 'Name',
-                            icon: Icons.person,
-                            controller: fullNameController,
-                          ),
-                          const SizedBox(height: 10),
-                          myTextField(
-                            labelText: 'Email',
-                            icon: Icons.email,
-                            controller: emailController,
-                          ),
-                          const SizedBox(height: 10),
-                          myTextField(
-                            labelText: 'Phone',
-                            icon: Icons.phone,
-                            controller: phoneController,
-                          ),
-                          const SizedBox(height: 10),
-                          myTextField(
-                            isPassword: true,
-                            labelText: 'Password',
-                            icon: Icons.lock,
-                            controller: passwordController,
-                          ),
-                          const SizedBox(height: 10),
-                          myTextField(
-                            isPassword: true,
-                            labelText: 'Confirm Password',
-                            icon: Icons.lock_outline,
-                            controller: confirmPasswordController,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    // Gender Selection
-                    buildToggleRow(
-                      title: "Gender",
-                      options: ["Male", "Female"],
-                      selected: gender,
-                      onSelected: (val) => setState(() => gender = val),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // Role Selection
-                    buildToggleRow(
-                      title: "Role",
-                      options: ["teacher", "parent"],
-                      selected: role,
-                      onSelected: (val) => setState(() => role = val),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    isLoading
-                        ? const CircularProgressIndicator()
-                        : myOutlinedButton(
-                            text: "Submit",
-                            onTap: () async {
-                              setState(() => isLoading = true);
-
-                              await apiService.createUser(
-                                fullNameController.text,
-                                emailController.text,
-                                passwordController.text,
-                                confirmPasswordController.text,
-                                role,
-                                phoneController.text,
-                                gender,
-                              );
-
-                              setState(() => isLoading = false);
-                            },
-                          ),
-
-                    const SizedBox(height: 20),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Already have an account? ",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 209, 209, 209),
-                              fontSize: 16),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const TeacherHomePage()),
-                            );
-                          },
-                          child: const Text(
-                            "Login",
+                          SizedBox(height: screenHeight * .01),
+                          const Text(
+                            "Create an account",
                             style: TextStyle(
-                              color: Colors.purple,
-                              fontSize: 16,
+                              color: Color.fromARGB(255, 89, 57, 158),
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: screenHeight * .01),
+
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                myTextField(
+                                  labelText: 'Name',
+                                  icon: Icons.person,
+                                  controller: fullNameController,
+                                ),
+                                const SizedBox(height: 10),
+                                myTextField(
+                                  labelText: 'Email',
+                                  icon: Icons.email,
+                                  controller: emailController,
+                                ),
+                                const SizedBox(height: 10),
+                                myTextField(
+                                  labelText: 'Phone',
+                                  icon: Icons.phone,
+                                  controller: phoneController,
+                                ),
+                                const SizedBox(height: 10),
+                                myTextField(
+                                  isPassword: true,
+                                  labelText: 'Password',
+                                  icon: Icons.lock,
+                                  controller: passwordController,
+                                ),
+                                const SizedBox(height: 10),
+                                myTextField(
+                                  isPassword: true,
+                                  labelText: 'Confirm Password',
+                                  icon: Icons.lock_outline,
+                                  controller: confirmPasswordController,
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 15),
+
+                          // Gender Selection
+                          buildToggleRow(
+                            title: "Gender",
+                            options: ["Male", "Female"],
+                            selected: gender,
+                            onSelected: (val) => setState(() => gender = val),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          // Role Selection
+                          buildToggleRow(
+                            title: "Role",
+                            options: ["teacher", "parent"],
+                            selected: role,
+                            onSelected: (val) => setState(() => role = val),
+                          ),
+                          const SizedBox(height: 30),
+                          isLoading
+                              ? const CircularProgressIndicator()
+                              : myOutlinedButton(
+                                  text: "Submit",
+                                  onTap: () async {
+                                    setState(() => isLoading = true);
+
+                                    await apiService.createUser(
+                                      fullNameController.text,
+                                      emailController.text,
+                                      passwordController.text,
+                                      confirmPasswordController.text,
+                                      role,
+                                      phoneController.text,
+                                      gender,
+                                    );
+
+                                    setState(() => isLoading = false);
+                                  },
+                                ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Already have an account? ",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 209, 209, 209),
+                                    fontSize: 16),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()),
+                                  );
+                                },
+                                child: const Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    color: Colors.purple,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 10),
                   ],
                 ),
               ),
