@@ -7,14 +7,18 @@ const kidschema = mongoose.Schema({
     },
     parent: {
         type : String,
-        required : [true, 'Please enter your name']
+        required : [true, 'Please enter your parent name']
+    },
+    teacher: {
+        type : String,
+        required : [true, 'Please enter your teacher name']
     },
     school: {
         type : String,
         //required : [true, 'Please enter your school']
     },
     age: {
-        type : Number,
+        type : String,
         max: [4,'your son age is not valid'],
         required: [true, 'enter your sons age']
     },
@@ -23,7 +27,7 @@ const kidschema = mongoose.Schema({
         required : [true ,'please enter your gender'],
         enum: ['Boy', 'Girl']
     },
-    code: Number,
+    code: String,
     marks: Number,
     medicalStatus : String,
 })

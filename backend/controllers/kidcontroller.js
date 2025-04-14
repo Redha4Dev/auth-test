@@ -80,11 +80,20 @@ exports.addKid = async (req,res,next) => {
 
         //create and save the newKid
         const newKid = await Kid.create(req.body);
+
+        const kidObject = {
+            name: newKid.name,
+            id: newKid._id,
+            code: newKid.code,
+            age: newKid.age,
+            gender: newKid.gender
+            // Add any other fields you want to include
+        };
         
         //insert the kid to the list of parent kids 
 
         const parent = await User.findOne(
-            {name : req.body.parent, 
+            {name : req.body.parent 
         })
 
         if (!parent) {
@@ -99,9 +108,9 @@ exports.addKid = async (req,res,next) => {
         }
 console.log(req.body.name);
 
-            parent.kids.push({
-                name : req.body.name , id : req.body.id
-            });
+            parent.kids.push(
+                kidObject
+            );
             await parent.save();
         
  
@@ -121,9 +130,9 @@ console.log(req.body.name);
 
         //to see if the kids exists in the school list
         if (!school.kids.includes(name)) {
-            school.kids.push({
-                name : req.body.name 
-            }
+            school.kids.push(
+                kidObject
+            
             );
             await school.save();
         }
@@ -141,10 +150,8 @@ console.log(req.body.name);
             
             if (!teacher.kids.includes(name)) {
                 teacher.kids.push({
-                    name : req.body.name ,
-                    id : newKid._id ,
-                    age : req.body.age ,
-                    code : req.body.code
+                    kidObject
+                    
                })
                                 
                 await teacher.save();
@@ -169,51 +176,49 @@ console.log(req.body.name);
 
 
  //to remove a kid from the db
-exports.removeKid = async (req,res,next) => {
-    //find the kid in the db
-    const kid = await Kid.findOne({name: req.body.name , _id : req.body.id})
-    
+ exports.removeKid = async (req, res, next) => {
     try {
+        // Find the kid
+        const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
+
         if (!kid) {
-            return next(console.error('this kid does not exists'))
+            return next(new Error('This kid does not exist'));
         }
-        //delete the kid
 
-        //we need to add the full name of the kid or we will change the list item to object containing the id and name of the child
-        const prant =await User.findOneAndUpdate(
-            {kids : kid.name , name : kid.parent},
-            {$pull : {kids : kid.name, _id : kid._id}},
-            {new : true}
-        )
+        // Remove the kid from the parent's kids array
+        await User.findOneAndUpdate(
+            { name : kid.parent }, // assuming this is parent's _id
+            { $pull: { kids: { name : kid.name} } }
+        );
 
-        //delete the child from the school list
-        const school = await User.findOneAndUpdate(
-            {kids : kid.name , school : kid.school},
-            {$pull : {kids : kid.name , _id : kid._id}},
-            {new : true}
-        )
+        // Remove the kid from the school's kids array
+        await User.findOneAndUpdate(
+            { name: kid.school }, // assuming school is referenced by _id
+            { $pull: { kids: { name : kid.name} }}      
+        );
 
-        const teacher = await User.findOneAndUpdate(
-            { kids : kid.name , teacher : kid.teacher},
-            {$pull : {kids : kid.name ,_id : kid.id} },
-            {new : true}
-        )
-           
-       //delete the kid from the kid collection
-        await Kid.findOneAndDelete({_id : kid._id})
-        //for the teacher document im not sure if  i ll add the delete function here or in the teacher controllers
-        
+        // Remove the kid from the teacher's kids array
+        await User.findOneAndUpdate(
+            { name: kid.teacher }, // assuming teacher is referenced by _id
+            { $pull: { kids: { name : kid.name } } }
+        );
+
+        // Finally delete the kid from the kid collection
+        await Kid.findByIdAndDelete(kid._id);
+
         res.status(204).json({
-            message : 'kid deleted successfully',
-            kid : null
-        })
+            message: 'Kid deleted successfully',
+            kid: null
+        });
+
     } catch (err) {
-        res.status(404).json({
-            message: 'erroe occured',
-            erro : err.message
-        })
+        res.status(500).json({
+            message: 'An error occurred',
+            error: err.message
+        });
     }
-}
+};
+
 
 //to update kid info in the db
 exports.updatekidinfo = async (req,res,next) => {

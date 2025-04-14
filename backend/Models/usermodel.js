@@ -81,6 +81,8 @@ const Userschema =  mongoose.Schema ({
         name: String,
         id: String,
         _id : false,
+        code : String,
+        age : String
     }],
     adress : String,
     passwordchangedAt: Date,
@@ -159,7 +161,7 @@ exports.teacher = User.discriminator('teacher', teacherschema)
 const schoolschema = new mongoose.Schema({
     teachers: Array,
     parents: Array,
-    code: Number
+    code: String
 })
 
 const school = User.discriminator('school', schoolschema)
