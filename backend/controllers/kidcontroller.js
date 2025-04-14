@@ -11,9 +11,9 @@ exports.getAllKids = async (req,res,next) =>{
 
         try {
             //getting user based on the information sent from the from the ftront-end part
-            
+            const { name, id } = req.query;
             const user = await User.findOne(
-                {name : req.body.name , _id : req.body.id}
+                {name , _id: id.trim()},
             )
     
             //check if the user exists

@@ -111,7 +111,7 @@ exports.logIn = async (req,res) =>{
             return next(console.error('please enter your email and password'))
         }        
         //create the token for the user
-        const token = jwt.sign({id : user._id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        const token = jwt.sign({id : user.id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         console.log(user.password);
         
 
