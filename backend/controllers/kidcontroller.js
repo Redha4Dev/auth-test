@@ -48,13 +48,8 @@ exports.getKid = catchError(async (req,res,next) =>{
 
 // //to add kid to the db
 
-<<<<<<< HEAD
 exports.addKid = catchError(async (req,res,next) => {
     //NB : this function is accessed only be the kid parent and the admin the kid will be added auomatically to the teacher kids list
-=======
-exports.addKid = async (req,res,next) => {
-    //NB : this function is accessed only be the kid parent and the admin
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
     const {name , code} = req.body;
     
         //verify if this kid exists already in the db using his unique code
@@ -124,38 +119,6 @@ console.log(req.body.name);
             await school.save();
         }
 
-<<<<<<< HEAD
-  // add the kid to the teacher kids list  
-  const teacher = await User.findOne(
-          { role : 'teacher' , teacher : req.body.teacher}
-  )
-     
-  //to see if the kids exists in the teacher list
- if (teacher.kids.includes(name)) {
-          return next(console.error('kid already exists'))
-      }else {
-          teacher.kids.push({name , id : newKid._id});
-          console.log(name);
-          
-          await teacher.save();
-      }
-
-      res.status(201).json({
-        message: 'document successfully created',
-        
-    })
-})
-
-//to remove a kid from the db
-exports.removeKid = catchError(async (req, res, next) => {
-  //find the kid in the db
-  const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
-
-  if (!kid) {
-    return next( new appError('user not exists please signUp or LogIn to continue', 404))
-}
-    //delete the kid
-=======
         // add the kif to the teacher kids list  
          if (req.body.teacher) { // Only if teacher is provided
             const teacher = await User.findOne({
@@ -182,22 +145,11 @@ exports.removeKid = catchError(async (req, res, next) => {
             message: 'Kid successfully created',
             kid: newKid
         });
-        
-    } catch (err) {
-        console.error('Error in addKid:', err);
-        res.status(500).json({
-            
-            error: err.message,
-            message: 'Internal server error'
-        })
-    }
-}
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
+})
 
 
  //to remove a kid from the db
- exports.removeKid = async (req, res, next) => {
-    try {
+ exports.removeKid = catchError(async (req, res, next) => {
         // Find the kid
         const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
 
@@ -211,13 +163,6 @@ exports.removeKid = catchError(async (req, res, next) => {
             { $pull: { kids: { name : kid.name} } }
         );
 
-<<<<<<< HEAD
-    res.status(204).json({
-      message: "kid deleted successfully",
-      kid: null,
-    });
-});
-=======
         // Remove the kid from the school's kids array
         await User.findOneAndUpdate(
             { name: kid.school }, // assuming school is referenced by _id
@@ -237,15 +182,7 @@ exports.removeKid = catchError(async (req, res, next) => {
             message: 'Kid deleted successfully',
             kid: null
         });
-
-    } catch (err) {
-        res.status(500).json({
-            message: 'An error occurred',
-            error: err.message
-        });
-    }
-};
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
+})
 
 
 //to update kid info in the db

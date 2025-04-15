@@ -1,11 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-<<<<<<< HEAD
 const Apperror = require ('./utils/apperror');
-=======
-const ErrorHandler = require ('./utils/apperror');
-
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
 const errorMiddleware = require('./controllers/errorcontroller')
 const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
@@ -20,8 +15,8 @@ const helmet = require('helmet');
 // const expresssslify = require('express-sslify');
 // const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-// const xss = require('xss-clean');
-// const hpp = require('hpp');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 // // const csurf = require('csurf');
 
@@ -30,8 +25,8 @@ app.use(helmet()); //http headers security
 // app.use(expresssslify.HTTPS({ trustProtoHeader: true })); //force HTTPS
 app.use(cookieParser());
 app.use(mongoSanitize());//sanitize from mongo injection
-// app.use(xss()); //sanitize fro m xss injections
-// app.use(hpp()); //prevent http from parameter pollution
+app.use(xss()); //sanitize from xss injections
+app.use(hpp()); //prevent http from parameter pollution
 // const limiter = rateLimit({
 //     max: 100,
 //     windowMs: 60 * 60 * 1000,

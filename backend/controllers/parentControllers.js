@@ -4,24 +4,13 @@ const User = require('../Models/usermodel');
 const Kid = require('../Models/kidmodel');
 const catchError = require('../utils/catchError');
 
-<<<<<<< HEAD
 exports.updateme = catchError(async (req, res , next) =>{
-=======
-exports.updateme = async (req, res, next) => {
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
     //get the user baesd on his unique id
     const user = await User.findById({ _id: req.body.id })
 
-<<<<<<< HEAD
     if (!user) {
         return next( new appError('user not exists please signUp or LogIn to continue', 404))
     }
-=======
-    try {
-        if (!user) {
-            return next(console.error('user not found please signUp or logIn to continue'))
-        }
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
         //get updated data
         const updateData = req.body;
         //update data
@@ -31,7 +20,6 @@ exports.updateme = async (req, res, next) => {
             { new: true, runvalidators: true }
             // the validators will be run to check if the user changed data are correct
         )
-<<<<<<< HEAD
 })
 
 
@@ -66,60 +54,3 @@ exports.getParents = catchError(async (req,res,next) =>{
         parents
     })
 })
-=======
-    } catch (error) {
-        res.status(404).json({
-            err: error.message,
-            message: 'update failed'
-        })
-    }
-}
-
-
-exports.getParentInfo = async (req, res, next) => {
-    console.log("trying to fetch parent info...");
-
-    //get the user based on his unique id
-    const user = await User.findById({ _id: req.params.id, name: req.params.name })
-    console.log(user);
-
-    try {
-        //check if the use exists
-        if (!user) {
-            return next(console.log('user not found please signup or logIn to continue'))
-        }
-        // const parent = await User.findById({_id : req.body.id, role : 'parent' , name: req.body.name})
-        // if(!parent){
-        //     return next( console.log('parent not found please SinUp or logIn to continue'));
-        // }
-        //send the response
-        res.body = user
-        res.status(200).send(user)
-    } catch (error) {
-        res.status(404).json({
-            err: error.message,
-            message: 'parent not found'
-        })
-    }
-}
-
-//this function accessed by the admin only
-exports.getParents = async (req, res, next) => {
-    //get the admin based on his id
-    const admin = await User.find({ role: 'admin', _id: req.body.id })
-    try {
-        //check if parents exists in the list
-        const parents = admin.parents;
-        if (!parents) {
-            return next(console.error('parents not found'))
-        }
-
-    } catch (error) {
-        res.status(404).json({
-            err: error.message,
-            message: 'parents not found'
-        })
-
-    }
-}
->>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
