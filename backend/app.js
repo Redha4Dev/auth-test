@@ -1,10 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-<<<<<<< HEAD
-const ErrorHandler = require ('./utils/apperror');
-=======
 const Apperror = require ('./utils/apperror');
->>>>>>> 65e80d50bb014a0c8179d1ae6f0faa6df1a02f89
 const errorMiddleware = require('./controllers/errorcontroller')
 const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
@@ -15,20 +11,20 @@ const  teacher  = require('./Routes/teacherroute');
 const app = express();
 //security
 // const morgan = require('morgan');
-// const helmet = require('helmet');
+const helmet = require('helmet');
 // const expresssslify = require('express-sslify');
 // const rateLimit = require('express-rate-limit');
-// const mongoSanitize = require('express-mongo-sanitize');
+const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
 // const hpp = require('hpp');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 // // const csurf = require('csurf');
 
 // // app.use(csurf({ cookie: true })); //CSRF protection
-// app.use(helmet()); //http headers security
+app.use(helmet()); //http headers security
 // app.use(expresssslify.HTTPS({ trustProtoHeader: true })); //force HTTPS
-// app.use(cookieParser());
-// app.use(mongoSanitize());//sanitize from mongo injection
+app.use(cookieParser());
+app.use(mongoSanitize());//sanitize from mongo injection
 // app.use(xss()); //sanitize fro m xss injections
 // app.use(hpp()); //prevent http from parameter pollution
 // const limiter = rateLimit({

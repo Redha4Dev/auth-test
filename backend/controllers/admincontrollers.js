@@ -1,16 +1,17 @@
 const User = require('../Models/usermodel');
 const Kid = require('../Models/kidmodel');
+const catchError = require ('../utils/catchError')
+const appError = require('../utils/apperror')
 
-exports.getschoolinfo = async(req, res , next) =>{
+exports.getschoolinfo = catchError(async(req, res , next) =>{
     //get the user based on his id
     console.log(req.body.id);
     
     const user = await User.findOne({ name : req.body.name});
     console.log("user");
     
-    try {
         if (!user) {
-            return next ( console.log('user not exists please signUp or LogIn to continue'))
+            return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
         //get the school info
         // const school = await User.school.findById({_id : req.body.id , name : req.body.name})
@@ -27,23 +28,15 @@ exports.getschoolinfo = async(req, res , next) =>{
         res.status(200).json({
             school
         })
+})
 
-    } catch (error) {
-        res.status(404).json({
-            err : error.message,
-            messge : 'school not found'
-        })
-    }
-
-}
-
-exports.updateSchoolInfo = async(req,res,next) =>{
+exports.updateSchoolInfo = catchError(async(req,res,next) =>{
     //get the user
     const user = await User.findById({_id : req.body.id});
-    try {
+    
         //check if the user exists
         if (!user) {
-            return next (console.error('user not found please signUp or logIn'))
+            return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
 
         //the user will be asked to enter his password to confrim that he has the access to update the school info
@@ -54,8 +47,8 @@ exports.updateSchoolInfo = async(req,res,next) =>{
 
         //check if the user has the access to update the school info
         if(user.role != 'admin' || !correct){
-            return next(console.error('you do not have the permission to change the school info'))
-        }
+                return next( new appError('user not exists please signUp or LogIn to continue', 404))
+            }
         
         //get the updated data
         const updateData = req.body;
@@ -66,11 +59,7 @@ exports.updateSchoolInfo = async(req,res,next) =>{
             {$set : updateData},
             {new : true}
         )
-        
-    } catch (error) {
-        res.status(404).json({
-            err : error.message,
-            message : 'update failed'
-        })
-    }
-}
+    res.status(204).json({
+        message : 'user info updated'
+    })
+})

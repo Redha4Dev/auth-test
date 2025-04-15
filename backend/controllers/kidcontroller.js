@@ -2,14 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const User = require('../Models/usermodel');
 const Kid = require('../Models/kidmodel');
-
+const catchError = require('../utils/catchError.js')
 
 //get all kids
 
-exports.getAllKids = async (req,res,next) =>{
+exports.getAllKids = catchError(async (req,res,next) =>{
         ////NB : this function used by the all the users types to get the list of all the kids inserted in their document 
 
-        try {
             //getting user based on the information sent from the from the ftront-end part
             
             const user = await User.findOne(
@@ -19,7 +18,7 @@ exports.getAllKids = async (req,res,next) =>{
             //check if the user exists
     
             if (!user) {
-                return next( new console.error('User does not exists'))
+                return next( new appError('user not exists please signUp or LogIn to continue', 404))
             }
     
             //send back the list from the document        
@@ -27,49 +26,32 @@ exports.getAllKids = async (req,res,next) =>{
                 size : user.kids.length,
                 kids : user.kids
             })
-        } catch (error) {
-            console.log('error');
-            
-            res.status(404).json({
-                message : error.message
-            })
-        }
-        
-    }
+})
     
 //get kid
-exports.getKid = async (req,res,next) =>{
+exports.getKid = catchError(async (req,res,next) =>{
     //NB : this function is used by all the users type
 
     const kid = await Kid.findOne({name: req.body.name , _id : req.body.id})
 
-    try {
         // console.log('start');
         
         if (!kid) {
-            return next ( new console.error('kid does not exists in the db'))
+            return next( new appError('kiid does not exists ', 404))
         }
         // console.log(kid);
         res.status(200).json({
             message : 'send back the child info',
             kid
-        })
-        
-    } catch (error) {
-        res.status(404).json({
-            msg : error.message,
-            error
-        })
-    }
-}
+        })    
+})
 
 // //to add kid to the db
 
-exports.addKid = async (req,res,next) => {
+exports.addKid = catchError(async (req,res,next) => {
     //NB : this function is accessed only be the kid parent and the admin the kid will be added auomatically to the teacher kids list
     const {name , code} = req.body;
     
-    try { 
         //verify if this kid exists already in the db using his unique code
         const exists = await Kid.findOne({code : code , name : name });
         
@@ -129,26 +111,16 @@ exports.addKid = async (req,res,next) => {
         message: 'document successfully created',
         
     })
-    
-} catch (err) {
-    console.log(err);
-    
-    res.status(404).json({
-        erro: err.message,
-        message : 'page not found'
-    })
-}
-};
+})
 
 //to remove a kid from the db
-exports.removeKid = async (req, res, next) => {
+exports.removeKid = catchError(async (req, res, next) => {
   //find the kid in the db
   const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
 
-  try {
-    if (!kid) {
-      return next(console.error("this kid does not exists"));
-    }
+  if (!kid) {
+    return next( new appError('user not exists please signUp or LogIn to continue', 404))
+}
     //delete the kid
 
     //we need to add the full name of the kid or we will change the list item to object containing the id and name of the child
@@ -179,36 +151,16 @@ exports.removeKid = async (req, res, next) => {
       message: "kid deleted successfully",
       kid: null,
     });
-  } catch (err) {
-    res.status(404).json({
-      message: "erroe occured",
-      erro: err.message,
-    });
-  }
-};
+});
 
 //to update kid info in the db
-exports.updatekidinfo = async (req,res,next) => {
-    const updateData = {};
-    if (req.body.name != undefined) {
-        updateData.name = req.body.name
-    }
-    if (req.body.age != undefined) {
-        updateData.age = req.body.age
-    }
-
-    if (req.body.marks != undefined) {
-        updateData.marks = req.body.marks
-    }
-
-    if (req.body.teacher != undefined) {
-        updateData.teacher = req.body.teacher
-    }
+exports.updatekidinfo = catchError(async (req,res,next) => {
+    const updateData = req.body;
+    
     //basiclly works waiting for other updates
-    try {
         
         const kid = await Kid.findOneAndUpdate(
-            { _id : req.body.id},
+            { _id : req.params.id},
             { $set : updateData },
             {new : true}
             )
@@ -217,9 +169,4 @@ exports.updatekidinfo = async (req,res,next) => {
             message : 'updated',
             kid
         })
-    } catch (error) {
-        res.status(404).json({
-            error 
-        })
-    }
-}
+})

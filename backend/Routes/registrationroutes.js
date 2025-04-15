@@ -24,4 +24,8 @@ router
     })
     .post(authController.signUp)
 
+router
+    .route('/verify')
+    .post(authController.verificationCode)
+
 module.exports = router;

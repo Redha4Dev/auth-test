@@ -34,7 +34,7 @@ const router = express.Router()
 
 router
     .route('/dashboard')
-    .get(adminControllers.getschoolinfo)
+    .get(adminControllers.getschoolinfo )
     .post()
     .patch()
     .delete()
