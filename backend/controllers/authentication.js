@@ -96,7 +96,7 @@ exports.logIn = catchError(async (req,res) =>{
             return next( new appError('user not exists please enter valide information or signUp to continue', 404))
         }      
         //create the token for the user
-        const token = jwt.sign({id : user._id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        const token = jwt.sign({id : user.id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         console.log(user.password);
         
 

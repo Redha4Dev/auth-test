@@ -44,8 +44,8 @@ const Userschema =  mongoose.Schema ({
     }, 
     gender :{
         type : String,
-        //required : [true ,'please enter youe gender'],
-        enum: ['Male', 'Female', 'Mouad']
+        //required : [true ,'please enter your gender'],
+        enum: ['Male', 'Female']
     },
     role: {
         type: String,
@@ -81,7 +81,12 @@ const Userschema =  mongoose.Schema ({
         name: String,
         id: String,
         _id : false,
+<<<<<<< HEAD
         default: [],
+=======
+        code : String,
+        age : String
+>>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
     }],
     adress : String,
     passwordchangedAt: Date,
@@ -181,4 +186,22 @@ const User = mongoose.model('User', Userschema);
 
 //teacher extra fields
 
+<<<<<<< HEAD
+=======
+const teacherschema = new mongoose.Schema({
+    room: Number
+})
+
+exports.teacher = User.discriminator('teacher', teacherschema)
+
+//school extra fields
+const schoolschema = new mongoose.Schema({
+    teachers: Array,
+    parents: Array,
+    code: String
+})
+
+const school = User.discriminator('school', schoolschema)
+
+>>>>>>> 498bab4748516db9599f6493d04a8eb08f45c564
 module.exports = User
