@@ -123,13 +123,12 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("Name: " + globalParentData?['name'],
-                        style: TextStyle(color: Colors.white)),
-                    Text("Email: " + globalParentData?['email'],
-                        style: TextStyle(color: Colors.white)),
-                    Text("Phone Number : 0770504885",
+                    Text("Name: ", style: TextStyle(color: Colors.white)),
+                    Text("Email: ", style: TextStyle(color: Colors.white)),
+                    Text("Phone Number ",
                         style: TextStyle(color: Colors.white)),
                   ],
+                  //+ globalParentData?['name']
                 ),
               ],
             ),
@@ -230,13 +229,16 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               SizedBox(
                 height: 400,
                 child: ListView(
-                  children: filteredStudents
-                      .map((student) => StudentCard(
-                            name: student['name'],
-                            age: student['age'],
-                            gender: student['gender'],
-                          ))
-                      .toList(),
+                  children: (globalParentData?['kids'] as List<dynamic>)
+                      .map((student) {
+                    final Map<String, dynamic> s =
+                        student as Map<String, dynamic>;
+                    return StudentCard(
+                      name: s['name'] ?? 'No name',
+                      age: 0,
+                      gender: 'Unknown',
+                    );
+                  }).toList(),
                 ),
               ),
             ],

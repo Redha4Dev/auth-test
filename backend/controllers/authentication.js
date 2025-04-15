@@ -15,11 +15,13 @@ exports.signUp = async (req,res) => {
         confirmPassword : req.body.confirmPassword,
         role : req.body.role,
         kids : req.body.kids
-
     })
+//signUp authentication
+exports.signUp = catchError (async (req,res) => {
+    const newUser = await User.create(req.body)
     console.log(newUser);
     
-    try{
+    
         // //create the token for the user
         const token = jwt.sign({id : newUser._id ,  name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         
@@ -37,67 +39,57 @@ exports.signUp = async (req,res) => {
         res.status(201).json({
             token
         })
-    } catch (err) {
-        console.log(err.message);
-        
-        res.status(404).json({
-            errr : err.message
-        })
-    } 
-}
+})
 
-//to be verified later on
 
 //verify user email
-exports.verificationCode = async (req,res,next) =>{
+exports.verificationCode = catchError (async (req,res,next) =>{
     //get the user based on the data sent
-    const user = await User.findById(req.params.id);
-
-    try {
+    const user = await User.findById(req.body.id);
+    console.log(user);
+   
         //check if the user exists
         
         if (!user) {
-            return res.status(400).json({
-                message : 'user does not exists'
-            })
+            return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
         //generate and save verification code
         const code = user.createVerificationCode();
-    
+        console.log(code);
+        
         //disabable validation before save
         await user.save({validateBeforeSave : false})
         //send the email to the user email
         //create the url
     
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/verify/${code}`
+
         //create the message
         const message = `Your verification code ids ${code} please follow this link ${url} to verify your account`
         //send the email
+
         await email ({
             email : user.email,
             subject : 'Email verification code',
             message
         })
-        
-    } catch (error) {
-        mesage: error.message
-    }
 
-}
+        res.status(200).json({
+            message : "verification sent"
+        })
+})
+    }
 
 //logIn authentication
 
-exports.logIn = async (req,res) =>{
+exports.logIn = catchError(async (req,res) =>{
     console.log('start');
     
     const {email , password} = req.body;
     
-    try {
         //check if user and email field are not empty
         if(!email || !password){
-            return res.status(400).json({
-                message : 'please enter valid email and password'
-            })
+                return next( new appError('please enter your email and password to continue', 404))
         }
         //check if the user exists
         console.log(email);
@@ -108,9 +100,9 @@ exports.logIn = async (req,res) =>{
         const correct = user.correctPassword(password , user.password)
         // console.log(correct);
         
-        if(!user){
-            return next(console.error('please enter your email and password'))
-        }        
+        if (!user) {
+            return next( new appError('user not exists please enter valide information or signUp to continue', 404))
+        }      
         //create the token for the user
         const token = jwt.sign({id : user.id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         console.log(user.password);
@@ -131,26 +123,21 @@ exports.logIn = async (req,res) =>{
             message : 'login successk',
             token
         })
-    } catch (err) {
-        res.status(404).json({
-            err
-        })
-    }
-}
+    })
 
 //protect routes
 
-exports.protectroute = async (req,res,next) => {
+exports.protectroute = catchError(async (req,res,next) => {
     //check if the token exists
     let token;
     if (req.headers.authorization && req.header.authorization.startsWith('Bearer')) {
         //split the authorization in the req headers in the ' ' will return array and take the second element where the token is stored ['bearer','token']
         token = req.headers.authorization.split(' ')[1]
     }
-    try {
-        if (!token) {
-            return next (new console.error('please logIn or signUp'));
-        }
+   
+    if (!token) {
+        return next( new appError(' please signUp or LogIn to continue', 404))
+    }
         //verification of the token
         const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
         //get user selon decoed token >>>>> token contain user id in the payload
@@ -158,37 +145,28 @@ exports.protectroute = async (req,res,next) => {
 
         //check if the user exists
         if (!currentUser) {
-            return next( new console.error('user does not exists'))
+            return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
 
         req.user = currentUser
         next()
-    } catch (err) {
-        res.status(404).json({
-            err
-        })
-    }
-    
-}
+})
 
 //to give permission to user to access the route
 exports.restrictTo = (...roles) =>{ //this roles will be added in the route ['admin', 'teacher', 'parent'] where this function will be used
     return (req,res,next) =>{
         if (!roles.includes(req.user.role)) {
-            return next(new console.error('you are not permitted to acces this route'))
+            return next(new appError('you are not permitted to acces this route', 400))
         }
     }
 }
 
-exports.forgotPassword = async (req,res,next) => {
+exports.forgotPassword = catchError(async (req,res,next) => {
     const user = await User.findOne({email: req.body.email})
 
-    try {
-        if (!user) {
-            return res.status(400).json({
-                message : 'please enter valid email and password'
-            })
-        }
+    if (!user) {
+        return next( new appError('user not exists please signUp or LogIn to continue', 404))
+    }
         //generate the reset token
         const token = user.createPasswordResetToken();
         //desactivate the validator because there is no password
@@ -207,30 +185,21 @@ exports.forgotPassword = async (req,res,next) => {
         })
         res.status(200).json({
             message : 'token sent'
-        })
-        
-    } catch (err) {
-        res.status(404).json({
-            err
-        })
-    }
-}
+        })       
+})
 
 //reset the password
 
-exports.resetPassword = async (req,res,next) => {
+exports.resetPassword = catchError (async (req,res,next) => {
     //get the user based on the token sent
     //hash the token 
     const hashToken = crypto.createHash('sh256').update(req.params.token).digesy('hex');
 
     const user = await User.findOne({passworResetToken : hashToken , passwordRestExipres : {$gt : Date.now()}});
 
-    try {
-        if (!user) {
-            return res.status(400).json({
-                message : 'token invalid or expired'
-            })
-        }
+    if (!user) {
+        return next( new appError('user not exists please signUp or LogIn to continue', 404))
+    }
         //set the new password
         user.password = req.body.password;
         user.confirmPassword = req.body.confirmPassword;
@@ -248,13 +217,7 @@ exports.resetPassword = async (req,res,next) => {
             message : 'password changed successfully',
             token
         })
-        
-    } catch (error) {
-        res.status(404).json({
-            err : error.message
-        })
-    }
-}
+})
 
 
 

@@ -29,3 +29,8 @@ router
 router.patch("/update-password", authController.updatePassword);
 
     module.exports = router;
+router
+    .route('/verify')
+    .post(authController.verificationCode)
+
+module.exports = router;

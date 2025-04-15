@@ -83,15 +83,15 @@ class _LoginPageState extends State<LoginPage> {
                     controller: passwordController,
                     icon: Icons.password),
                 SizedBox(
-                  height: screenHeight * .1,
+                  height: screenHeight * .05,
                 ),
                 myOutlinedButton(
                   text: "Submit",
                   onTap: () async {
                     print('🔐 Attempting to log in...');
                     final response = await apiService.loginUser(
-                      'log@dz.dz',
-                      'aze',
+                      'nox',
+                      'nox',
                     );
 
                     if (response != null) {
@@ -105,11 +105,10 @@ class _LoginPageState extends State<LoginPage> {
 
                         // Use the extracted user data to fetch parent info
                         final parentInfo = await apiService.getParentInfo(
-                          // '67e865fa467eeb7c40462f0a',
-                          // 'ESI'
-                          userData['id'],
-                          userData['name'],
-                        );
+                            '67e865fa467eeb7c40462f0a', 'ESI'
+                            //userData['id'],
+                            //userData['name'],
+                            );
                         print('👨‍👩‍👧 Parent Info: $parentInfo');
                         if (parentInfo != null) {
                           print('👨‍👩‍👧 Parent Info: $parentInfo');

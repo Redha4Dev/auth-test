@@ -81,14 +81,33 @@ const Userschema =  mongoose.Schema ({
         name: String,
         id: String,
         _id : false,
-        code : String,
-        age : String
+        default: [],
     }],
     adress : String,
     passwordchangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
     verificationCode : String,
+    teachers: { 
+        type :Array,
+        _id : false,
+        default : []
+    },
+    parents: { 
+        type :Array,
+        default : [],
+        _id : false
+    },
+    subject: {
+        type: String,
+    },
+    experience: {
+        type: Number,
+    },
+    qualifications: {
+        type: String,
+    },
+    code: Number
 })
 
 
@@ -100,6 +119,17 @@ Userschema.pre('save', async function (req,res,next) {
     //check if the user cahnged the password
     if (!this.isModified('password')) {
         return next
+    }
+    if (this.role != 'admin') {
+        this.teachers = undefined
+        this.parents = undefined
+        this.code = undefined
+    }
+    if (this.role != 'teacher') {
+        this.subject = undefined
+        this.experience = undefined
+        this.qualifications = undefined
+        
     }
     //  try {
          //crypt the password
@@ -141,29 +171,14 @@ Userschema.methods.createPasswordResetToken = function (){
 
 Userschema.methods.createVerificationCode = async  function () {  
     //create verification code
-    const code = Math.floor(1000 + Math.random())* 900000;
+    const code = (Math.floor(1000 + Math.random())* 900000).toString;
     //save hashed code in his field
     this.verificationCode = crypto.createHash('sha256').update(code).digest('hex');
     //return the code
-
+    return code
 }
 const User = mongoose.model('User', Userschema);
 
 //teacher extra fields
-
-const teacherschema = new mongoose.Schema({
-    room: Number
-})
-
-exports.teacher = User.discriminator('teacher', teacherschema)
-
-//school extra fields
-const schoolschema = new mongoose.Schema({
-    teachers: Array,
-    parents: Array,
-    code: String
-})
-
-const school = User.discriminator('school', schoolschema)
 
 module.exports = User

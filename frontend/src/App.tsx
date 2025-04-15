@@ -8,6 +8,7 @@ import Profiles from "./Pages/Profiles";
 import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
 import Kids from "./Pages/Users/Kids";
+import Parents from "./Pages/Users/Parent";
 
 function App() {
   const [dataF, setDataF] = useState({ name: "", email: "" });
@@ -40,7 +41,8 @@ function App() {
           <Route element={<Home />} path="/" />
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
-          <Route element={<Kids />} path="Users/Kids" />
+          <Route element={<Kids />} path="/Users/Kids" />
+          <Route element={<Parents/>} path="/Users/Parents"/>
         </Route>
       </Routes>
     </BrowserRouter>
