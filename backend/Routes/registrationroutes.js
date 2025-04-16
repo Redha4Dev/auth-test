@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('../controllers/authentication');
 const path = require('path');
 
+
 const router = express.Router()
 
 
@@ -24,6 +25,10 @@ router
     })
     .post(authController.signUp)
 
+
+router.patch("/update-password", authController.updatePassword);
+
+    module.exports = router;
 router
     .route('/verify')
     .post(authController.verificationCode)
