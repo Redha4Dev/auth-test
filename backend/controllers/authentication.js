@@ -4,18 +4,9 @@ const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { log } = require('console');
-//signUp authentication
-//admin
-exports.signUp = async (req,res) => {
-    const newUser = await User.create({
-        name : req.body.name,
-        email : req.body.email,
-        password : req.body.password,
-        confirmPassword : req.body.confirmPassword,
-        role : req.body.role,
-        kids : req.body.kids
-    })
+const catchError = require ('../utils/catchError');
+
+
 //signUp authentication
 exports.signUp = catchError (async (req,res) => {
     const newUser = await User.create(req.body)
@@ -152,6 +143,7 @@ exports.protectroute = catchError(async (req,res,next) => {
         next()
 })
 
+
 //to give permission to user to access the route
 exports.restrictTo = (...roles) =>{ //this roles will be added in the route ['admin', 'teacher', 'parent'] where this function will be used
     return (req,res,next) =>{
@@ -161,6 +153,8 @@ exports.restrictTo = (...roles) =>{ //this roles will be added in the route ['ad
     }
 }
 
+
+//forgot password
 exports.forgotPassword = catchError(async (req,res,next) => {
     const user = await User.findOne({email: req.body.email})
 
@@ -221,8 +215,9 @@ exports.resetPassword = catchError (async (req,res,next) => {
 
 
 
-exports.updatePassword = async (req,res,next) => {
-  try {
+
+exports.updatePassword = catchError(async (req,res,next) => {
+
     // 1. Get user ID from JWT (via auth middleware)
     const userId = req.body.id; // Set by `protect` middleware
 
@@ -233,7 +228,7 @@ exports.updatePassword = async (req,res,next) => {
     const user = await User.findById(userId).select('+password');
     console.log(user.name)
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return next ( new appError('user not found', 404))
     }
 
     // 4. Verify current password
@@ -264,8 +259,4 @@ exports.updatePassword = async (req,res,next) => {
       token, // Send new token to client
       message: 'Password updated successfully'
     });
-
-  } catch (err) {
-    res.status(404).json({ message: err.mesage });
-  }
-};
+})
