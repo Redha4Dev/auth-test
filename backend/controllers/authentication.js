@@ -4,8 +4,7 @@ const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { log } = require('console');
-
+const catchError = require ('../utils/catchError');
 
 //signUp authentication
 //admin
