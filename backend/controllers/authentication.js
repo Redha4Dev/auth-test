@@ -5,6 +5,8 @@ const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const { log } = require('console');
+
+
 //signUp authentication
 //admin
 exports.signUp = async (req,res) => {
@@ -82,7 +84,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
 
 //logIn authentication
 
-exports.logIn = catchError(async (req,res) =>{
+exports.logIn = catchError (async (req,res) =>{
     console.log('start');
     
     const {email , password} = req.body;
