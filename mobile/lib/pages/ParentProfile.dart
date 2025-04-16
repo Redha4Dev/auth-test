@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/studentCard.dart';
 
+
+
 class HomePage extends StatelessWidget {
   final Color primaryColor = Color(0xFF5F3DC4);
   final TextStyle headerStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
