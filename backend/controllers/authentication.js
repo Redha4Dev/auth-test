@@ -69,6 +69,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
             message : "verification sent"
         })
 })
+    }
 
 //logIn authentication
 
