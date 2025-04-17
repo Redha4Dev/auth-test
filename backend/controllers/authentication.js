@@ -4,18 +4,9 @@ const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { log } = require('console');
-//signUp authentication
-//admin
-exports.signUp = async (req,res) => {
-    const newUser = await User.create({
-        name : req.body.name,
-        email : req.body.email,
-        password : req.body.password,
-        confirmPassword : req.body.confirmPassword,
-        role : req.body.role,
-        kids : req.body.kids
-    })
+const catchError = require('../utils/catchError')
+const appError = require('../utils/apperror')
+
 //signUp authentication
 exports.signUp = catchError (async (req,res) => {
     const newUser = await User.create(req.body)
@@ -49,7 +40,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
     console.log(user);
    
         //check if the user exists
-        
+    
         if (!user) {
             return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
@@ -65,7 +56,9 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/verify/${code}`
 
         //create the message
-        const message = `Your verification code ids ${code} please follow this link ${url} to verify your account`
+
+        const message = `Your varification code is ${code} please follow this link ${url} to verify your account`
+
         //send the email
 
         await email ({
@@ -78,7 +71,6 @@ exports.verificationCode = catchError (async (req,res,next) =>{
             message : "verification sent"
         })
 })
-    }
 
 //logIn authentication
 
@@ -221,51 +213,3 @@ exports.resetPassword = catchError (async (req,res,next) => {
 
 
 
-exports.updatePassword = async (req,res,next) => {
-  try {
-    // 1. Get user ID from JWT (via auth middleware)
-    const userId = req.body.id; // Set by `protect` middleware
-
-    // 2. Get passwords from request body
-    const { currentPassword, newPassword, confirmNewPassword } = req.body;
-
-    // 3. Find user (include password)
-    const user = await User.findById(userId).select('+password');
-    console.log(user.name)
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // 4. Verify current password
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!isMatch) {
-      return res.status(404).json({ message: 'Current password is incorrect' });
-    }
-
-    // 5. Validate new passwords
-    if (newPassword !== confirmNewPassword) {
-      return res.status(400).json({ message: 'Passwords do not match' });
-    }
-
-    // 6. Update password (pre-save hook hashes it)
-    user.password = newPassword;
-    await user.save();
-
-    // 7. Generate a NEW JWT (optional but recommended)
-    const token = jwt.sign(
-      { id: user._id }, 
-      process.env.JWT_SECRET, 
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
-
-    // 8. Respond with new token
-    res.status(200).json({
-      status: 'success',
-      token, // Send new token to client
-      message: 'Password updated successfully'
-    });
-
-  } catch (err) {
-    res.status(404).json({ message: err.mesage });
-  }
-};
