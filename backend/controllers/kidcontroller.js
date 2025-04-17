@@ -22,7 +22,7 @@ exports.getAllKids = catchError(async (req,res,next) =>{
             }
     
             //send back the list from the document        
-            res.status(200).json({
+            res.status(200).send({
                 size : user.kids.length,
                 kids : user.kids
             })
@@ -40,7 +40,7 @@ exports.getKid = catchError(async (req,res,next) =>{
             return next( new appError('kiid does not exists ', 404))
         }
         // console.log(kid);
-        res.status(200).json({
+        res.status(200).send({
             message : 'send back the child info',
             kid
         })    
@@ -56,7 +56,7 @@ exports.addKid = catchError(async (req,res,next) => {
         const exists = await Kid.findOne({code ,  name });
         
         if (exists) {
-             return res.status(400).json({message : 'this kid already exists'})
+             return res.status(400).send({message : 'this kid already exists'})
 
         }
 
@@ -79,14 +79,14 @@ exports.addKid = catchError(async (req,res,next) => {
         })
 
         if (!parent) {
-            return res.status(404).json({ message: 'Parent not found' });
+            return res.status(404).send({ message: 'Parent not found' });
         }
 
         if (!parent.kids) parent.kids = []; // Initialize if undefined
 
         //if the child exists in the list
         if (parent.kids.includes(name)) {
-            return res.status(400).json({ message: 'Kid already exists in parent list' });
+            return res.status(400).send({ message: 'Kid already exists in parent list' });
         }
 console.log(req.body.name);
 
@@ -105,7 +105,7 @@ console.log(req.body.name);
         
         
          if (!school) {
-            return res.status(404).json({ message: 'School not found' });
+            return res.status(404).send({ message: 'School not found' });
         }
 
         if (!school.kids) school.kids = [];
@@ -141,7 +141,7 @@ console.log(req.body.name);
         }
     }
         //to see if the child exists in the teacher list (i am not sure about if i ll add it here or in th teacher controllers)
-        res.status(200).json({
+        res.status(200).send({
             message: 'Kid successfully created',
             kid: newKid
         });
@@ -178,7 +178,7 @@ console.log(req.body.name);
         // Finally delete the kid from the kid collection
         await Kid.findByIdAndDelete(kid._id);
 
-        res.status(200).json({
+        res.status(200).send({
             message: 'Kid deleted successfully',
             kid: null
         });
@@ -197,7 +197,7 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
             {new : true}
             )
         kid.save
-        res.status(200).json({
+        res.status(200).send({
             message : 'updated',
             kid
         })
