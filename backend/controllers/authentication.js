@@ -144,6 +144,7 @@ exports.protectroute = catchError(async (req,res,next) => {
         next()
 })
 
+
 //to give permission to user to access the route
 exports.restrictTo = (...roles) =>{ //this roles will be added in the route ['admin', 'teacher', 'parent'] where this function will be used
     return (req,res,next) =>{
@@ -153,6 +154,8 @@ exports.restrictTo = (...roles) =>{ //this roles will be added in the route ['ad
     }
 }
 
+
+//forgot password
 exports.forgotPassword = catchError(async (req,res,next) => {
     const user = await User.findOne({email: req.body.email})
 
@@ -213,3 +216,48 @@ exports.resetPassword = catchError (async (req,res,next) => {
 
 
 
+
+exports.updatePassword = catchError(async (req,res,next) => {
+
+    // 1. Get user ID from JWT (via auth middleware)
+    const userId = req.body.id; // Set by `protect` middleware
+
+    // 2. Get passwords from request body
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
+
+    // 3. Find user (include password)
+    const user = await User.findById(userId).select('+password');
+    console.log(user.name)
+    if (!user) {
+      return next ( new appError('user not found', 404))
+    }
+
+    // 4. Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(404).json({ message: 'Current password is incorrect' });
+    }
+
+    // 5. Validate new passwords
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
+    // 6. Update password (pre-save hook hashes it)
+    user.password = newPassword;
+    await user.save();
+
+    // 7. Generate a NEW JWT (optional but recommended)
+    const token = jwt.sign(
+      { id: user._id }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
+    // 8. Respond with new token
+    res.status(200).json({
+      status: 'success',
+      token, // Send new token to client
+      message: 'Password updated successfully'
+    });
+})
