@@ -141,7 +141,7 @@ console.log(req.body.name);
         }
     }
         //to see if the child exists in the teacher list (i am not sure about if i ll add it here or in th teacher controllers)
-        res.status(200).json({
+        res.status(201).json({
             message: 'Kid successfully created',
             kid: newKid
         });
@@ -178,7 +178,7 @@ console.log(req.body.name);
         // Finally delete the kid from the kid collection
         await Kid.findByIdAndDelete(kid._id);
 
-        res.status(200).json({
+        res.status(204).json({
             message: 'Kid deleted successfully',
             kid: null
         });

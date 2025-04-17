@@ -4,8 +4,8 @@ const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const catchError = require ('../utils/catchError');
-
+const catchError = require('../utils/catchError')
+const appError = require('../utils/apperror')
 
 //signUp authentication
 exports.signUp = catchError (async (req,res) => {
@@ -40,7 +40,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
     console.log(user);
    
         //check if the user exists
-        
+    
         if (!user) {
             return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
@@ -56,7 +56,9 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/verify/${code}`
 
         //create the message
-        const message = `Your verification code ids ${code} please follow this link ${url} to verify your account`
+
+        const message = `Your varification code is ${code} please follow this link ${url} to verify your account`
+
         //send the email
 
         await email ({
