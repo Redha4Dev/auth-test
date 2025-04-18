@@ -84,7 +84,7 @@ router
 
     router 
     .route('/parent')
-    .get()
+    .get(parentControllers.getParents)
     .post(parentControllers.addParent)
     .patch()
     .delete()
