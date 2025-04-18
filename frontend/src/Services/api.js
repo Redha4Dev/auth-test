@@ -46,3 +46,18 @@ export const addKid = async (kidData) => {
     throw error;
   }
 };
+
+export const getParents = async (id) => {
+  try {
+    const response = await api.get(`/admin/parents`, {
+      params: { id }, // Send parameters in the query string
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching parents data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
