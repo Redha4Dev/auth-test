@@ -2,7 +2,7 @@ const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
 const adminControllers = require('../controllers/adminControllers');
-
+const parentControllers = require('../controllers/parentControllers')
 //start the route
 const router = express.Router()
 
@@ -79,6 +79,13 @@ router
     .route('/admin/settings')
     .get()
     .post()
+    .patch()
+    .delete()
+
+    router 
+    .route('/admin/parent')
+    .get()
+    .post(parentControllers.addParent)
     .patch()
     .delete()
 

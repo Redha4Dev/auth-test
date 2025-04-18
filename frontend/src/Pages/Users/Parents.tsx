@@ -9,7 +9,6 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChevronLeft, ChevronRight, MoreVertical, Plus } from 'lucide-react';
-import React from 'react'
 
 function Parents() {
   return (

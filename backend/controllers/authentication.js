@@ -39,7 +39,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
     console.log(user);
    
         //check if the user exists
-        
+    
         if (!user) {
             return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }

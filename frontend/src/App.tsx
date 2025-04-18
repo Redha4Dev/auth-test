@@ -8,10 +8,7 @@ import Profiles from "./Pages/Profiles";
 import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
 import Kids from "./Pages/Users/Kids";
-import Parents from "./Pages/Users/Parent";
-import LandingPage from "./Pages/LandingPage";
-import ForgotPassword from "./Pages/ForgotPassword";
-import ResetPassword from "./Pages/ResetPassword";
+import Parents from "./Pages/Users/Parents";
 
 function App() {
   const [dataF, setDataF] = useState({ name: "", email: "" });
@@ -38,17 +35,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<LandingPage />} path="/" />
         <Route element={<Login />} path="/Login" />
         <Route element={<SignUp />} path="/SignUp" />
-        <Route element={<ForgotPassword />} path="/ForgotPassword" />
-        <Route element={<ResetPassword />} path="/ResetPassword" />
         <Route element={<ProtectedRouters />}>
           <Route element={<Home />} path="/" />
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
-          <Route element={<Kids />} path="/Users/Kids" />
-          <Route element={<Parents/>} path="/Users/Parents"/>
+          <Route element={<Kids />} path="Users/Kids" />
+          <Route element={<Parents/>} path="Users/Parents" />
         </Route>
       </Routes>
     </BrowserRouter>
