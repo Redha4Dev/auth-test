@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const User = require('../Models/usermodel');
 const Kid = require('../Models/kidmodel');
-const catchError = require('../utils/catchError.js')
+const catchError = require('../utils/catchError.js');
+const AppError = require('../utils/apperror.js');
 
 //get all kids
 
@@ -18,7 +19,7 @@ exports.getAllKids = catchError(async (req,res,next) =>{
             //check if the user exists
     
             if (!user) {
-                return next( new appError('user not exists please signUp or LogIn to continue', 404))
+                return next( new AppError('user not exists please signUp or LogIn to continue', 404))
             }
     
             //send back the list from the document        
@@ -30,16 +31,23 @@ exports.getAllKids = catchError(async (req,res,next) =>{
     
 //get kid
 exports.getKid = catchError(async (req,res,next) =>{
-    //NB : this function is used by all the users type
 
-    const kid = await Kid.findOne({name: req.body.name , _id : req.body.id})
+    const { name, id } = req.query;
 
-        // console.log('start');
+    if (!name && !id) {
+        return next(new AppError('Please enter  name and id as query parameter', 404));
+    }
+
+    const searchQuery = {};
+    if (name) searchQuery.name = name;
+    if (id) searchQuery._id = id;
+
+    const kid = await Kid.findOne(searchQuery);
+
         
         if (!kid) {
-            return next( new appError('kiid does not exists ', 404))
+            return next( new AppError('kid does not exists ', 404))
         }
-        // console.log(kid);
         res.status(200).send({
             message : 'send back the child info',
             kid
