@@ -9,6 +9,9 @@ import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
 import Kids from "./Pages/Users/Kids";
 import Parents from "./Pages/Users/Parents";
+import ClassScheduling from "./Pages/Scheduling";
+import Scheduling from "./Pages/Scheduling";
+import Meals from "./Pages/Meals";
 
 function App() {
   const [dataF, setDataF] = useState({ name: "", email: "" });
@@ -43,6 +46,8 @@ function App() {
           <Route element={<Dashboard />} path="/Dashboard" />
           <Route element={<Kids />} path="Users/Kids" />
           <Route element={<Parents/>} path="Users/Parents" />
+          <Route element={<Scheduling/>} path="/Scheduling"/>
+          <Route element={<Meals/>} path="/Meals"/>
         </Route>
       </Routes>
     </BrowserRouter>
