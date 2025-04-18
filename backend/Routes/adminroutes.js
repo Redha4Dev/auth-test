@@ -62,8 +62,8 @@ router
     .delete(kidControllers.removeKid)
 
  router 
-    .route('/admin/manage-kids/: id')
-    .get()
+    .route('/manage-kids')
+    .get(kidControllers.getKid)
     .post()
     .patch()
     .delete(kidControllers.removeKid , authController.restrictTo(['admin', 'parent']))
@@ -83,7 +83,7 @@ router
     .delete()
 
     router 
-    .route('/admin/parent')
+    .route('/parent')
     .get()
     .post(parentControllers.addParent)
     .patch()

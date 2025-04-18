@@ -18,6 +18,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const AppError = require('./utils/apperror');
 
 app.use(helmet()); //http headers security
 app.set('trust proxy', 1)
@@ -58,7 +59,7 @@ app.use('/teacher', teacher)
 app.use('/', registration)
 
 app.all('*', (req, res , next) => {
-    next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
+    next (new AppError(`Can' t find ${req.originalUrl} on this server`, 404));
 })
 app.use(errorMiddleware);
 // app.all('*', (req, res , next) => {

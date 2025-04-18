@@ -56,22 +56,17 @@ const Userschema =  mongoose.Schema ({
         default: 'parent',
         required: true
     },
-    password :{
-        type :String ,
-        required : [true ,'please enter youe password'],
-        select : false,
+    password: {
+        type: String,
+        required: [true, 'Please enter your password'],
+        select: false,
         validate: {
             validator: function(el) {
-                return validator.isStrongPassword(el, {
-                minLength: 8,
-                minLowercase: 1,
-                minUppercase: 1,
-                minNumbers: 1,
-                minSymbols: 1,
-            });
+                return el.length >= 6 && /\d/.test(el);  
             },
-            message: 'Password must contain at least 8 characters, including uppercase, lowercase, number, and symbol'
-            },
+            message: 'Password must contain at least 6 characters, including a number'
+        
+    }},
     confirmPassword :{
         type : String,
         validate : {
@@ -114,7 +109,7 @@ const Userschema =  mongoose.Schema ({
     },
     code: Number
 }
-});
+);
 
 
 

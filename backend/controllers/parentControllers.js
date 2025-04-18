@@ -10,7 +10,7 @@ exports.updateme = catchError(async (req, res , next) =>{
     const user = await User.findById({ _id: req.body.id })
 
     if (!user) {
-        return next( new appError('user not exists please signUp or LogIn to continue', 404))
+        return next( new AppError('user not exists please signUp or LogIn to continue', 404))
     }
         //get updated data
         const updateData = req.body;
@@ -33,7 +33,7 @@ console.log("rrr");
         
       //check if the use exists
     if (!user) {
-        return next( new appError('user not exists please signUp or LogIn to continue', 404))
+        return next( new AppError('user not exists please signUp or LogIn to continue', 404))
     }
             // const parent = await User.findById({_id : req.body.id, role : 'parent' , name: req.body.name})
             // if(!parent){
@@ -58,10 +58,13 @@ exports.getParents = catchError(async (req,res,next) =>{
 
 exports.addParent = catchError(async (req , res , next) => {
 
-    const exists = await Kid.findOne({code ,  name });
+
+    const name  = req.body.name;
+
+    const exists = await Kid.findOne({ name });
     
     if (exists) {
-        return res.status(400).send({message : 'this kid already exists'})
+        return res.status(400).send({message : 'this parent already exists'})
 
     }
         //create and save the newKid
@@ -97,7 +100,7 @@ exports.addParent = catchError(async (req , res , next) => {
         
         res.status(200).send({
             message: 'Parent successfully created',
-            parent
+            parent : newParent
         });
 })
 
