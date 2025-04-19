@@ -121,18 +121,7 @@ export default function Sections() {
             <div>
               <h3 className="text-lg font-semibold">Follow Us</h3>
               <div className="flex space-x-4 mt-2">
-                <a href="#" className="text-gray-400 hover:text-white text-xl">
-                  <FaFacebookF />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white text-xl">
-                  <FaTwitter />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white text-xl">
-                  <FaInstagram />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white text-xl">
-                  <FaLinkedinIn />
-                </a>
+                
               </div>
             </div>
           </div>
