@@ -6,11 +6,11 @@ const sendemail = async options => {
     
         
        const transporter =   nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port : process.env.EMAIL_PORT,
+        host: 'smtp.mailtrap.io',
+        port :2525,
         auth :{
-            user : process.env.EMAIL_USERNAME,
-            pass : process.env.EMAIL_PASSWORD
+            user : '00a8a45eba1da2',
+            pass : '194a547c89bc99'
         }
        })
     
@@ -22,6 +22,8 @@ const sendemail = async options => {
         text : options.message
        }
     
+       //send the email
+       await transporter.sendMail(mailoptions)
        
     } catch (err) {
         console.error('error occured', err);
@@ -29,8 +31,6 @@ const sendemail = async options => {
     }
 
 
-    //send the email
-    await transporter.sendMail(mailoptions)
 }
 
 module.exports = sendemail

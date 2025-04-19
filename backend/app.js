@@ -58,7 +58,7 @@ app.use('/teacher', teacher)
 app.use('/', registration)
 
 app.all('*', (req, res , next) => {
-    next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
+    next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
 })
 app.use(errorMiddleware);
 // app.all('*', (req, res , next) => {

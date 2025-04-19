@@ -46,3 +46,15 @@ export const addKid = async (kidData) => {
     throw error;
   }
 };
+export const ForgotPassword = async (email) => {
+        try {
+          console.log('first')
+          const res = await axios.post('http://localhost:5000/forgotPassword', { email });
+        //   const res = await axios.post('/api/v1/users/forgotPassword', { email });
+          console.log('good')
+          setMessage('Check your email for the reset link.');
+        } catch (err) {
+          setMessage(err.response?.data?.message || 'Something went wrong.');
+          console.log('bad')
+        }
+      };
