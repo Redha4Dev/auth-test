@@ -12,10 +12,9 @@ import Parents from "./Pages/Users/Parents";
 import ClassScheduling from "./Pages/Scheduling";
 import Scheduling from "./Pages/Scheduling";
 import Meals from "./Pages/Meals";
+import KidProfile from "./Pages/Users/KidProfile";
 
 function App() {
-  const [dataF, setDataF] = useState({ name: "", email: "" });
-  const [response, setResponse] = useState(null);
 
   // const handleChange = (e) => {
   //   setDataF({ ...dataF, [e.target.name]: e.target.value });
@@ -45,9 +44,10 @@ function App() {
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
           <Route element={<Kids />} path="Users/Kids" />
-          <Route element={<Parents/>} path="Users/Parents" />
-          <Route element={<Scheduling/>} path="/Scheduling"/>
-          <Route element={<Meals/>} path="/Meals"/>
+          <Route element={<KidProfile />} path="Users/Kids/:id/:name" />
+          <Route element={<Parents />} path="Users/Parents" />
+          <Route element={<Scheduling />} path="/Scheduling" />
+          <Route element={<Meals />} path="/Meals" />
         </Route>
       </Routes>
     </BrowserRouter>

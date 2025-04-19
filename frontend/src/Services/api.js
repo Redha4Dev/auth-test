@@ -19,20 +19,28 @@ export const getKids = async (name, id) => {
   }
 };
 
-export const getKid = (name, id) => {
+export const getKid = async (name, id) => {
   try {
-    const response = api.get(`/admin/kids/${id}`, {
-      params: { name, id }, // Send parameters in the query string
+    const response = await api.get(`/admin/manage-kids/`, {
+      params: { name, id, t: new Date().getTime() }, // added timestamp to prevent caching
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+      }
     });
+
+    console.log("✅ getKid response:", response.data);
     return response.data;
+
   } catch (error) {
     console.error(
-      "Error fetching kid data:",
+      "❌ Error fetching kid data:",
       error.response?.data?.message || error.message
     );
     throw error;
   }
 };
+
 
 export const addKid = async (kidData) => {
   try {
