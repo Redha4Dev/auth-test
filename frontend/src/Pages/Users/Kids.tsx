@@ -50,6 +50,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Link } from "react-router-dom";
 
 const childrenData = Array.from({ length: 50 }, (_, i) => ({
   id: `${i + 1}`,
@@ -262,9 +263,9 @@ function Kids() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
-                            onClick={() => alert(`Viewing ${child.name}`)}
+                            
                           >
-                            View
+                            <Link className="w-full" to={`/Users/Kids/${child.id}/${child.name}`}>View</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => alert(`Editing ${child.name}`)}

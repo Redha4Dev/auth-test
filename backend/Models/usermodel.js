@@ -45,7 +45,10 @@ const Userschema =  mongoose.Schema ({
     gender :{
         type : String,
         //required : [true ,'please enter your gender'],
-        enum: ['Male', 'Female']
+        enum: {
+            values : ['Male', 'Female'],
+            message: 'Please select a valid gender identity'
+        }
     },
     role: {
         type: String,
@@ -53,20 +56,17 @@ const Userschema =  mongoose.Schema ({
         default: 'parent',
         required: true
     },
-    password :{
-        type :String ,
-        required : [true ,'please enter youe password'],
-        select : false,
-        // validate :{
-        //     validator: function (el) {
-        //         return validator.isStrongPassword(el, {
-        //             minLength: 5,
-        //             // minUppercase : 1,
-        //         })
-        //     },
-        //     message : 'Password is not strong enough.'
-        // }
-    },
+    password: {
+        type: String,
+        required: [true, 'Please enter your password'],
+        select: false,
+        validate: {
+            validator: function(el) {
+                return el.length >= 6 && /\d/.test(el);  
+            },
+            message: 'Password must contain at least 6 characters, including a number'
+        
+    }},
     confirmPassword :{
         type : String,
         validate : {
@@ -108,7 +108,8 @@ const Userschema =  mongoose.Schema ({
         type: String,
     },
     code: Number
-})
+}
+);
 
 
 

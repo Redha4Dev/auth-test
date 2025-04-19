@@ -2,7 +2,7 @@ const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
 const adminControllers = require('../controllers/adminControllers');
-
+const parentControllers = require('../controllers/parentControllers')
 //start the route
 const router = express.Router()
 
@@ -62,8 +62,8 @@ router
     .delete(kidControllers.removeKid)
 
  router 
-    .route('/admin/manage-kids/: id')
-    .get()
+    .route('/manage-kids')
+    .get(kidControllers.getKid)
     .post()
     .patch()
     .delete(kidControllers.removeKid , authController.restrictTo(['admin', 'parent']))
@@ -79,6 +79,13 @@ router
     .route('/admin/settings')
     .get()
     .post()
+    .patch()
+    .delete()
+
+    router 
+    .route('/parent')
+    .get(parentControllers.getParents)
+    .post(parentControllers.addParent)
     .patch()
     .delete()
 

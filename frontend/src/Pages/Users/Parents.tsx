@@ -8,9 +8,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { getParents } from '@/Services/api';
 import { ChevronLeft, ChevronRight, MoreVertical, Plus } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 
 function Parents() {
+  const [list, setList] = useState([]);
+  const handleGetParents = async () => {
+    try {
+      const parents = await getParents('67e865fa467eeb7c40462f0a');
+      setList(parents);
+      console.log(parents);
+
+    } catch (error) {
+      console.error('Error fetching parents:', error);
+    }
+  }
+  useEffect(() => {
+    handleGetParents();
+  }, []);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -106,7 +123,48 @@ function Parents() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              
+              {list.map((parent) => (
+                <TableRow key={parent.id}>
+                    <TableCell>{parent.id}</TableCell>
+                    <TableCell>{parent.name}</TableCell>
+                    <TableCell>{parent.age}</TableCell>
+                    <TableCell>{parent.class}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          parent.status === "Active"
+                            ? "success"
+                            : parent.status === "Inactive"
+                            ? "destructive"
+                            : "warning"
+                        }
+                      >
+                        {parent.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreVertical />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => alert(`Viewing ${parent.name}`)}
+                          >
+                            View
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => alert(`Editing ${parent.name}`)}
+                          >
+                            Edit
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+              ) )}
               
             </TableBody>
           </Table>
