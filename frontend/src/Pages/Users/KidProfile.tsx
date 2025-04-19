@@ -32,7 +32,7 @@ function KidProfile() {
         <h1>{profile.name}'s Profile</h1>
       </header>
 
-      <div className="flex flex-col min-w-[70%] w-fit  mt-3 bg-[#FEFEFE] rounded-xl shadow-md mx-auto">
+      <div className="flex flex-col min-w-[70%] w-fit  mt-3 bg-[#f4f4f4] rounded-xl shadow-md mx-auto">
       <div className="w-full flex items-center justify-center bg-[length:100%_60%] bg-no-repeat bg-top h-32 bg-gradient-to-r from-[#a075eb] to-[#e4d3f1] rounded-t-xl">
           <div
               className={`flex items-center justify-center w-20 h-20 rounded-full text-white text-4xl font-bold

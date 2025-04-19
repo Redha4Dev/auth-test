@@ -265,7 +265,7 @@ function Kids() {
                           <DropdownMenuItem
                             
                           >
-                            <Link className="w-full" to={`/Users/Kids/${child.id}/${child.name.toLowerCase()}`}>View</Link>
+                            <Link className="w-full" to={`/Users/Kids/${child.id}/${child.name}`}>View</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => alert(`Editing ${child.name}`)}
