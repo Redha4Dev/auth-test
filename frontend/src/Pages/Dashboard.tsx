@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import clsx from "clsx";
 import { FormProvider } from "./Steps/FormContext";
 import {
@@ -21,8 +21,46 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getKids } from "@/Services/api";
+import { jwtDecode } from "jwt-decode";
 
 function Dashboard() {
+
+  const [username, setUsername] = useState("");
+  const [id, setId] = useState(""); 
+  const [kids, setKids] = useState({})
+  
+  const [kidsNumber, setKidsNumber] = useState(0);
+  const [UsersNumber, setUsersNumber] = useState(0);
+  const ListKids = async () => {
+    try {
+      const response = await getKids(username, id);
+      console.log("Kids API response:", response);
+  
+      // Make sure response and response.data exist
+        setKids(response.data);
+        setKidsNumber(response.size);
+
+    } catch (error) {
+      console.error("Error fetching kids:", error);
+    }
+  };
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decode = jwtDecode(token);
+      console.log("Decoded token:", decode);
+      setUsername(decode.name);
+      setId(decode.id); // This triggers the second useEffect
+    }
+  }, []);
+  
+   useEffect(() => {
+      if (id) { // Only call when ID is available
+        ListKids();
+      }
+    }, [id]);
   const genral_data = [
     {
       title: "Total Users",
@@ -32,7 +70,7 @@ function Dashboard() {
     },
     {
       title: "Total Kids",
-      value: 170,
+      value: kidsNumber,
       icon: <ToyBrick />,
       color: "blue",
     },
@@ -63,6 +101,7 @@ function Dashboard() {
     { browser: "ASD", visitors: 173, fill: "var(--color-edge)" },
     { browser: "Depression", visitors: 190, fill: "var(--color-other)" },
   ];
+
   return (
     <FormProvider>
       <SidebarProvider>
@@ -98,7 +137,7 @@ function Dashboard() {
                 ))}
                 <div className="col-span-3 grid gap-3 grid-cols-1 md:grid-cols-5">
                   <div className="md:col-span-3 col-span-5">
-                    <MultipleBar />
+                    <MultipleBar  />
                   </div>
                   <div className="md:col-span-2 col-span-5">
                     <Piechart chartData={PiechartData} title={"Kids Status"} />
