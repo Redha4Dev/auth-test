@@ -45,16 +45,29 @@ console.log("rrr");
         })
 })
 
-//this function accessed by the admin only
-exports.getParents = catchError(async (req,res,next) =>{
-    //get the admin based on his id
-    const admin = await User.find({role : 'admin', _id : req.body.id})
-        //check if parents exists in the list
-        const parents = admin.parents;
-    res.status(200).send({
-        parents
-    })
-})
+exports.getParents = catchError(async (req, res, next) => {
+    const { name, id } = req.query;
+
+    if (!name && !id) {
+        return next(new AppError('Please enter either name or id as query parameter', 400));
+    }
+
+    const searchQuery = { role: 'admin' };
+    if (name) searchQuery.name = name;
+    if (id) searchQuery._id = id;
+
+    const admins = await User.find(searchQuery);
+
+    const allParents = admins.flatMap(admin => admin.parents || []);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            parents: allParents
+        }
+    });
+});
+
 
 exports.addParent = catchError(async (req , res , next) => {
 
