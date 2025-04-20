@@ -178,6 +178,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
 
+        console.log('dead')
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
         //send the email

@@ -4,33 +4,32 @@
         try {
             //create the transporter according to the information sets in the config file
         
-            
-        const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST,
-            port : process.env.EMAIL_PORT,
-            auth :{
-                user : process.env.EMAIL_USERNAME,
-                pass : process.env.EMAIL_PASSWORD
-            }
-        })
-        
-        //define the email options
-        const mailoptions = {
-            from : 'Children Nuersery <Children.Nursery@gmail.com>',
-            to : options.email  ,
-            subject : options.subject,
-            text : options.message
+    const transporter =   nodemailer.createTransport({
+        host: 'smtp.mailtrap.io',
+        port :2525,
+        auth :{
+            user : '00a8a45eba1da2',
+            pass : '194a547c89bc99'
         }
-        
-        
-        } catch (err) {
-            console.error('error occured', err);
-            console.error('could not send the email');
-        }
-
-
-        //send the email
-        await transporter.sendMail({mailoptions})
+       })
+    
+       //define the email options
+       const mailoptions = {
+        from : 'Children Nuersery <Children.Nursery@gmail.com>',
+        to : options.email,
+        subject : options.subject,
+        text : options.message
+       }
+    
+       //send the email
+       await transporter.sendMail(mailoptions)
+       
+    } catch (err) {
+        console.error('error occured', err);
+        console.error('could not send the email');
     }
 
-    module.exports = sendemail
+
+}
+
+module.exports = sendemail
