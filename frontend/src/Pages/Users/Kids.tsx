@@ -124,14 +124,6 @@ function Kids() {
       console.error("Error fetching kids:", error);
     }
   };
-  const getMykid = async () => {
-    try {
-      const newkid = await getKid("Johny since", "67dd0abb66205d9553eb5377");
-      console.log(newkid);
-    } catch (error) {
-      console.error("Error fetching kid:", error);
-    }
-  };
   const AddKid = async () => {
     try {
       await addKid(kids);

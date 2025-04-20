@@ -2,8 +2,9 @@ import { AppSidebar } from '@/components/app-sidebar'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import FullCalendar from '@fullcalendar/react'
-import { Sidebar } from 'lucide-react'
+import { List, Sidebar } from 'lucide-react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import listPlugin from '@fullcalendar/list'
 import React, { useEffect, useState } from 'react'
 
 function Meals() {
@@ -19,33 +20,37 @@ function Meals() {
                     <h1 className="text-2xl font-bold">Meals</h1>
                   </div>
                 </header>
-                <div className='p-4 mx-auto w-[95%] h-[60%]   bg-[#F8F8F8] rounded-lg shadow-md'>
-                  <FullCalendar plugins={[dayGridPlugin]} 
-                  initialView="dayGridWeek"
-                  height="100%"
-                  dateClick={(info) => alert(`Clicked on: ${info.dateStr}`)}
-                  events={[
-                    {
-                        title: 'Breakfast',
-                        daysOfWeek: [0, 1, 2, 3, 4], // Sunday - Thursday
-                        startTime: '08:00',
-                        endTime: '09:00',
+                <div className='p-4 mx-auto w-[95%] h-full   bg-[#F8F8F8] rounded-lg shadow-md'>
+                <FullCalendar
+  plugins={[listPlugin, dayGridPlugin]}
+  initialView="listWeek"
+  height="100%"
+  dateClick={(info) => alert(`Clicked on: ${info.dateStr}`)}
+  events={[
+    {
+      title: 'Breakfast',
+      daysOfWeek: [0, 1, 2, 3, 4], // Sunday to Thursday
+      startTime: '08:00:00',
+      endTime: '09:00:00',
+      startRecur: '2024-01-01',
+    },
+    {
+      title: 'Soup',
+      daysOfWeek: [1], // Monday
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      startRecur: '2024-01-01',
+    },
+    {
+      title: 'Salad',
+      daysOfWeek: [3], // Wednesday
+      startTime: '14:00:00',
+      endTime: '15:30:00',
+      startRecur: '2024-01-01',
+    },
+  ]}
+/>
 
-                    },
-                    {
-                      title: 'Soup',
-                      daysOfWeek: [1], 
-                      startTime: '10:00',
-                      endTime: '11:00',
-                    },
-                    {
-                      title: 'Salad',
-                      daysOfWeek: [3], 
-                      startTime: '14:00',
-                      endTime: '15:30',
-                    },
-                  ]}
-                  />
                 </div>
             </SidebarInset>
         </SidebarProvider>
