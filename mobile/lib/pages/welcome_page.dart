@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/myButton.dart';
+import 'package:kidergarten/pages/login_page.dart';
 import 'package:kidergarten/pages/signup_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -33,26 +34,26 @@ class _WelcomePageState extends State<WelcomePage> {
                 height: 150,
               ),
               Mybutton(
-                title: 'I am a Teacher',
+                title: 'Sign up',
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignupPage(
-                          isParent: false), // Set true for Parent Login
+                      builder: (context) =>
+                          SignupPage(), // Set true for Parent Login
                     ),
                   );
                 },
               ),
               Mybutton(
-                title: 'I am a Parent',
+                title: 'Login',
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignupPage(
-                          isParent: true), // Set true for Parent Login
-                    ),
+                        builder: (context) =>
+                            LoginPage() // Set true for Parent Login
+                        ),
                   );
                 },
               ),

@@ -8,7 +8,6 @@ const AppError = require('../utils/apperror.js');
 //get all kids
 
 exports.getAllKids = catchError(async (req,res,next) =>{
-        ////NB : this function used by the all the users types to get the list of all the kids inserted in their document 
 
             //getting user based on the information sent from the from the ftront-end part
             const { name, id } = req.query;
@@ -210,3 +209,122 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
             kid
         })
 })
+
+exports.displaySchoolKidList = catchError(async (req, res, next) => {
+    const { name, id } = req.query;
+
+    if (!name || !id) {
+        return next(new AppError('Both name and id are required as query parameters.', 400));
+    }
+
+    const admin = await User.findOne({
+        role: 'admin',
+        name,
+        _id: id
+    }); 
+
+    if (!admin) {
+        return next(new AppError('Admin not found. Please check your credentials.', 404));
+    }
+
+    const kids = await Kid.find({ 
+        school: admin.name 
+    })
+
+    if (kids.length === 0) {
+        return res.status(200).send({
+            status: 'success',
+            message: 'No kids found for this school',
+            kids: {
+                kids: []
+            }
+        });
+    }
+
+    res.status(200).send({
+        status: 'success',
+        kids: {
+            kids
+        }
+    });
+});
+
+
+exports.displayParentKidList = catchError(async (req, res, next) => {
+    const { name, id } = req.query;
+
+    if (!name || !id) {
+        return next(new AppError('Both name and id are required as query parameters.', 400));
+    }
+
+    const parent = await User.findOne({
+        role: 'parent',
+        name,
+        _id: id
+    }); 
+
+    if (!parent) {
+        return next(new AppError('Admin not found. Please check your credentials.', 404));
+    }
+
+    const kids = await Kid.find({ 
+        parent : parent.name
+    })
+
+    if (kids.length === 0) {
+        return res.status(200).send({
+            status: 'success',
+            message: 'No kids found for this parent',
+            kids: {
+                kids: []
+            }
+        });
+    }
+
+    res.status(200).send({
+        status: 'success',
+        kids: {
+            kids
+        }
+    });
+});
+
+
+exports.displayTeacherKidList = catchError(async (req, res, next) => {
+    const { name, id } = req.query;
+
+    if (!name || !id) {
+        return next(new AppError('Both name and id are required as query parameters.', 400));
+    }
+
+    const teacher = await User.findOne({
+        role: 'teacher',
+        name,
+        _id: id
+    }); 
+
+    if (!teacher) {
+        return next(new AppError('Admin not found. Please check your credentials.', 404));
+    }
+
+    const kids = await Kid.find({ 
+        teacher : teacher.name
+    })
+
+    if (kids.length === 0) {
+        return res.status(200).send({
+            status: 'success',
+            message: 'No kids found for this teacher',
+            kids: {
+                kids: []
+            }
+        });
+    }
+
+    res.status(200).send({
+        status: 'success',
+        kids: {
+            kids
+        }
+    });
+});

@@ -89,4 +89,26 @@ router
     .patch()
     .delete()
 
+    router
+    .route('/school')
+    .get(kidControllers.displaySchoolKidList)
+    .post()
+    .patch()
+    .delete()
+    
+    router
+    .route('/parent/kids')
+    .get(kidControllers.displayParentKidList)
+    .post()
+    .patch()
+    .delete()
+
+    router
+    .route('/teacher/kids')
+    .get(kidControllers.displayTeacherKidList)
+    .post()
+    .patch()
+    .delete()
+
+
     module.exports = router
