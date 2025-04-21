@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/myButton.dart';
 import 'package:kidergarten/components/textField.dart';
-import 'package:kidergarten/pages/teacher.dart';
+import 'package:kidergarten/pages/navigator.dart';
 import 'package:kidergarten/pages/teacherDashboard.dart';
 import 'package:kidergarten/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TeacherHomePage(),
+                          builder: (context) => NavigationSpine(),
                         ));
                   },
                 ),
