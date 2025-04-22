@@ -60,12 +60,9 @@ app.use('/', registration)
 
 app.all('*', (req, res , next) => {
     next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
-<<<<<<< HEAD
 })
 app.all('*', (req, res , next) => {
     next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
-=======
->>>>>>> 52625f0459ba5b238e7a78e03fe3aba648d599ec
 })
 app.use(errorMiddleware);
 

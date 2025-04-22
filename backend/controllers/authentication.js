@@ -43,7 +43,6 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         if (!user) {
             return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
-        try{
         
         //generate and save L code
         const code = user.createVerificationCode();
@@ -70,19 +69,8 @@ exports.verificationCode = catchError (async (req,res,next) =>{
             status : 'success',
             message : "verification sent"
         })
-<<<<<<< HEAD
 })
     
-=======
-        } catch (err) {
-        // Reset the verification code if email fails
-        user.verificationCode = undefined;
-        await user.save({ validateBeforeSave: false });
-        }
-return next(new AppError('There was an error sending the verification email. Please try again.', 500));
-    
-    })
->>>>>>> 52625f0459ba5b238e7a78e03fe3aba648d599ec
 
     
 //logIn authentication
@@ -183,13 +171,8 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //send the email to the user email
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
-<<<<<<< HEAD
         console.log(111);
         
-=======
-
-        console.log('dead')
->>>>>>> 52625f0459ba5b238e7a78e03fe3aba648d599ec
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
         console.log(message);
