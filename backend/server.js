@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 <<<<<<< HEAD
-<<<<<<< HEAD
 
 // process.on('uncaughtException', err => {
 //     console.log('Uncaught exception! Shutting down...');
@@ -9,8 +8,6 @@ const dotenv = require('dotenv');
 //     process.exit(1);
 // });
 
-=======
->>>>>>> parent of c00024a (ii)
 =======
 >>>>>>> parent of c00024a (ii)
 dotenv.config({path : './config.env'})
