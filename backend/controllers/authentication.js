@@ -71,7 +71,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
             message : "verification sent"
         })
 })
-    }
+    
 
 //logIn authentication
 
@@ -97,7 +97,7 @@ exports.logIn = catchError(async (req,res) =>{
             return next( new appError('user not exists please enter valide information or signUp to continue', 404))
         }      
         //create the token for the user
-        const token = jwt.sign({id : user.id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        const token = jwt.sign({id : user.id  , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         console.log(user.password);
         
 
@@ -159,7 +159,8 @@ exports.restrictTo = (...roles) =>{ //this roles will be added in the route ['ad
 //forgot password
 exports.forgotPassword = catchError(async (req,res,next) => {
     const user = await User.findOne({email: req.body.email})
-
+    console.log(user);
+    
     if (!user) {
         return next( new appError('user not exists please signUp or LogIn to continue', 404))
     }
@@ -170,9 +171,12 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //send the email to the user email
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
-
+        console.log(111);
+        
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
+        console.log(message);
+        
         //send the email
         await email ({
             email : user.email,
@@ -180,7 +184,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
             message
         })
         res.status(200).json({
-            message : 'token sent'
+            message : 'email sent'
         })       
 })
 
@@ -250,7 +254,7 @@ exports.updatePassword = catchError(async (req,res,next) => {
 
     // 7. Generate a NEW JWT (optional but recommended)
     const token = jwt.sign(
-      { id: user._id }, 
+      { id: user._id , name : user.name }, 
       process.env.JWT_SECRET, 
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
