@@ -27,8 +27,11 @@ router
 router
     .route('/verify')
     .post(authController.verificationCode)
+<<<<<<< HEAD
 router
     .route('/forgotPassword')
     .post(authController.forgotPassword)
+=======
+>>>>>>> parent of c00024a (ii)
 
 module.exports = router;
