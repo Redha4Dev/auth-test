@@ -13,7 +13,7 @@ router
         
         res.sendFile(path.join(__dirname , '../../frontend/src/Pages/Login.tsx'))
      })
-     .post(authController.forgotPassword)
+     .post(authController.logIn)
 
 //signUp routes
 
@@ -29,30 +29,6 @@ router
     .post(authController.verificationCode)
 router
     .route('/forgotPassword')
-    .post(authController.forgotPassword)
-
-router
-    .route('/forgotPassword')
-    .get((req,res)=>{
-                res.send([{
-                    name: 'John Doe',
-                    age: 25,
-                    id: 1
-                },{
-                    name: 'Jane Doe',
-                    age: 24,
-                    id: 2
-                },
-                {
-                    name: 'John Smith',
-                    age: 30,
-                    id: 3
-                },{
-                    name: 'Jane Smith',
-                    age: 29,
-                    id: 4
-                }])
-       })
     .post(authController.forgotPassword)
 
 module.exports = router;

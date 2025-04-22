@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+<<<<<<< HEAD
 
 // process.on('uncaughtException', err => {
 //     console.log('Uncaught exception! Shutting down...');
@@ -7,6 +8,8 @@ const dotenv = require('dotenv');
 //     process.exit(1);
 // });
 
+=======
+>>>>>>> parent of c00024a (ii)
 dotenv.config({path : './config.env'})
 const app = require('./app')
 
@@ -18,23 +21,13 @@ const app = require('./app')
  .then(() => {
     console.log('Connected to database!');
 })
-// .catch(() => {
-//     console.log('Connection failed!');
-// });
+.catch(() => {
+    console.log('Connection failed!');
+});
 
 
 // start the server
 const port = process.env.PORT || 8000
-const server = app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 }); //hello word
-
-
-// handle unhandled rejection it ceash the server waiting to implement a tool to reRun the server
-// process.on('unhandledRejection', err => {
-//     console.log('Unhandled rejection! Shutting down...');
-//     console.log(err.name, err.message);
-//     server.close(() => {
-//         process.exit(1);
-//     });
-// })
