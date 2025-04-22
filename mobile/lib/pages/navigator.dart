@@ -5,20 +5,20 @@ import 'package:kidergarten/pages/chatPage.dart';
 import 'package:kidergarten/pages/settings.dart';
 import 'package:kidergarten/pages/teacherDashboard.dart';
 
-class TeacherHomePage extends StatefulWidget {
-  const TeacherHomePage({super.key});
+class NavigationSpine extends StatefulWidget {
+  const NavigationSpine({super.key});
 
   @override
-  State<TeacherHomePage> createState() => _TeacherHomePageState();
+  State<NavigationSpine> createState() => _NavigationSpineState();
 }
 
-class _TeacherHomePageState extends State<TeacherHomePage> {
+class _NavigationSpineState extends State<NavigationSpine> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const TeacherDashboard(),
+    TeacherDashboard(),
     ChatPage(),
-    const SettingsPage(),
+    SettingsPage(),
   ];
 
   @override

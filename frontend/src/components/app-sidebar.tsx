@@ -72,7 +72,7 @@ export function AppSidebar() {
       icon: <CookieIcon />,
     },
     {
-      name: "Time Manage",
+      name: "Scheduling",
       icon: <Calendar />,
     },
     {

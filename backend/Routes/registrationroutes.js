@@ -27,6 +27,9 @@ router
 router
     .route('/verify')
     .post(authController.verificationCode)
+router
+    .route('/forgotPassword')
+    .post(authController.forgotPassword)
 
 router
     .route('/forgotPassword')

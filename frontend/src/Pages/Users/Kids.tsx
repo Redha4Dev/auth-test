@@ -50,6 +50,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Link } from "react-router-dom";
 
 const childrenData = Array.from({ length: 50 }, (_, i) => ({
   id: `${i + 1}`,
@@ -121,14 +122,6 @@ function Kids() {
       console.log(newkids.kids);
     } catch (error) {
       console.error("Error fetching kids:", error);
-    }
-  };
-  const getMykid = async () => {
-    try {
-      const newkid = await getKid("Johny since", "67dd0abb66205d9553eb5377");
-      console.log(newkid);
-    } catch (error) {
-      console.error("Error fetching kid:", error);
     }
   };
   const AddKid = async () => {
@@ -262,9 +255,9 @@ function Kids() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
-                            onClick={() => alert(`Viewing ${child.name}`)}
+                            
                           >
-                            View
+                            <Link className="w-full" to={`/Users/Kids/${child.id}/${child.name}`}>View</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => alert(`Editing ${child.name}`)}

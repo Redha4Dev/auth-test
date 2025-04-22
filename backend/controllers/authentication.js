@@ -4,8 +4,7 @@ const email = require ('../utils/email')
 const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const catchError = require('../utils/catchError')
-const appError = require('../utils/apperror')
+const catchError = require ('../utils/catchError');
 
 //signUp authentication
 exports.signUp = catchError (async (req,res) => {
@@ -44,7 +43,9 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         if (!user) {
             return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
-        //generate and save verification code
+        try{
+        
+        //generate and save L code
         const code = user.createVerificationCode();
         console.log(code);
         
@@ -56,9 +57,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/verify/${code}`
 
         //create the message
-
-        const message = `Your varification code is ${code} please follow this link ${url} to verify your account`
-
+        const message = `Your verification code is ${code} please follow this link ${url} to verify your account`
         //send the email
 
         await email ({
@@ -68,14 +67,27 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         })
 
         res.status(200).json({
+            status : 'success',
             message : "verification sent"
         })
+<<<<<<< HEAD
 })
     
+=======
+        } catch (err) {
+        // Reset the verification code if email fails
+        user.verificationCode = undefined;
+        await user.save({ validateBeforeSave: false });
+        }
+return next(new AppError('There was an error sending the verification email. Please try again.', 500));
+    
+    })
+>>>>>>> 52625f0459ba5b238e7a78e03fe3aba648d599ec
 
+    
 //logIn authentication
 
-exports.logIn = catchError(async (req,res) =>{
+exports.logIn = catchError (async (req,res) =>{
     console.log('start');
     
     const {email , password} = req.body;
@@ -171,8 +183,13 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //send the email to the user email
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
+<<<<<<< HEAD
         console.log(111);
         
+=======
+
+        console.log('dead')
+>>>>>>> 52625f0459ba5b238e7a78e03fe3aba648d599ec
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
         console.log(message);
@@ -224,42 +241,42 @@ exports.resetPassword = catchError (async (req,res,next) => {
 
 exports.updatePassword = catchError(async (req,res,next) => {
 
-    // 1. Get user ID from JWT (via auth middleware)
-    const userId = req.body.id; // Set by `protect` middleware
+    // 1 Get user ID from JWT 
+    const userId = req.body.id; 
 
-    // 2. Get passwords from request body
+    // 2 Get passwords from request body
     const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
-    // 3. Find user (include password)
+    // 3 Find user (include password)
     const user = await User.findById(userId).select('+password');
     console.log(user.name)
     if (!user) {
       return next ( new appError('user not found', 404))
     }
 
-    // 4. Verify current password
+    // 4 Verify current password
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.status(404).json({ message: 'Current password is incorrect' });
     }
 
-    // 5. Validate new passwords
+    // 5 Validate new passwords
     if (newPassword !== confirmNewPassword) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    // 6. Update password (pre-save hook hashes it)
+    // 6 Update password 
     user.password = newPassword;
     await user.save();
 
-    // 7. Generate a NEW JWT (optional but recommended)
+    // 7Generate a NEW JWT 
     const token = jwt.sign(
       { id: user._id , name : user.name }, 
       process.env.JWT_SECRET, 
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    // 8. Respond with new token
+    // 8 Respond with new token
     res.status(200).json({
       status: 'success',
       token, // Send new token to client
