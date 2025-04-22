@@ -76,10 +76,10 @@ const Userschema =  mongoose.Schema ({
             },
             message : 'passwords are not the same'
         }
-    },// hybrid data modeling to improve the app performance and 
+    },
     kids: [{
-        name: String,//embedded (denormalized) data modeling : to improve the app performance by making few queries to the db
-        id: String, // referencing (normalized) data modeling :i used id to easily query the embedded data inside to avoid the 
+        name: String,
+        id: String,
         _id : false,
         default: [],
     }],
@@ -88,16 +88,13 @@ const Userschema =  mongoose.Schema ({
     passwordResetToken: String,
     passwordResetExpires: Date,
     verificationCode : String,
-    createdAt : Date,
     teachers: { 
-        name : String,
-        id :String,
+        type :Array,
         _id : false,
         default : []
     },
     parents: { 
-        name : String,
-        id :String,
+        type :Array,
         default : [],
         _id : false
     },
@@ -139,7 +136,6 @@ Userschema.pre('save', async function (req,res,next) {
          //crypt the password
          this.password = await bcrypt.hash(this.password , 12);
          this.confirmPassword = undefined
-         this.createdAt = new Date()
          
         
     //  } catch (error) {
@@ -170,7 +166,7 @@ Userschema.methods.createPasswordResetToken = function (){
     this.passwordResetToken = crypto.createHash('sha256').update(token).digest('hex');
 
     //set expiration time (10min for example) to the reset time
-    this.passwordResetExpires = Date() + 20 * 60 * 1000
+    this.passwordResetExpires = date() + 20 * 60 * 1000
     return token
 }
 
