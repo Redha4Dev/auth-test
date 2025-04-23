@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const Apperror = require ('./utils/apperror');
-const errorMiddleware = require('./controllers/errorcontroller')
+const errorMiddleware = require('./middlewares/errorcontroller')
 const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const registration = require('./Routes/registrationroutes')
@@ -59,24 +59,8 @@ app.use('/teacher', teacher)
 app.use('/', registration)
 
 app.all('*', (req, res , next) => {
-<<<<<<< HEAD
     next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
-<<<<<<< HEAD
-})
-app.all('*', (req, res , next) => {
-    next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
-=======
->>>>>>> 52625f0459ba5b238e7a78e03fe3aba648d599ec
-=======
-    next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
->>>>>>> parent of c00024a (ii)
 })
 app.use(errorMiddleware);
-// app.all('*', (req, res , next) => {
-//     next (new ErrorHandler(`Can' t find ${req.originalUrl} on this server`, 404));
-// })
-// app.use(errorMiddleware);
-
-
 
 module.exports = app;

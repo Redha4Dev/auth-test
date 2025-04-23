@@ -35,14 +35,10 @@ console.log("rrr");
     if (!user) {
         return next( new AppError('user not exists please signUp or LogIn to continue', 404))
     }
-            // const parent = await User.findById({_id : req.body.id, role : 'parent' , name: req.body.name})
-            // if(!parent){
-            //     return next( console.log('parent not found please SinUp or logIn to continue'));
-            // }
         //send the response
-        res.status(200).json({
-            PARENT :user
-        })
+    res.status(200).json({
+         PARENT :user
+    })
 })
 
 exports.getParents = catchError(async (req, res, next) => {

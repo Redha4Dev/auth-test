@@ -88,16 +88,16 @@ const Userschema =  mongoose.Schema ({
     passwordResetToken: String,
     passwordResetExpires: Date,
     verificationCode : String,
-    teachers: { 
+    teachers: [{ 
         type :Array,
         _id : false,
         default : []
-    },
-    parents: { 
+    }],
+    parents: [{ 
         type :Array,
         default : [],
         _id : false
-    },
+    }],
     subject: {
         type: String,
     },
