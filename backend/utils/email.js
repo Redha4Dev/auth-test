@@ -28,6 +28,7 @@ const sendEmail = async (emailOptions) => {
       attachments: emailOptions.attachments || [] // Array of attachments
     };
 
+<<<<<<< HEAD
     // Send email
     await transporter.sendMail(mailOptions);
     console.log('Email sent successfully');
@@ -37,5 +38,10 @@ const sendEmail = async (emailOptions) => {
      
   }
 };
+=======
+    //send the email
+    await transporter.sendMail(mailoptions)
+}
+>>>>>>> 625a53aa7220f2f535840507ca3ad2ba1767a66e
 
 module.exports = sendEmail;

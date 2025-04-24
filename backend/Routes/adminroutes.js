@@ -69,7 +69,7 @@ router
     .get(kidControllers.getKid)
     .post()
     .patch()
-    .delete(kidControllers.removeKid , authController.restrictTo(['admin', 'parent']))
+    .delete(kidControllers.removeKid , authController.restrictTo(['admin', 'parent' , 'teacher']))
 
 router 
     .route('/admin/manage-classes')

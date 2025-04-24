@@ -101,6 +101,25 @@ function Dashboard() {
     { browser: "ASD", visitors: 173, fill: "var(--color-edge)" },
     { browser: "Depression", visitors: 190, fill: "var(--color-other)" },
   ];
+  const chartData = [
+    { grade: "1st", boys: 6, girls: 6 },
+    { grade: "2nd", boys: 7, girls: 7 },
+    { grade: "3rd", boys: 8, girls: 8 },
+    { grade: "4th", boys: 9, girls: 9 },
+    { grade: "5th", boys: 10, girls: 10 },
+    { grade: "6th", boys: 11, girls: 11 },
+  ]
+  
+  const chartConfig = {
+    boys: {
+      label: "Boys",
+      color: "hsl(var(--chart-1))",
+    },
+    girls: {
+      label: "Girls",
+      color: "hsl(var(--chart-2))",
+    },
+  }
 
   return (
     <FormProvider>
@@ -137,7 +156,19 @@ function Dashboard() {
                 ))}
                 <div className="col-span-3 grid gap-3 grid-cols-1 md:grid-cols-5">
                   <div className="md:col-span-3 col-span-5">
-                    <MultipleBar  />
+                  <MultipleBar
+  chartData={chartData}
+  chartConfig={chartConfig}
+  xAxisKey="grade"
+  bars={[
+    { dataKey: "boys" },
+    { dataKey: "girls" },
+  ]}
+  title="Average Age of Kids"
+  description="Per Grade Level"
+  footerTrendText="Age trend is consistent"
+  footerNote="Ages for boys and girls from 1st to 6th grade"
+/>
                   </div>
                   <div className="md:col-span-2 col-span-5">
                     <Piechart chartData={PiechartData} title={"Kids Status"} />
