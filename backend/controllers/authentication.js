@@ -5,6 +5,7 @@ const {promisify} = require('util')
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const catchError = require ('../utils/catchError');
+const AppError = require('../utils/apperror.js');
 
 //signUp authentication
 exports.signUp = catchError (async (req,res) => {
@@ -17,7 +18,11 @@ exports.signUp = catchError (async (req,res) => {
         
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-            httpOnly: true
+            httpOnly: true,
+            Object : {
+                name : req.body.name,
+                _id : newUser._id
+            }
         };
     
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -110,7 +115,11 @@ exports.logIn = catchError (async (req,res) =>{
 
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-            httpOnly: true
+            httpOnly: true,
+            Object : {
+                name : req.body.name,
+                _id : id
+            }
         };
     
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -120,7 +129,7 @@ exports.logIn = catchError (async (req,res) =>{
 
         //send the response
         res.status(200).json({
-            message : 'login successk',
+            message : 'login success',
             token
         })
     })
@@ -136,7 +145,7 @@ exports.protectroute = catchError(async (req,res,next) => {
     }
    
     if (!token) {
-        return next( new appError(' please signUp or LogIn to continue', 404))
+        return next( new AppError(' please signUp or LogIn to continue', 404))
     }
         //verification of the token
         const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
@@ -178,7 +187,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
 
-        console.log('dead')
+        console.log('token is :' + token);
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
         //send the email
@@ -197,12 +206,14 @@ exports.forgotPassword = catchError(async (req,res,next) => {
 exports.resetPassword = catchError (async (req,res,next) => {
     //get the user based on the token sent
     //hash the token 
-    const hashToken = crypto.createHash('sh256').update(req.params.token).digesy('hex');
+    const hashToken = crypto.createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
 
-    const user = await User.findOne({passworResetToken : hashToken , passwordRestExipres : {$gt : Date.now()}});
+    const user = await User.findOne({passwordResetToken : hashToken , passwordRestExipres : {$gt : Date.now()}});
 
     if (!user) {
-        return next( new appError('user not exists please signUp or LogIn to continue', 404))
+        return next( new AppError('user not exists please signUp or LogIn to continue', 404))
     }
         //set the new password
         user.password = req.body.password;
@@ -211,7 +222,7 @@ exports.resetPassword = catchError (async (req,res,next) => {
 
         user.passwordRestExipres = undefined;
         user.passwordResetToken = undefined;
-
+        user.passwordchangedAt = Date.now();
         //save the user to validate the password
         user.save();
 
@@ -228,45 +239,37 @@ exports.resetPassword = catchError (async (req,res,next) => {
 
 exports.updatePassword = catchError(async (req,res,next) => {
 
-    // 1 Get user ID from JWT 
     const userId = req.body.id; 
 
-    // 2 Get passwords from request body
     const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
-    // 3 Find user (include password)
     const user = await User.findById(userId).select('+password');
     console.log(user.name)
     if (!user) {
       return next ( new appError('user not found', 404))
     }
 
-    // 4 Verify current password
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.status(404).json({ message: 'Current password is incorrect' });
     }
 
-    // 5 Validate new passwords
     if (newPassword !== confirmNewPassword) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    // 6 Update password 
     user.password = newPassword;
     await user.save();
 
-    // 7Generate a NEW JWT 
     const token = jwt.sign(
       { id: user._id }, 
       process.env.JWT_SECRET, 
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    // 8 Respond with new token
     res.status(200).json({
       status: 'success',
-      token, // Send new token to client
+      token,    
       message: 'Password updated successfully'
     });
 })

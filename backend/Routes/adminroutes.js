@@ -2,7 +2,10 @@ const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
 const adminControllers = require('../controllers/adminControllers');
-const parentControllers = require('../controllers/parentControllers')
+const parentControllers = require('../controllers/parentControllers');
+const sendEmail = require('../utils/email.js');
+const teacherController = require('../controllers/teachercontrollers');
+
 //start the route
 const router = express.Router()
 
@@ -98,17 +101,59 @@ router
     
     router
     .route('/parent/kids')
-    .get(kidControllers.displayParentKidList)
+    .get(parentControllers.displayParentKidList)
     .post()
     .patch()
     .delete()
 
     router
     .route('/teacher/kids')
-    .get(kidControllers.displayTeacherKidList)
+    .get(teacherController.displayTeacherKidList)
     .post()
     .patch()
     .delete()
+
+    router
+    .route('/kid/teachers')
+    .get(teacherController.displayTeachers)
+    .post()
+    .patch()
+    .delete()
+
+    router
+    .route('/teachers')
+    .get(teacherController.getTeacher)
+    .post()
+    .patch()
+    .delete()
+
+    router.post('/send-email', async (req, res) => {
+        try {
+          // Extract from request body
+          const { email, subject, text, html, attachments } = req.body;
+          
+          // Validate required fields
+          if (!email || !text) {
+            return res.status(400).json({ error: 'Email and text content are required' });
+          }
+      
+          // Send email
+          await sendEmail({
+            email,
+            subject,
+            text,
+            html,
+            attachments
+          });
+      
+          res.status(200).json({ message: 'Email sent successfully' });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Failed to send email' });
+        }
+      });
+
+
 
 
     module.exports = router

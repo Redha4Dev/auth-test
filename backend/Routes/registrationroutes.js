@@ -31,4 +31,9 @@ router
     .route('/forgotPassword')
     .post(authController.forgotPassword)
 
+router
+    .route('/reset-password/:token')
+    .patch(authController.resetPassword)
+    
+
 module.exports = router;

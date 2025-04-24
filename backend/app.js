@@ -6,7 +6,6 @@ const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const registration = require('./Routes/registrationroutes')
 const  teacher  = require('./Routes/teacherroute');
-
 //creating the app
 const app = express();
 //security
