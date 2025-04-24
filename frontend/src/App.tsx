@@ -16,6 +16,7 @@ import ClassScheduling from "./Pages/Scheduling";
 import Scheduling from "./Pages/Scheduling";
 import Meals from "./Pages/Meals";
 import KidProfile from "./Pages/Users/KidProfile";
+import ParentProfile from "./Pages/Users/ParentProfile";
 
 function App() {
 
@@ -52,8 +53,10 @@ function App() {
           <Route element={<Kids />} path="Users/Kids" />
           <Route element={<KidProfile />} path="Users/Kids/:id/:name" />
           <Route element={<Parents />} path="Users/Parents" />
+          <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
           <Route element={<Scheduling />} path="/Scheduling" />
           <Route element={<Meals />} path="/Meals" />
+
         </Route>
       </Routes>
     </BrowserRouter>

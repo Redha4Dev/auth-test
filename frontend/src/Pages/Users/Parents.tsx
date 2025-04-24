@@ -12,14 +12,15 @@ import { getParents } from '@/Services/api';
 import { ChevronLeft, ChevronRight, MoreVertical, Plus } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Parents() {
   const [list, setList] = useState([]);
   const handleGetParents = async () => {
     try {
-      const parents = await getParents('67e865fa467eeb7c40462f0a');
-      setList(parents);
-      console.log(parents);
+      const response = await getParents('ESI', '67e865fa467eeb7c40462f0a');
+      setList(response.data.parents);
+      console.log(response.data.parents);
 
     } catch (error) {
       console.error('Error fetching parents:', error);
@@ -151,9 +152,9 @@ function Parents() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
-                            onClick={() => alert(`Viewing ${parent.name}`)}
+                            
                           >
-                            View
+                            <Link className="w-full" to={`/Users/Parents/${parent.id}/${parent.name}`}>View</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => alert(`Editing ${parent.name}`)}

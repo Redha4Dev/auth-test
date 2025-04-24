@@ -159,11 +159,11 @@ console.log(req.body.name);
  exports.removeKid = catchError(async (req, res, next) => {
         // Find the kid
         const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
-
+        console.log(req.body.name, req.body.id);
         if (!kid) {
             return next(new Error('This kid does not exist'));
         }
-
+        
         // Remove the kid from the parent's kids array
         await User.findOneAndUpdate(
             { name : kid.parent }, // assuming this is parent's _id
@@ -243,9 +243,7 @@ exports.displaySchoolKidList = catchError(async (req, res, next) => {
 
     res.status(200).send({
         status: 'success',
-        kids: {
-            kids
-        }
+        kids
     });
 });
 
