@@ -23,7 +23,7 @@ export function Forgot() {
         try {
           ForgotPassword(email);
         } catch (err) {
-          setMessage(err.response?.data?.message || 'Something went wrong.');
+          setMessage('Something went wrong.');
           console.log('bad')
         }
       };
