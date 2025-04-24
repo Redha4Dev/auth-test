@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const catchError = require ('../utils/catchError');
 
 //signUp authentication
-exports.signUp = catchError (async (req,res) => {
+exports.signUp = catchError (async (req,res, next) => {
     const newUser = await User.create(req.body)
     console.log(newUser);
     
@@ -43,7 +43,6 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         if (!user) {
             return next( new appError('user not exists please signUp or LogIn to continue', 404))
         }
-        try{
         
         //generate and save L code
         const code = user.createVerificationCode();
@@ -70,19 +69,12 @@ exports.verificationCode = catchError (async (req,res,next) =>{
             status : 'success',
             message : "verification sent"
         })
-        } catch (err) {
-        // Reset the verification code if email fails
-        user.verificationCode = undefined;
-        await user.save({ validateBeforeSave: false });
-        }
-return next(new AppError('There was an error sending the verification email. Please try again.', 500));
-    
-    })
+})
 
     
 //logIn authentication
 
-exports.logIn = catchError (async (req,res) =>{
+exports.logIn = catchError (async (req,res, next) =>{
     console.log('start');
     
     const {email , password} = req.body;
@@ -104,7 +96,7 @@ exports.logIn = catchError (async (req,res) =>{
             return next( new appError('user not exists please enter valide information or signUp to continue', 404))
         }      
         //create the token for the user
-        const token = jwt.sign({id : user.id , role : user.role , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
+        const token = jwt.sign({id : user.id  , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         console.log(user.password);
         
 
@@ -118,6 +110,8 @@ exports.logIn = catchError (async (req,res) =>{
         res.cookie('jwt', token, cookieOptions);
 
 
+        console.log(user);
+        
         //send the response
         res.status(200).json({
             message : 'login successk',
@@ -177,8 +171,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //send the email to the user email
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
-
-        console.log('dead')
+        console.log(111);    
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
         //send the email

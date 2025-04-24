@@ -1,15 +1,16 @@
-    const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-    const sendemail = async options => {
-        try {
-            //create the transporter according to the information sets in the config file
+const sendemail = async options => {
+    try {
+        //create the transporter according to the information sets in the config file
+    
         
-    const transporter =   nodemailer.createTransport({
-        host: 'smtp.mailtrap.io',
-        port :2525,
+       const transporter =   nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port : process.env.EMAIL_PORT,
         auth :{
-            user : '00a8a45eba1da2',
-            pass : '194a547c89bc99'
+            user : process.env.EMAIL_USERNAME,
+            pass : process.env.EMAIL_PASSWORD
         }
        })
     
@@ -21,8 +22,6 @@
         text : options.message
        }
     
-       //send the email
-       await transporter.sendMail(mailoptions)
        
     } catch (err) {
         console.error('error occured', err);
@@ -30,6 +29,8 @@
     }
 
 
+    //send the email
+    await transporter.sendMail(mailoptions)
 }
 
 module.exports = sendemail
