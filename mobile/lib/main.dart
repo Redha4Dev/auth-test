@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kidergarten/pages/ParentProfile.dart';
 import 'package:kidergarten/pages/welcome_page.dart';
 
 void main() {
@@ -10,8 +11,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: WelcomePage(),
+    return MaterialApp(
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

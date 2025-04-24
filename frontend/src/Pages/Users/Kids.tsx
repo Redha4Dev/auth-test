@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getKids, addKid, getKid } from "@/Services/api";
+import { getKids, addKid, getKid, ListKids, deleteKid } from "@/Services/api";
 import { jwtDecode } from "jwt-decode";
 import {
   SidebarInset,
@@ -97,7 +97,7 @@ function Kids() {
 
   useEffect(() => {
     if (id) { // Only call when ID is available
-      ListKids();
+      HandleListKids();
     }
   }, [id]);
   
@@ -114,7 +114,7 @@ function Kids() {
   );
   
 
-  const ListKids = async () => {
+  const HandleListKids = async () => {
     try {
       const newkids = await getKids(username, id);
       console.log(newkids.kids);
@@ -124,14 +124,6 @@ function Kids() {
       console.error("Error fetching kids:", error);
     }
   };
-  const getMykid = async () => {
-    try {
-      const newkid = await getKid("Johny since", "67dd0abb66205d9553eb5377");
-      console.log(newkid);
-    } catch (error) {
-      console.error("Error fetching kid:", error);
-    }
-  };
   const AddKid = async () => {
     try {
       await addKid(kids);
@@ -139,6 +131,13 @@ function Kids() {
       console.log("Error adding kid", error);
     }
   };
+  const handleRemoveKid = async (kid) => {
+    try {
+      await deleteKid(kid);
+    } catch (error) {
+      console.log("Error deleting kid", error);
+    }
+  }
 
   return (
     <SidebarProvider>
@@ -271,6 +270,11 @@ function Kids() {
                             onClick={() => alert(`Editing ${child.name}`)}
                           >
                             Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleRemoveKid(child)}
+                          >
+                            Remove
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

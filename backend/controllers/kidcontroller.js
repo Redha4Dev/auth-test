@@ -8,7 +8,6 @@ const AppError = require('../utils/apperror.js');
 //get all kids
 
 exports.getAllKids = catchError(async (req,res,next) =>{
-        ////NB : this function used by the all the users types to get the list of all the kids inserted in their document 
 
             //getting user based on the information sent from the from the ftront-end part
             const { name, id } = req.query;
@@ -160,11 +159,11 @@ console.log(req.body.name);
  exports.removeKid = catchError(async (req, res, next) => {
         // Find the kid
         const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
-
+        console.log(req.body.name, req.body.id);
         if (!kid) {
             return next(new Error('This kid does not exist'));
         }
-
+        
         // Remove the kid from the parent's kids array
         await User.findOneAndUpdate(
             { name : kid.parent }, // assuming this is parent's _id
@@ -210,3 +209,46 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
             kid
         })
 })
+
+exports.displaySchoolKidList = catchError(async (req, res, next) => {
+    const { name, id } = req.query;
+
+    if (!name || !id) {
+        return next(new AppError('Both name and id are required as query parameters.', 400));
+    }
+
+    const admin = await User.findOne({
+        role: 'admin',
+        name,
+        _id: id
+    }); 
+
+    if (!admin) {
+        return next(new AppError('Admin not found. Please check your credentials.', 404));
+    }
+
+    const kids = await Kid.find({ 
+        school: admin.name 
+    })
+
+    if (kids.length === 0) {
+        return res.status(200).send({
+            status: 'success',
+            message: 'No kids found for this school',
+            kids: {
+                kids: []
+            }
+        });
+    }
+
+    res.status(200).send({
+        status: 'success',
+        kids
+    });
+});
+
+
+
+
+
+
