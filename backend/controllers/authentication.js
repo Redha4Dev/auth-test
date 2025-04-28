@@ -19,10 +19,7 @@ exports.signUp = catchError (async (req,res, next) => {
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             httpOnly: true,
-            Object : {
-                name : req.body.name,
-                _id : newUser._id
-            }
+            
         };
     
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -108,10 +105,7 @@ exports.logIn = catchError (async (req,res, next) =>{
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             httpOnly: true,
-            Object : {
-                name : req.body.name,
-                _id : id
-            }
+            
         };
     
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -122,7 +116,7 @@ exports.logIn = catchError (async (req,res, next) =>{
         console.log(user);
         
         //send the response
-        res.status(200).json({
+        res.status(200).send({
             message : 'login success',
             token
         })
