@@ -183,6 +183,8 @@ exports.forgotPassword = catchError(async (req,res,next) => {
             subject : 'your password reset link (valide for 10 min)',
             message
         })
+        console.log('dead')
+
         res.status(200).json({
             message : 'token sent'
         })       
