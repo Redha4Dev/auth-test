@@ -25,11 +25,14 @@ export function Reset() {
     const handleReset = async (e) => {
         e.preventDefault();
         try {
+            console.log('first step done')
           const res = await axios.patch(`/api/v1/users/resetPassword/${token}`, {
             password,
             confirmPassword
           });
+          console.log('second step done')
           setMessage(res.data.message);
+          console.log('third step done')
         //   navigate('/login');
         } catch (error) {
           console.error(error);
@@ -60,7 +63,7 @@ export function Reset() {
                             </div>
                             {message && <p className='mt-4 text-sm text-red-600'>{message}</p>}
                             <CardFooter className="flex justify-between">
-                                <Button>Reset Password</Button>
+                                <Button type='submit'>Reset Password</Button>
                             </CardFooter>
                         </form>
                     </CardContent>

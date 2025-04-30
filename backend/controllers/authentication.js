@@ -172,6 +172,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //desactivate the validator because there is no password
         await user.save({validateBeforeSave : false});
         //send the email to the user email
+        console.log('Reset token:', token);
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
         console.log(111);    
