@@ -63,7 +63,7 @@ export function AppSidebar() {
 
   const getFilteredRoutes = () => {
     const allRoutes = [
-      { name: "Dashboard", icon: <Home />, roles: ["admin", "teacher"] },
+      { name: "Dashboard", icon: <Home />, roles: ["admin", "teacher", "parent"] },
       { name: "Analyse", icon: <ChartBar />, roles: ["admin", "teacher"] },
       { name: "Meals", icon: <CookieIcon />, roles: ["admin", "parent", "teacher"] },
       { name: "Scheduling", icon: <Calendar />, roles: ["admin", "parent", "teacher"] },

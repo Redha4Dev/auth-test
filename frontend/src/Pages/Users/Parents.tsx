@@ -125,11 +125,11 @@ function Parents() {
             </TableHeader>
             <TableBody>
               {list.map((parent) => (
-                <TableRow key={parent.id}>
-                    <TableCell>{parent.id}</TableCell>
-                    <TableCell>{parent.name}</TableCell>
-                    <TableCell>{parent.age}</TableCell>
-                    <TableCell>{parent.class}</TableCell>
+                <TableRow key={parent[0].id}>
+                    <TableCell>{parent[0].id}</TableCell>
+                    <TableCell>{parent[0].name}</TableCell>
+                    <TableCell>{parent[0].age}</TableCell>
+                    <TableCell>{parent[0].class}</TableCell>
                     <TableCell>
                       <Badge
                         variant={
@@ -154,10 +154,10 @@ function Parents() {
                           <DropdownMenuItem
                             
                           >
-                            <Link className="w-full" to={`/Users/Parents/${parent.id}/${parent.name}`}>View</Link>
+                            <Link className="w-full" to={`/Users/Parents/${parent[0].id}/${parent[0].name}`}>View</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => alert(`Editing ${parent.name}`)}
+                            onClick={() => alert(`Editing ${parent[0].name}`)}
                           >
                             Edit
                           </DropdownMenuItem>
