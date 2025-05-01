@@ -270,3 +270,31 @@ exports.updatePassword = catchError(async (req,res,next) => {
 })
 
 
+
+exports.getUserData = catchError(async (req, res) => {
+  
+    // 1. Get token from cookies
+    const token = req.cookies.token;
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    console.log(token);
+    // 2. Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded)
+    console.log(decoded.id)
+    // 3. Find user in MongoDB
+    const user = await User.findOne({
+        id : decoded.userId,
+        name : decoded.name});
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // 4. Return user data
+    res.status(200).json(user);
+    
+  
+});
