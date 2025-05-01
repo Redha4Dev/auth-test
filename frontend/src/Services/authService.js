@@ -1,7 +1,8 @@
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
+import { set } from "date-fns";
 
 const API_URL = "http://localhost:5000"; // Adjust based on your backend
-
 // Sign up function
 export const signUpAdmin = async (userData) => {
   try {

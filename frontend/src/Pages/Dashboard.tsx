@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { getKids } from "@/Services/api";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "@/context/AuthContext";
 
 function Dashboard() {
 
@@ -45,14 +46,12 @@ function Dashboard() {
       console.error("Error fetching kids:", error);
     }
   };
+  const {user} = useAuth();
   
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decode = jwtDecode(token);
-      console.log("Decoded token:", decode);
-      setUsername(decode.name);
-      setId(decode.id); // This triggers the second useEffect
+    console.log(user);
+    if (user) {
+      setUsername(user.name)
     }
   }, []);
   
@@ -123,6 +122,7 @@ function Dashboard() {
 
   return (
     <FormProvider>
+      
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
