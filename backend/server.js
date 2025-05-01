@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const { Server } = require('socket.io');
-const { createServer } = require('node:http');
+// const { Server } = require('socket.io');
+// const { createServer } = require('node:http');
 
 
 
@@ -14,19 +14,19 @@ dotenv.config({path : './config.env'})
 
 
 const app = require('./app')
-const server = createServer(app);
-const io = new Server(server);
+// const server = createServer(app);
+// const io = new Server(server);
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-  });  
+// io.on('connection', (socket) => {
+//     console.log('a user connected');
+//   });  
   
 
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      console.log('message: ' + msg);
-    });
-  });
+// io.on('connection', (socket) => {
+//     socket.on('chat message', (msg) => {
+//       console.log('message: ' + msg);
+//     });
+//   });
 
 //connect to DB
  mongoose.connect('mongodb+srv://ilyesmekalfa:aIZn7w54qWr51TKZ@cluster0.k7107.mongodb.net/'

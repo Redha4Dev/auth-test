@@ -6,6 +6,7 @@ const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const registration = require('./Routes/registrationroutes')
 const  teacher  = require('./Routes/teacherroute');
+// const message = require('./Routes/messageroute')
 //creating the app
 const app = express();
 //security
@@ -17,7 +18,6 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
-const AppError = require('./utils/apperror');
 
 app.use(helmet()); //http headers security
 app.set('trust proxy', 1)
@@ -56,6 +56,7 @@ app.use('/parent', parent)
 app.use('/admin', admin)
 app.use('/teacher', teacher)
 app.use('/', registration)
+// app.use('/', message)
 
 app.all('*', (req, res , next) => {
     next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
