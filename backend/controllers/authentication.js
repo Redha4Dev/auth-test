@@ -265,3 +265,29 @@ exports.updatePassword = catchError(async (req,res,next) => {
       message: 'Password updated successfully'
     });
 })
+
+
+
+exports.getUserData = catchError(async (req, res) => {
+  
+    
+    const token = req.cookies.token;
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    const user = await User.findOne({
+        id : decoded.userId,
+        name : decoded.name});
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+    
+  
+});

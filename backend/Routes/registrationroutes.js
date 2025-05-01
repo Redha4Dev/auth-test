@@ -39,4 +39,8 @@ router.get('/protected', authController.protectroute, (req, res) => {
         res.json({ message: `Welcome, ${req.user.name}` });
       });
 
+router
+    .route('/getUserData')
+    .get(authController.getUserData)
+
 module.exports = router;
