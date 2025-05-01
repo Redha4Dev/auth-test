@@ -34,6 +34,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "@/context/AuthContext";
 
 
 export function AppSidebar() {
@@ -43,13 +44,9 @@ export function AppSidebar() {
   const [username , setUsername] = useState("Username");
   const [role, setRole] = useState("parent")
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decode = jwtDecode(token);
-      setUsername(decode.name);
-      setRole(decode.role);
+    // const {user} = useAuth();
+    // console.log(user);
 
-    }
   }, []);
   
   const Logout = async () => {
