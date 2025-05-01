@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const { Server } = require('socket.io');
-const { createServer } = require('node:http');
-
-
 
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! shutting down...');
@@ -11,22 +7,8 @@ process.on('uncaughtException', err => {
     process.exit(1);
 }); 
 dotenv.config({path : './config.env'})
-
-
 const app = require('./app')
-const server = createServer(app);
-const io = new Server(server);
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-  });  
-  
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      console.log('message: ' + msg);
-    });
-  });
 
 //connect to DB
  mongoose.connect('mongodb+srv://ilyesmekalfa:aIZn7w54qWr51TKZ@cluster0.k7107.mongodb.net/'

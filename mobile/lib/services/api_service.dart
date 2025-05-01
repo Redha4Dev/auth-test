@@ -5,6 +5,25 @@ import 'package:kidergarten/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
+  Future<void> getKidInfo(String name, String id) async {
+  final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
+      .replace(queryParameters: {'name': name, 'id': id});
+
+  try {
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print('👶 Kid Info: ${data['kid']}');
+    } else {
+      final error = jsonDecode(response.body);
+      print('⚠️ Failed to fetch kid info: ${error['message']}');
+    }
+  } catch (e) {
+    print('❌ Error fetching kid info: $e');
+  }
+}
+
   Future<Map<String, dynamic>?> getUserFromToken() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -56,12 +75,16 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>?> getParentInfo(String id, String name) async {
-    final url = Uri.parse('http://10.0.2.2:5000/parent/profile/$id/$name');
+    final url = Uri.parse('http://10.0.2.2:5000/parent/profile');
 
     try {
-      final response = await http.get(
+      final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'id': id,
+          'name': name,
+        }),
       );
 
       if (response.statusCode == 200) {
