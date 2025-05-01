@@ -178,7 +178,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         await user.save({validateBeforeSave : false});
         //send the email to the user email
         //create the link url
-        const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
+        const url = `${req.protocol}://${req.get('host')}/resetPassword/${token}`
         console.log('url : ', url);    
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
@@ -201,6 +201,8 @@ exports.resetPassword = catchError (async (req,res,next) => {
     const hashToken = crypto.createHash('sha256')
     .update(req.params.token)
     .digest('hex');
+
+    console.log(hashToken)
 
     const user = await User.findOne({passwordResetToken : hashToken , passwordRestExipres : {$gt : Date.now()}});
 
@@ -287,7 +289,7 @@ exports.getUserData = catchError(async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json(user);
+    res.status(200).send(user);
     
   
 });
