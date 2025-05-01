@@ -9,7 +9,7 @@ export default function Sections() {
   return (
     <div className="min-h-[1000px] w-full">
       {/* Presentation Section */}
-      <section className="h-[600px] bg-green-500"></section>
+      <section className="h-[600px]"></section>
 
       {/* Features & Benefits Section */}
       <section className="min-h-[600px] flex flex-col p-10 items-center text-center">
@@ -79,15 +79,15 @@ export default function Sections() {
       </section>
 
       {/*  how to use sectoin */}
-      <section className="h-[700px] shadow-lg inset-shadow-sm">
+      <section className="h-[700px] ">
         <Carousel />
       </section>
       {/* clients commets sectoin */}
       <section className="h-[300px] "></section>
       {/* Pricing sectoin */}
-      <section className="h-[600px] bg-[black]"></section>
+      <section className="h-[600px] bg-[]"></section>
       {/* footer sectoin */}
-      <footer className="bg-gray-900 text-white py-8">
+      <footer className="bg-gray-900 text-white py-8 min-w-full bg-opacity-95">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>

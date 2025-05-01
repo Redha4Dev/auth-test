@@ -32,7 +32,7 @@ router
     .post(authController.forgotPassword)
 
 router
-    .route('/reset-password/:token')
+    .route('/resetPassword/:token')
     .patch(authController.resetPassword)
     
 router.get('/protected', authController.protectroute, (req, res) => {
