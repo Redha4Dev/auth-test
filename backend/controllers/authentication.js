@@ -178,7 +178,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         await user.save({validateBeforeSave : false});
         //send the email to the user email
         //create the link url
-        const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
+        const url = `${req.protocol}://${req.get('host')}/resetPassword/${token}`
         console.log('url : ', url);    
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
