@@ -65,7 +65,7 @@ export const ForgotPassword = async (email) => {
         }
       };
 
-export const ReseetPassword = async (email) => {
+export const ResetPassword = async (email) => {
         try {
           console.log('first')
           const res = await axios.post('http://localhost:5000/resetPassword', { email });

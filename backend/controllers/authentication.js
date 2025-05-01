@@ -177,10 +177,9 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //desactivate the validator because there is no password
         await user.save({validateBeforeSave : false});
         //send the email to the user email
-        console.log('Reset token:', token);
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
-        console.log(111);    
+        console.log('url : ', url);    
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
         //send the email
@@ -189,8 +188,6 @@ exports.forgotPassword = catchError(async (req,res,next) => {
             subject : 'your password reset link (valide for 10 min)',
             message
         })
-        console.log('dead')
-
         res.status(200).json({
             message : 'token sent'
         })       
