@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const catchError = require ('../utils/catchError');
 const AppError = require('../utils/apperror.js');
 
+
 //signUp authentication
 exports.signUp = catchError (async (req,res, next) => {
     const newUser = await User.create(req.body)
@@ -97,56 +98,61 @@ exports.logIn = catchError (async (req,res, next) =>{
         if (!user) {
             return next( new appError('user not exists please enter valide information or signUp to continue', 404))
         }      
-        //create the token for the user
-        const token = jwt.sign({id : user.id  , name : user.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
-        console.log(user.password);
+        const token = jwt.sign(
+            { id: user.id, name: user.name },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN }
+          );
         
-
-        const cookieOptions = {
+          // ✅ 5. Set cookie
+          const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             httpOnly: true,
-        };
-    
-        if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    
-        res.cookie('jwt', token, cookieOptions);
-
-
-        console.log(user);
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+          };
         
-        //send the response
-        res.status(200).send({
-            message : 'login success',
-            token
-        })
-    })
-
+          res.cookie('token', token, cookieOptions); // 🔁 use 'token' to match your protect middleware
+        
+          // ✅ 6. Remove password from output
+          user.password = undefined;
+        
+          // ✅ 7. Send response
+          res.status(200).send({
+            message: 'Login success',
+            token,
+            data: {
+              user,
+            },
+          });
+        });
 //protect routes
 
-exports.protectroute = catchError(async (req,res,next) => {
-    //check if the token exists
+exports.protectroute = catchError(async (req, res, next) => {
     let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        //split the authorization in the req headers in the ' ' will return array and take the second element where the token is stored ['bearer','token']
-        token = req.headers.authorization.split(' ')[1]
+  
+    // ✅ Get token from cookie instead of header
+    if (req.cookies && req.cookies.token) {
+      token = req.cookies.token;
     }
-   
+  
     if (!token) {
-        return next( new AppError(' please signUp or LogIn to continue', 404))
+      return next(new AppError('Please sign up or log in to continue', 401));
     }
-        //verification of the token
-        const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
-        //get user selon decoed token >>>>> token contain user id in the payload
-        const currentUser = await User.findById(decoded.id)
-
-        //check if the user exists
-        if (!currentUser) {
-            return next( new appError('user not exists please signUp or LogIn to continue', 404))
-        }
-
-        req.user = currentUser
-        next()
-})
+  
+    // ✅ Verify token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  
+    // ✅ Get user from decoded token
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next(new AppError('User no longer exists. Please log in again.', 401));
+    }
+  
+    // ✅ Attach user to request
+    req.user = currentUser;
+    next();
+  });
 
 
 //to give permission to user to access the route
@@ -171,6 +177,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //desactivate the validator because there is no password
         await user.save({validateBeforeSave : false});
         //send the email to the user email
+        console.log('Reset token:', token);
         //create the link url
         const url = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${token}`
         console.log(111);    

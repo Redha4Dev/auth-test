@@ -1,66 +1,77 @@
 const express = require('express');
 const cors = require('cors');
-const Apperror = require ('./utils/apperror');
-const errorMiddleware = require('./middlewares/errorcontroller')
-const admin = require('./Routes/adminroutes');
-const parent = require('./Routes/parentroutes');
-const registration = require('./Routes/registrationroutes')
-const  teacher  = require('./Routes/teacherroute');
-// const message = require('./Routes/messageroute')
-//creating the app
-const app = express();
-//security
 const morgan = require('morgan');
 const helmet = require('helmet');
-// const expresssslify = require('express-sslify');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 
-app.use(helmet()); //http headers security
-app.set('trust proxy', 1)
-// app.use(expresssslify.HTTPS()); //force HTTPS
-app.use(cookieParser());
-app.use(mongoSanitize());//sanitize from mongo injection
-app.use(xss()); //sanitize from xss injections
-app.use(hpp()); //prevent http from parameter pollution
-const limiter = rateLimit({
-    limit: 100, //limit each IP to 100 requests per windowMs
-    windowMs: 60 * 60 * 1000,
-    message: 'Too many requests from this IP, please try again in an hour!',
-    legacyHeaders: false, //disable the legacy headers
-     standardHeaders: true //enable the standard headers 
-});//limit the number of request from a IP adress to 100 requests in hour to protect the server from teh DDos attaks
-app.use('/api', limiter);
+const Apperror = require('./utils/apperror');
+const errorMiddleware = require('./middlewares/errorcontroller');
+const admin = require('./Routes/adminroutes');
+const parent = require('./Routes/parentroutes');
+const registration = require('./Routes/registrationroutes');
+const teacher = require('./Routes/teacherroute');
+const jwt = require('jsonwebtoken');
 
 
+// Create app
+const app = express();
 
+// Trust proxies (needed for secure cookies if behind a proxy)
+app.set('trust proxy', 1);
 
+// Security: set secure HTTP headers
+app.use(helmet());
 
-
+// Logging in development
 if (process.env.NODE_ENV === 'development') {
-    app.use (morgan('dev'))
+    app.use(morgan('dev'));
 }
 
+// Limit repeated requests to public APIs
+const limiter = rateLimit({
+    limit: 100,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many requests from this IP, please try again in an hour!',
+    legacyHeaders: false,
+    standardHeaders: true
+});
+app.use('/api', limiter);
 
-app.use(cors());
+// Parse JSON and cookies
 app.use(express.json());
+app.use(cookieParser());
 
+// Sanitize data
+app.use(mongoSanitize());
+app.use(xss());
+app.use(hpp());
 
+// ✅ Proper CORS config (ONLY this one)
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
-//routes
+// Serve static files
 app.use('/api/v1', express.static('public'));
-app.use('/parent', parent)
-app.use('/admin', admin)
-app.use('/teacher', teacher)
-app.use('/', registration)
-// app.use('/', message)
 
-app.all('*', (req, res , next) => {
-    next (new Apperror(`Can' t find ${req.originalUrl} on this server`, 404));
-})
+// Routes
+app.use('/parent', parent);
+app.use('/admin', admin);
+app.use('/teacher', teacher);
+app.use('/', registration);
+
+
+// Handle unknown routes
+app.all('*', (req, res, next) => {
+    next(new Apperror(`Can't find ${req.originalUrl} on this server`, 404));
+});
+
+// Global error handling
 app.use(errorMiddleware);
 
 module.exports = app;

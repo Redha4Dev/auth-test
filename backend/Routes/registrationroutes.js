@@ -35,5 +35,8 @@ router
     .route('/reset-password/:token')
     .patch(authController.resetPassword)
     
+router.get('/protected', authController.protectroute, (req, res) => {
+        res.json({ message: `Welcome, ${req.user.name}` });
+      });
 
 module.exports = router;
