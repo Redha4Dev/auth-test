@@ -24,6 +24,7 @@ import {
 import { getKids } from "@/Services/api";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "@/context/AuthContext";
+import { getCurrentUser } from "@/Services/authService";
 
 function Dashboard() {
 
@@ -48,11 +49,19 @@ function Dashboard() {
   };
   const {user} = useAuth();
   
-  useEffect(() => {
-    console.log(user);
-    if (user) {
-      setUsername(user.name)
+  const handleGetUser = async () => {
+    try {
+      const reponse = await getCurrentUser();
+      console.log(reponse);
+      setUsername(reponse.username);
+      setId(reponse.id);
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
+    handleGetUser();
   }, []);
   
    useEffect(() => {

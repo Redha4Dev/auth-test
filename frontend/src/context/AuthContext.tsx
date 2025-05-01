@@ -22,32 +22,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      // Check for authentication status from localStorage
-      const storedUser = localStorage.getItem('user');
-      const storedToken = localStorage.getItem('token');
+    const checkUser = async () => {
 
-      if (storedUser && storedToken) {
-        setUser(JSON.parse(storedUser));  // Parse the stored user data
-        setToken(storedToken);
-        setIsAuthenticated(true);
-      } else {
-        // If no user data, check the server (you can skip this if you want to rely on `localStorage` only)
         try {
-          const response = await axios.get('http://localhost:5000/protected', {
-            withCredentials: true,
-          });
-          if (response.data.authenticated) {
-            setToken(response.data.token);
-            setUser(response.data.user);
-            setIsAuthenticated(true);
-          }
-        } catch (error) {
-          console.error('Auth check failed:', error);
-        }
-      }
-    };
-    checkAuth();
+            const response = await axios.get('http://localhost:5000/getUserData', {
+                withCredentials: true,
+            });
+            setUser(response.data);
+            console.log(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        checkUser();
+    }
   }, []);
 
   const logIn = async (credentials: any) => {
