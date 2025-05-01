@@ -45,7 +45,7 @@ function App() {
         <Route element={<Login />} path="/Login" />
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
-        <Route element={<ResetPassword />} path="/ResetPassword" />
+        <Route element={<ResetPassword />} path="/ResetPassword/:token" />
         <Route element={<ProtectedRouters />}>
           <Route element={<Home />} path="/" />
           <Route element={<Profiles />} path="/Profiles" />
