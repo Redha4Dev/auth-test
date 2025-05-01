@@ -173,12 +173,15 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         return next( new appError('user not exists please signUp or LogIn to continue', 404))
     }
         //generate the reset token
+        console.log('first step');
         const token = user.createPasswordResetToken();
         //desactivate the validator because there is no password
+        console.log('second step');
         await user.save({validateBeforeSave : false});
         //send the email to the user email
         //create the link url
-        const url = `${req.protocol}://${req.get('host')}/resetPassword/${token}`
+        console.log('third step');
+        const url = `${req.protocol}://${req.get('host')}/resetPassword/${token}` ; 
         console.log('url : ', url);    
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
