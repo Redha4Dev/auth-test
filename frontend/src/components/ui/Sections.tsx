@@ -8,7 +8,7 @@ import Carousel from "./Carousel";
 import FeaturesBenefits from "./FeaturesBenefits";
 export default function Sections() {
   return (
-    <div className="min-h-[1000px] w-full">
+    <div className="min-h-[1000px] w-full space-y-96">
       {/* Presentation Section */}
       <section className="h-[600px]"></section>
       {/* Features & Benefits Section */}
@@ -22,7 +22,7 @@ export default function Sections() {
       {/* clients comments sectoin */}
       <section className="h-[300px]" id="ClientsCommentsSection"></section>
       {/* Pricing sectoin */}
-      <section className="h-[600px] bg-[]" id="PriceSection"></section>
+      <section className="h-[600px]" id="PriceSection"></section>
     </div>
   );
 }
