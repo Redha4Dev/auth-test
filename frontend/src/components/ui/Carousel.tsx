@@ -27,16 +27,16 @@ const Carousel = () => {
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   };
 //   the automatically //
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//         setCurrent((prev) => (prev + 1) % slides.length);
-//     }, 3000);
-//     return () => clearInterval(interval);
-//   }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+        setCurrent((prev) => (prev + 1) % slides.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative w-full h-[90%] mx-auto">
-      <div className="overflow-hidden relative rounded-lg w-full h-full ">
+      <Card className="overflow-hidden relative rounded-lg h-full bg-opacity-20 mx-16">
         {slides.map((slide, index) => (
           < div 
           key={slide.id}
@@ -55,13 +55,13 @@ const Carousel = () => {
             </Card>
               
               </div>
-              <div className={`col-span-2`}>
+              <div className={`col-span-2 pl-56`}>
                 <slide.photo />
               </div>
             </div>
           </div>
         ))}
-      </div>
+      </Card>
 
       {/* Dots for navigation */}
       <div className="flex justify-center space-x-2 mt-4">

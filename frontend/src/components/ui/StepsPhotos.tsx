@@ -19,22 +19,20 @@ export function UnlockAnimation() {
 export function SecondStepsPhoto() {
     return (
         <DotLottieReact
-      src="https://lottie.host/d0801186-af58-4ac6-8d41-2ece2c19647f/A2BUF0YSHx.lottie"
-      loop
-      autoplay
-    />
+        src='https://lottie.host/873a174e-ad13-4cb3-b909-3ef9034ba5fc/fqRnG6Ts3m.lottie'
+        loop
+        autoplay
+        />
     )
 }
 
 export function ThirdStepsPhoto() {
     return (
-        <div>  {/* className="flex justify-center items-center"> */} 
-            {/* <img src={ChatBubble} alt="Chat Bubble" className="w-[100px] h-[100px]"/>
-            <img src={Calendar} alt="Calendar" className="w-[100px] h-[100px]"/>
-            <img src={Folder} alt="Folder" className="w-[100px] h-[100px]"/>
-            <img src={ShoppingCart} alt="Shopping Cart" className="w-[100px] h-[100px]"/> */}
-            <h1 className="text-9xl">Third</h1>
-        </div>
+        <DotLottieReact
+            src='https://lottie.host/2f853d7e-d6a5-4a8b-b76b-0e8163b4d1b8/eB2knLS2YE.lottie'
+            loop
+            autoplay
+        />
     )
 }
 
