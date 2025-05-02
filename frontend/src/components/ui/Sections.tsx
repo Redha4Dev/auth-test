@@ -4,6 +4,7 @@ import {
   FaInstagram,
   FaLinkedinIn,
 } from "react-icons/fa";
+import PricingTable from "./PriceTable";
 import Carousel from "./Carousel";
 import FeaturesBenefits from "./FeaturesBenefits";
 export default function Sections() {
@@ -22,7 +23,9 @@ export default function Sections() {
       {/* clients comments sectoin */}
       <section className="h-[300px]" id="ClientsCommentsSection"></section>
       {/* Pricing sectoin */}
-      <section className="h-[600px]" id="PriceSection"></section>
+      <section className="min-h-[600px]" id="PriceSection">
+        <PricingTable />
+      </section>
     </div>
   );
 }
