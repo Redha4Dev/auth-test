@@ -162,17 +162,18 @@ Userschema.methods.changedPasswordAfter = function (JWTTimestamp) {
 Userschema.methods.createPasswordResetToken = function (){
     //create the token using the crypto module
     const token = crypto.randomBytes(32).toString('hex');
+    console.log('token1' , token)
     //save the hashed token in the resettoken field
     this.passwordResetToken = crypto.createHash('sha256').update(token).digest('hex');
 
     //set expiration time (10min for example) to the reset time
-    this.passwordResetExpires = Date() + 20 * 60 * 1000
+    this.passwordResetExpires = Date.now() + 20 * 60 * 1000
     return token
 }
 
 Userschema.methods.createVerificationCode = async  function () {  
     //create verification code
-    const code = (Math.floor(1000 + Math.random())* 900000).toString;
+    const code = (Math.floor(1000 + Math.random())* 900000).toString();
     //save hashed code in his field
     this.verificationCode = crypto.createHash('sha256').update(code).digest('hex');
     //return the code

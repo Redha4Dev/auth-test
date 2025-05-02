@@ -113,6 +113,13 @@ export function LoginForm({
               </div>
             </div>
           </form>
+          <div className="relative hidden md:bg-violet-50 md:rounded-xl bg-muted md:block">
+            <img
+              src={form}
+              alt="Image"
+              className="absolute inset-0 my-auto w-full object-cover dark:brightness-[0.2] dark:grayscale"
+            />
+          </div>
         </CardContent>
       </Card>
       <div className="flex justify-center text-sm text-muted-foreground">

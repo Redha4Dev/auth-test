@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
-import { logout } from "@/Services/authService";
+import { getCurrentUser, logout } from "@/Services/authService";
 import {
   Calendar,
   ChartBar,
@@ -43,10 +43,19 @@ export function AppSidebar() {
   const [usersOpen, setUsersOpen] = useState(false);
   const [username , setUsername] = useState("Username");
   const [role, setRole] = useState("parent")
-  useEffect(() => {
-    // const {user} = useAuth();
-    // console.log(user);
+  const handleGetUser = async () => {
+    try {
+      const reponse = await getCurrentUser();
+      console.log(reponse);
+      setUsername(reponse.name);
+      setRole(reponse.role);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  useEffect(() => {
+    handleGetUser();
   }, []);
   
   const Logout = async () => {

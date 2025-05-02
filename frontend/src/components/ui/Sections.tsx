@@ -79,7 +79,7 @@ export default function Sections() {
       </section>
 
       {/*  how to use sectoin */}
-      <section className="h-[700px] ">
+      <section className="h-[600px]">
         <Carousel />
       </section>
       {/* clients commets sectoin */}

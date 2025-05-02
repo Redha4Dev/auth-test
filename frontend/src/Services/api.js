@@ -65,16 +65,23 @@ export const ForgotPassword = async (email) => {
         }
       };
 
-export const ResetPassword = async (email) => {
-        try {
-          console.log('first')
-          const res = await axios.post('http://localhost:5000/resetPassword', { email });
-        //   const res = await axios.post('/api/v1/users/forgotPassword', { email });
-          console.log('good')
-        } catch (err) {
-          console.log('bad')
-        }
-      };
+export const resetPassword = async (token, password, confirmPassword) => {
+  try {
+    console.log('ha1');
+    const response = await api.patch(`/resetPassword/${token}`, {
+      password,
+      confirmPassword
+    });
+    console.log('ha2');
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error resetting password:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+};
 
 export const getParents = async (name,id) => {
   try {

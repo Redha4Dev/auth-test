@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { resetPassword } from '@/Services/api'
 
   
 
@@ -20,23 +21,36 @@ export function Reset() {
     const [password , setPassword] = useState('');
     const [confirmPassword , setConfirmPassword] = useState('');
     const [message , setMessage] = useState('');
+    const [isLoading , setIsLoading] = useState(false);
     const { token } = useParams();
     const navigate = useNavigate();
+
     const handleReset = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
+            if (password.length < 8) {
+                setMessage('Password must be at least 8 characters long');
+                setIsLoading(false);
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                setMessage('Passwords do not match');
+                setIsLoading(false);
+                return;
+              }
             console.log('first step done')
-          const res = await axios.patch(`/api/v1/users/resetPassword/${token}`, {
-            password,
-            confirmPassword
-          });
-          console.log('second step done')
-          setMessage(res.data.message);
-          console.log('third step done')
+            const res = await resetPassword(token, password, confirmPassword);
+            console.log('second step done')
+            setMessage(res.data.message || 'Password reset successful');
+            console.log('third step done')
         //   navigate('/login');
         } catch (error) {
           console.error(error);
           setMessage('Something went wrong');
+        } finally {
+            setIsLoading(false);
         }
       };
     return (
@@ -61,9 +75,9 @@ export function Reset() {
                                     <Input type="password" id="password2" placeholder="Re-Enter the new password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                                 </div>
                             </div>
-                            {message && <p className='mt-4 text-sm text-red-600'>{message}</p>}
+                            {message && <p className={`mt-4 text-sm ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
                             <CardFooter className="flex justify-between">
-                                <Button type='submit'>Reset Password</Button>
+                                <Button type='submit' disabled={isLoading}> {isLoading ? 'Resetting...' : 'Reset Password'} </Button>
                             </CardFooter>
                         </form>
                     </CardContent>
