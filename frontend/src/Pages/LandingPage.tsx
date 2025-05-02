@@ -6,11 +6,13 @@ import { WarpBackground } from "@/components/magicui/warp-background";
 
 function LandingPage(){
     return (
-        <WarpBackground perspective={150} beamsPerSide={5} beamSize={8} className='overflow-hidden'>
-                <Header />
-                <Sections />
-                <Footer />
-        </WarpBackground>
+        <div className='overflow-hidden'>
+            <WarpBackground perspective={150} beamsPerSide={5} beamSize={8}>
+                    <Header />
+                    <Sections />
+                    <Footer />
+            </WarpBackground>
+        </div>
     );
 };
 
