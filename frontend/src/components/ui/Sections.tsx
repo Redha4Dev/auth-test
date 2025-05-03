@@ -1,15 +1,9 @@
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
 import PricingTable from "./PriceTable";
 import Carousel from "./Carousel";
 import FeaturesBenefits from "./FeaturesBenefits";
 export default function Sections() {
   return (
-    <div className="min-h-[1000px] w-full space-y-96">
+    <div className="min-h-[1000px] w-full space-y-28">
       {/* Presentation Section */}
       <section className="h-[600px]"></section>
       {/* Features & Benefits Section */}
