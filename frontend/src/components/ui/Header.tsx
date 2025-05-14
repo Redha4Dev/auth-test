@@ -24,7 +24,7 @@ export default function Header({}) {
     <Button className="min-w-24" variant='link' onClick={()=>scrollTo("HowToUseSection")} >How To use Our Service</Button>
     <Button className="min-w-24" variant='link' onClick={()=>scrollTo("ClientsCommentsSection")} >Our Clients Comments</Button>
     <Button className="min-w-24" variant='link' onClick={()=>scrollTo("PriceSection")} >Price Plans</Button>
-    <Button className="w-24" onClick={() => navigate('/Dashboard')} >Get Started</Button>
+    <Button className="w-24" onClick={() => navigate('/SignUp')} >Get Started</Button>
     </div>
   </div>
 </header>

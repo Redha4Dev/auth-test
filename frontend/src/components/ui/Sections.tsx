@@ -1,14 +1,9 @@
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import PricingTable from "./PriceTable";
 import Carousel from "./Carousel";
 import FeaturesBenefits from "./FeaturesBenefits";
 export default function Sections() {
   return (
-    <div className="min-h-[1000px] w-full space-y-96">
+    <div className="min-h-[1000px] w-full space-y-28">
       {/* Presentation Section */}
       <section className="h-[600px]"></section>
       {/* Features & Benefits Section */}
@@ -20,9 +15,11 @@ export default function Sections() {
         <Carousel />
       </section>
       {/* clients comments sectoin */}
-      <section className="h-[300px]" id="ClientsCommentsSection"></section>
+      <section className="h-[300px] bg-red-800" id="ClientsCommentsSection"></section>
       {/* Pricing sectoin */}
-      <section className="h-[600px]" id="PriceSection"></section>
+      <section className="min-h-[600px]" id="PriceSection">
+        <PricingTable />
+      </section>
     </div>
   );
 }

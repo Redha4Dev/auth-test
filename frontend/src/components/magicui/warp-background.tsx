@@ -94,7 +94,7 @@ export const WarpBackground: React.FC<WarpBackgroundProps> = ({
           } as React.CSSProperties
         }
         className={
-          "pointer-events-none absolute left-0 top-[-450px] size-full overflow-hidden [clipPath:inset(0)] [container-type:size] [perspective:var(--perspective)] [transform-style:preserve-3d]"
+          "pointer-events-none absolute left-0 top-[-850px] size-full overflow-visible  [container-type:size] [perspective:var(--perspective)] [transform-style:preserve-3d]"
         }
       >
         {/* top side */}
