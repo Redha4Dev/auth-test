@@ -20,7 +20,7 @@ function ProtectedRoutes() {
       }
     };
     checkAuth();
-  }, []);
+  }, [auth]);
 
   if (loading) return <div>Loading...</div>;
 

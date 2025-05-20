@@ -112,7 +112,9 @@ exports.logIn = catchError (async (req,res, next) =>{
             sameSite: 'strict',
           };
         
-          res.cookie('token', token, cookieOptions);         
+          res.cookie('jwt', token, cookieOptions);
+          
+        
           // ✅ 6. Remove password from output
           user.password = undefined;
         
@@ -128,12 +130,12 @@ exports.logIn = catchError (async (req,res, next) =>{
 //protect routes
 
 exports.protectroute = catchError(async (req, res, next) => {
-    let token;
   
     // ✅ Get token from cookie instead of header
-    if (req.cookies && req.cookies.token) {
-      token = req.cookies.token;
-    }
+    let token;
+  if (req.cookies && req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
   
     if (!token) {
       return next(new AppError('Please sign up or log in to continue', 401));
@@ -284,7 +286,7 @@ exports.updatePassword = catchError(async (req,res,next) => {
 exports.getUserData = catchError(async (req, res) => {
   
     
-    const token = req.cookies.token;
+    const token = req.cookies.jwt;
     
     if (!token) {
       return res.status(401).json({ message: 'Authentication required' });
