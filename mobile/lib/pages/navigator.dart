@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/components/studentCard.dart';
-import 'package:kidergarten/components/timetable.dart';
 import 'package:kidergarten/pages/chatPage.dart';
 import 'package:kidergarten/pages/settings.dart';
 import 'package:kidergarten/pages/teacherDashboard.dart';
