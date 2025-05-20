@@ -1,46 +1,47 @@
-const Conversation = require('../Models/conversationmodel');
-const catchError = require ('../utils/catchError');
+const Message = require('../Models/messagemodel');
+const catchError = require('../utils/catchError');
 
-
-
-
-
-exports.sendMessage = catchError(async(req,res,next) =>{
+exports.sendMessage = catchError(async (req, res, next) => {
+  const { message } = req.body;
+  const { id: receiverId } = req.params;
+  const senderId = req.user._id;
     
-    console.log('message sent to ' , req.params.id);
+  console.log(message);
+  console.log(receiverId);
+  console.log(senderId);
+
+  
+  // Create message
+  const newMessage = await Message.create({
+    sender: senderId,
+    receiver: receiverId,
+    message
+  });
+
+
+  res.status(201).json({
+    status: 'success',
     
-    const message = req.body.message;
-    const {id:receiverId} = req.params;
-    const senderId = req.user._id;
-    
-    console.log('message : ' ,message)
-    console.log('receiver : ' ,receiverId)
-    console.log('sender : ' ,senderId)
-    let conversation = await Conversation.findOne({
-        participant : { $all : [senderId , receiverId] }
-    })
-    if (!conversation) {
-        converstaion =  Conversation.create({
-        participant : [senderId , receiverId], 
-        messages : [{sender : senderId, message}] 
+    message: newMessage,
+  });
+});
+
+exports.getAllMessages = catchError(async (req,res,next) => {
+        const userId = req.user._id;
+        
+        const messages = await Message.find({
+          $or: [
+            { sender: userId },
+            { receiver: userId }
+          ]
         })
-
-
-        const newMessage = new Message({
-            senderId,
-            receiverId,
-            message
+        .sort({ createdAt: -1 })
+        .populate('sender receiver', 'name email');
+      
+        res.status(200).json({
+          status: 'success',
+          messages
+          
         });
-
-
-    if (newMessage){
-        conversation.messages.push(newMessage._id);
-    }
-
-    await Promise.all([conversation.save() ,newMessage.save() ]);
-    res.status(201).json({message : "Message sent successfully", newMessage })
-
-    }
-
-
-}) 
+      });
+    

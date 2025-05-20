@@ -14,6 +14,7 @@ const admin = require('./Routes/adminroutes');
 const parent = require('./Routes/parentroutes');
 const registration = require('./Routes/registrationroutes');
 const teacher = require('./Routes/teacherroute');
+const message = require('./Routes/messageroute');
 const jwt = require('jsonwebtoken');
 
 
@@ -64,6 +65,7 @@ app.use('/parent', parent);
 app.use('/admin', admin);
 app.use('/teacher', teacher);
 app.use('/', registration);
+app.use('/chat', message);
 
 
 // Handle unknown routes

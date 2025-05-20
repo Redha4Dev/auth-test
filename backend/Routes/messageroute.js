@@ -4,8 +4,8 @@ const router = express.Router();
 const authController = require('../controllers/authentication')
 
 router
-    .route('/chat/:id')
-    .get()
+    .route('/:id')
+    .get(authController.protectroute , messageController.getAllMessages)
     .post(authController.protectroute ,messageController.sendMessage)
     .patch()
     .delete()
