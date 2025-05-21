@@ -190,7 +190,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
 exports.resetPassword = catchError (async (req,res,next) => {
     //get the user based on the token sent
     //hash the token 
-    const hashToken = crypto.createHash('sh256').update(req.params.token).digesy('hex');
+    const hashToken = crypto.createHash('sh256').update(req.params.token).digest('hex');
 
     const user = await User.findOne({passworResetToken : hashToken , passwordRestExipres : {$gt : Date.now()}});
 
