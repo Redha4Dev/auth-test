@@ -307,7 +307,7 @@ exports.getUserData = catchError(async (req, res) => {
 
 exports.logout = catchError(async (req, res, next) => {
   try {
-    res.clearCookie('token', { httpOnly: true, secure: true });
+    res.clearCookie('jwt', { httpOnly: true, secure: true });
     res.status(200).send({ message: 'Logged out successfully' });
   } catch (error) {
     next(error);
