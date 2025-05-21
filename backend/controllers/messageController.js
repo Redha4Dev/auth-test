@@ -1,5 +1,9 @@
 const Message = require('../Models/messagemodel');
 const catchError = require('../utils/catchError');
+const User = require('../Models/usermodel')
+
+
+
 
 exports.sendMessage = catchError(async (req, res, next) => {
   const { message } = req.body;
@@ -11,7 +15,6 @@ exports.sendMessage = catchError(async (req, res, next) => {
   console.log(senderId);
 
   
-  // Create message
   const newMessage = await Message.create({
     sender: senderId,
     receiver: receiverId,
@@ -45,3 +48,39 @@ exports.getAllMessages = catchError(async (req,res,next) => {
         });
       });
     
+
+
+exports.getMessageDetails = catchError(async (req, res, next) => {
+    const { id } = req.params; 
+    console.log(id)
+    
+  
+    const message = await Message.findById(id)
+  
+    if (!message) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'No message found with that ID'
+      });
+    }
+
+    const user = await User.findById(message.sender._id)
+
+    if (!user) {
+        return res.status(404).json({
+          status: 'fail',
+          message: 'No User found with that ID'
+        });
+      }
+
+
+    
+  
+    res.status(200).json({
+        status: 'success',
+        senderId: message.sender._id,
+        senderName: message.sender.name,
+        message: message.message,
+        name : user.name
+      }
+    )})

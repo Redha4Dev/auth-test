@@ -10,4 +10,10 @@ router
     .patch()
     .delete()
 
+router
+    .route('/message/:id')
+    .get(authController.protectroute , messageController.getMessageDetails)
+    .post()
+    .patch()
+    .delete()
 module.exports = router  
