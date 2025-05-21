@@ -1,6 +1,7 @@
 import PricingTable from "./PriceTable";
-import Carousel from "./Carousel";
+import Carousel from "./Carousela";
 import FeaturesBenefits from "./FeaturesBenefits";
+import ClientsComments from "./ClientsComments";
 export default function Sections() {
   return (
     <div className="min-h-[1000px] w-full space-y-28">
@@ -15,7 +16,9 @@ export default function Sections() {
         <Carousel />
       </section>
       {/* clients comments sectoin */}
-      <section className="h-[300px] bg-red-800" id="ClientsCommentsSection"></section>
+      <section className="min-h-[100px] bg-red-800" id="ClientsCommentsSection">
+        <ClientsComments />
+      </section>
       {/* Pricing sectoin */}
       <section className="min-h-[600px]" id="PriceSection">
         <PricingTable />

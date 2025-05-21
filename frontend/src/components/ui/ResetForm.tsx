@@ -25,7 +25,7 @@ export function Reset() {
     const { token } = useParams();
     const navigate = useNavigate();
 
-    const handleReset = async (e) => {
+    const handleReset = async (e:any) => {
         e.preventDefault();
         setIsLoading(true);
         try {

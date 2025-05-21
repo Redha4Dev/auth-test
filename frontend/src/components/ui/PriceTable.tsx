@@ -16,25 +16,25 @@ export default function PricingTable() {
 
                         <th className="px-4 py-8 text-center">
                             <span className="text-base font-medium text-blue-600"> Free </span>
-                            <p className="mt-6 text-6xl font-bold">$0</p>
+                            <p className="mt-6 text-6xl font-bold">0 <i className="text-3xl">DZD</i></p>
                             <p className="mt-2 text-base font-normal text-gray-500">Per month</p>
                         </th>
 
                         <th className="px-4 py-8 text-center">
                             <span className="text-base font-medium text-blue-600"> Small Kindregarden </span>
-                            <p className="mt-6 text-6xl font-bold">$99</p>
+                            <p className="mt-6 text-6xl font-bold">99 <i className="text-3xl">DZD</i></p>
                             <p className="mt-2 text-base font-normal text-gray-500">Per month</p>
                         </th>
 
                         <th className="px-4 py-8 text-center bg-gray-900 rounded-t-xl">
                             <span className="px-4 py-2 text-base font-medium text-white bg-blue-600 rounded-full"> Popular </span>
-                            <p className="mt-6 text-6xl font-bold text-white">$150</p>
+                            <p className="mt-6 text-6xl font-bold text-white">150 <i className="text-3xl">DZD</i></p>
                             <p className="mt-2 text-base font-normal text-gray-200">Per month</p>
                         </th>
 
                         <th className="px-4 py-8 text-center">
                             <span className="text-base font-medium text-blue-600"> National kindergardens </span>
-                            <p className="mt-6 text-6xl font-bold">$490</p>
+                            <p className="mt-6 text-6xl font-bold">490 <i className="text-3xl">DZD</i></p>
                             <p className="mt-2 text-base font-normal text-gray-500">Per month</p>
                         </th>
                     </tr>
@@ -57,7 +57,7 @@ export default function PricingTable() {
                         <td className="py-4 pr-4 font-medium border-b border-gray-200">Server storage</td>
 
                         <td className="px-4 py-4 text-center border-b border-gray-200">100 GB</td>
-
+0
                         <td className="px-4 py-4 text-center border-b border-gray-200">500 GB</td>
 
                         <td className="px-4 py-4 text-center text-white bg-gray-900 border-b border-white/20">1 TB</td>
