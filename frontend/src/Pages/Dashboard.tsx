@@ -55,6 +55,8 @@ function Dashboard() {
       console.log(reponse);
       setUsername(reponse.username);
       setId(reponse.id);
+      setKidsNumber(reponse.kids.length);
+      
     } catch (error) {
       console.log(error);
     }

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kidergarten/components/studentCard.dart';
 import 'package:kidergarten/components/timetable.dart';
 import 'package:kidergarten/global.dart';
-import 'package:kidergarten/pages/ChildNotesPage.dart';
-import 'package:kidergarten/pages/ChildProfileB.dart';
+import 'package:kidergarten/pages/childPTeacher.dart';
 import 'package:kidergarten/services/api_service.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -235,27 +234,32 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               ),
               SizedBox(
                   height: 400,
-                  child: ListView(
+                  child: // Update your ListView in the teacher dashboard
+                      ListView(
                     children: (kids ?? []).map((student) {
                       final s = student as Map<String, dynamic>;
                       return GestureDetector(
                         onTap: () async {
                           final name = s['name'];
                           final id = s['id'];
+                          final gender = s['gender'] ??
+                              'male'; // Default to male if not provided
 
-                          await apiService.getKidInfo(
-                              name, id); // Fetch and print
-                          Navigator.push(
-                            context,
+                          // Navigate to the child profile page within the navigation spine
+                          Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ChildNotesPage(),
+                              builder: (context) => ChildProfilePage(
+                                childId: id,
+                                childName: name,
+                                gender: gender,
+                              ),
                             ),
                           );
                         },
                         child: StudentCard(
                           name: s['name'] ?? 'No name',
-                          age: 0,
-                          gender: 'Unknown',
+                          age: s['age'] ?? 0,
+                          gender: s['gender'] ?? 'Unknown',
                         ),
                       );
                     }).toList(),

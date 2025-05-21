@@ -109,10 +109,11 @@ exports.logIn = catchError (async (req,res, next) =>{
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: 'strict',
           };
         
-          res.cookie('jwt', token, cookieOptions); // 🔁 use 'token' to match your protect middleware
+          res.cookie('jwt', token, cookieOptions);
+          
         
           // ✅ 6. Remove password from output
           user.password = undefined;
@@ -129,12 +130,12 @@ exports.logIn = catchError (async (req,res, next) =>{
 //protect routes
 
 exports.protectroute = catchError(async (req, res, next) => {
-    let token;
   
     // ✅ Get token from cookie instead of header
-    if (req.cookies && req.cookies.token) {
-      token = req.cookies.token;
-    }
+    let token;
+  if (req.cookies && req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
   
     if (!token) {
       return next(new AppError('Please sign up or log in to continue', 401));
@@ -181,7 +182,8 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         //send the email to the user email
         //create the link url
         console.log('third step');
-        const url = `${req.protocol}://${req.get('host')}/resetPassword/${token}` ; 
+        const url = `http://localhost:5000/resetPassword/${token}`; // React route
+ 
         console.log('url : ', url);    
         //the message within the email
         const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
@@ -194,6 +196,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         res.status(200).json({
             message : 'token sent'
         })       
+        next()
 })
 
 //reset the password
@@ -224,11 +227,11 @@ exports.resetPassword = catchError (async (req,res,next) => {
         user.confirmPassword = req.body.confirmPassword;
         //delete the token and the expiration date
 
-        user.passwordRestExpires = undefined;
+        user.passwordResetExpires = undefined;
         user.passwordResetToken = undefined;
-        user.passwordchangedAt = Date.now();
+        user.passwordChangedAt = Date.now();
         //save the user to validate the password
-        user.save();
+        await user.save();
 
         // login the user and send the new token
         const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET, { expiresIn : process.env.JWT_EXPIRES_IN});
@@ -283,7 +286,7 @@ exports.updatePassword = catchError(async (req,res,next) => {
 exports.getUserData = catchError(async (req, res) => {
   
     
-    const token = req.cookies.token;
+    const token = req.cookies.jwt;
     
     if (!token) {
       return res.status(401).json({ message: 'Authentication required' });
@@ -306,9 +309,9 @@ exports.getUserData = catchError(async (req, res) => {
 
 exports.logout = catchError(async (req, res, next) => {
   try {
-    res.clearCookie('token', { httpOnly: true, secure: true });
+    res.clearCookie('jwt', { httpOnly: true, secure: true });
     res.status(200).send({ message: 'Logged out successfully' });
   } catch (error) {
     next(error);
   }
-});
+}); 
