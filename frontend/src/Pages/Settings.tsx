@@ -37,15 +37,19 @@ import { Switch } from "@/components/ui/switch";
 function Settings() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [role, setRole] = useState("");
+  const [adress, setAdress] = useState("");
   
   const handleGetUser = async () => {
     try {
       const response = await getCurrentUser();
       console.log(response);
-      setUsername(response.username || response.name);
-      setEmail(response.email || "");
-      setRole(response.role || "");
+      setUsername(response.name);
+      setEmail(response.email);
+      setRole(response.role);
+      setPhoneNumber(response.phone || "No phone");
+      setAdress(response.adress || "No adress");
     } catch (error) {
       console.log(error);
     }
@@ -101,8 +105,16 @@ function Settings() {
                     <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input id="phone" type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="role">Role</Label>
                     <Input id="role" value={role} disabled />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="adress">Adress</Label>
+                    <Input id="adress" value={adress} disabled />
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
@@ -156,15 +168,6 @@ function Settings() {
                         <Label>Email Notifications</Label>
                         <p className="text-sm text-muted-foreground">
                           Receive important updates via email.
-                        </p>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label>Users Suggestions</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Get notified about teacher and parent suggestions.
                         </p>
                       </div>
                       <Switch defaultChecked />

@@ -67,16 +67,32 @@ export const ForgotPassword = async (email) => {
 
 export const resetPassword = async (token, password, confirmPassword) => {
   try {
-    console.log('ha1');
     const response = await api.patch(`/resetPassword/${token}`, {
       password,
       confirmPassword
     });
-    console.log('ha2');
     return response.data;
   } catch (error) {
     console.error(
       "Error resetting password:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+};
+
+export const updatePassword = async (userId, currentPassword, newPassword, confirmNewPassword) => {
+  try {
+    const response = await api.patch('/updatePassword', {
+      id: userId,
+      currentPassword,
+      newPassword,
+      confirmNewPassword
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error updating password:",
       error.response?.data?.message || error.message
     );
     throw error;
