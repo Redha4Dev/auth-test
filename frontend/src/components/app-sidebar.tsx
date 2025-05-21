@@ -148,7 +148,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem>
-                  <Button className="w-full" variant='ghost'>
+                  <Button className="w-full" variant='ghost' onClick={() => navigate("/settings")}>
                     Settings
                   </Button>
                 </DropdownMenuItem>

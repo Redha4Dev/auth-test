@@ -21,10 +21,10 @@ export default function Header({}) {
   {/* Buttons (Right Corner) */}
   <div className="col-span-4 col-start-5 flex items-center justify-end text-[customPurple]">
     <div className="flex gap-4">
-    <Button className="min-w-24" variant='link' onClick={()=>scrollTo("HowToUseSection")} >How To use Our Service</Button>
-    <Button className="min-w-24" variant='link' onClick={()=>scrollTo("ClientsCommentsSection")} >Our Clients Comments</Button>
-    <Button className="min-w-24" variant='link' onClick={()=>scrollTo("PriceSection")} >Price Plans</Button>
-    <Button className="w-24" onClick={() => navigate('/SignUp')} >Get Started</Button>
+    <Button className="min-w-24 hover:underline" variant='link' onClick={()=>scrollTo("HowToUseSection")} >How To use Our Service</Button>
+    <Button className="min-w-24 hover:underline" variant='link' onClick={()=>scrollTo("ClientsCommentsSection")} >Our Clients Comments</Button>
+    <Button className="min-w-24 hover:underline" variant='link' onClick={()=>scrollTo("PriceSection")} >Price Plans</Button>
+    <Button className="w-24 hover:underline" onClick={() => navigate('/SignUp')} >Get Started</Button>
     </div>
   </div>
 </header>
