@@ -1,46 +1,86 @@
-// const Conversation = require('../Models/conversationmodel');
-// const catchError = require ('../utils/catchError');
+const Message = require('../Models/messagemodel');
+const catchError = require('../utils/catchError');
+const User = require('../Models/usermodel')
 
 
 
 
-
-// exports.sendMessage = catchError(async(req,res,next) =>{
+exports.sendMessage = catchError(async (req, res, next) => {
+  const { message } = req.body;
+  const { id: receiverId } = req.params;
+  const senderId = req.user._id;
     
-//     console.log('message sent to ' , req.params.id);
+  console.log(message);
+  console.log(receiverId);
+  console.log(senderId);
+
+  
+  const newMessage = await Message.create({
+    sender: senderId,
+    receiver: receiverId,
+    message
+  });
+
+
+  res.status(201).json({
+    status: 'success',
     
-//     const message = req.body.message;
-//     const {id:receiverId} = req.params;
-//     const senderId = req.user._id;
+    message: newMessage,
+  });
+});
+
+exports.getAllMessages = catchError(async (req,res,next) => {
+        const userId = req.user._id;
+        
+        const messages = await Message.find({
+          $or: [
+            { sender: userId },
+            { receiver: userId }
+          ]
+        })
+        .sort({ createdAt: -1 })
+        .populate('sender receiver', 'name email');
+      
+        res.status(200).json({
+          status: 'success',
+          messages
+          
+        });
+      });
     
-//     console.log('message : ' ,message)
-//     console.log('receiver : ' ,receiverId)
-//     console.log('sender : ' ,senderId)
-//     let conversation = await Conversation.findOne({
-//         participant : { $all : [senderId , receiverId] }
-//     })
-//     if (!conversation) {
-//         converstaion =  Conversation.create({
-//         participant : [senderId , receiverId], 
-//         messages : [{sender : senderId, message}] 
-//         })
 
 
-//         const newMessage = new Message({
-//             senderId,
-//             receiverId,
-//             message
-//         });
+exports.getMessageDetails = catchError(async (req, res, next) => {
+    const { id } = req.params; 
+    console.log(id)
+    
+  
+    const message = await Message.findById(id)
+  
+    if (!message) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'No message found with that ID'
+      });
+    }
+
+    const user = await User.findById(message.sender._id)
+
+    if (!user) {
+        return res.status(404).json({
+          status: 'fail',
+          message: 'No User found with that ID'
+        });
+      }
 
 
-//     if (newMessage){
-//         conversation.messages.push(newMessage._id);
-//     }
-
-//     await Promise.all([conversation.save() ,newMessage.save() ]);
-//     res.status(201).json({message : "Message sent successfully", newMessage })
-
-//     }
-
-
-// }) 
+    
+  
+    res.status(200).json({
+        status: 'success',
+        senderId: message.sender._id,
+        senderName: message.sender.name,
+        message: message.message,
+        name : user.name
+      }
+    )})
