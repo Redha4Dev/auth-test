@@ -16,7 +16,7 @@ export default function Sections() {
         <Carousel />
       </section>
       {/* clients comments sectoin */}
-      <section className="min-h-[100px] bg-red-800" id="ClientsCommentsSection">
+      <section className="min-h-[100px]" id="ClientsCommentsSection">
         <ClientsComments />
       </section>
       {/* Pricing sectoin */}

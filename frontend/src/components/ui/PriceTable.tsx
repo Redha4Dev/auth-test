@@ -57,7 +57,6 @@ export default function PricingTable() {
                         <td className="py-4 pr-4 font-medium border-b border-gray-200">Server storage</td>
 
                         <td className="px-4 py-4 text-center border-b border-gray-200">100 GB</td>
-0
                         <td className="px-4 py-4 text-center border-b border-gray-200">500 GB</td>
 
                         <td className="px-4 py-4 text-center text-white bg-gray-900 border-b border-white/20">1 TB</td>
