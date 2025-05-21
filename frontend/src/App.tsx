@@ -48,8 +48,8 @@ function App() {
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
         <Route element={<ResetPassword />} path="/ResetPassword/:token" />
+        <Route element={<Home />} path="/" />
         <Route element={<ProtectedRouters />}>
-          <Route element={<Home />} path="/" />
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
           <Route element={<Kids />} path="Users/Kids" />

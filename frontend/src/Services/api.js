@@ -144,4 +144,40 @@ export const deleteKid = async (kid) => {
     throw error;
   }
 };
+export const getAllMessages = async (id) => {
+  try {
+    const response = await api.get(`/chat/${id}`);
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
 
+export const SendMessage = async (sender, recevier, message) => {
+  try {
+    const response = await api.post(`/chat/${recevier}`, { message , _id : sender});
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+export const getMessage = async (id) => {
+  try {
+    const response = await api.get(`/chat/message/${id}`);
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}

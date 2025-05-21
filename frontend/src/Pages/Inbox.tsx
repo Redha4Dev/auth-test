@@ -7,11 +7,64 @@ import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
+import { getAllMessages, SendMessage } from '@/Services/api'
+import { getCurrentUser } from '@/Services/authService'
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
 import { Plus } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 function Inbox() {
+
+    const [messages, setMessages] = useState([]);
+    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [recever, setRecever] = useState("");
+    const [message, setMessage] = useState("");
+
+    const handleGetUser = async () => {
+        try {
+          const reponse = await getCurrentUser();
+          console.log(reponse);
+          setUsername(reponse.id);
+          console.log(username)
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    
+      useEffect(() => {
+        handleGetUser();
+      }, []);
+    const handleGetAllMessages = async () => {
+            try {
+                const response = await getAllMessages(username);
+                console.log("✅ getAllMessages response:", response);
+                setMessages(response.messages.reverse());
+            }
+            catch (error) {
+                console.error(
+                    "Error fetching messages:",
+                    error.response?.data?.message || error.message
+                );
+                throw error;
+            }
+        }
+        useEffect(() => {
+            handleGetAllMessages();
+        }, [username])
+    const handleSendMessage = async () => {
+        try {
+            const response = await SendMessage(username, recever, message);
+        } catch (error) {
+            console.error(
+                "Error fetching messages:",
+                error.response?.data?.message || error.message
+            );
+            throw error;
+        }
+    }
   return (
     <SidebarProvider>
         <AppSidebar/>
@@ -38,9 +91,10 @@ function Inbox() {
                                     Enter the ID to send the mail
                                 </DialogDescription>
                             </DialogHeader>
-                            <Input placeholder='Enter the ID' />
-                            <Textarea placeholder='Enter the message' />
-                            <Button>Send Mail</Button>
+                            <Input placeholder='Enter the ID' onChange={(e) => setRecever(e.target.value)}/>
+                            <Textarea value={message}
+                            onChange={(e) => setMessage(e.target.value)} placeholder='Enter the message'  />
+                            <Button onClick={handleSendMessage}>Send Mail</Button>
                         </DialogContent>
                     </Dialog>
                 </div>
@@ -55,11 +109,14 @@ function Inbox() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow className='cursor-pointer bg-white'>
-                            <TableCell>User234</TableCell>
-                            <TableCell>Admin</TableCell>
-                            <TableCell className="text-right">Today</TableCell>
-                        </TableRow>
+                        {messages.map((message) => (
+                            <TableRow className='cursor-pointer bg-white' onClick={() => navigate(`/Inbox/${message._id}`)} key={message._id}>
+                                <TableCell>{message.sender.name}</TableCell>
+                                <TableCell>{message.sender.name}</TableCell>
+                                <TableCell className="text-right">{message.sentAt}</TableCell>
+                            </TableRow>
+                        ))}
+                        
                     </TableBody>
                 </Table>
             </div>
