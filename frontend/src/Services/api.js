@@ -60,17 +60,33 @@ export const ForgotPassword = async (email) => {
           const res = await axios.post('http://localhost:5000/forgotPassword', { email });
         //   const res = await axios.post('/api/v1/users/forgotPassword', { email });
           console.log('good')
-          setMessage('Check your email for the reset link.');
         } catch (err) {
-          setMessage(err.response?.data?.message || 'Something went wrong.');
           console.log('bad')
         }
       };
 
-export const getParents = async (id) => {
+export const resetPassword = async (token, password, confirmPassword) => {
   try {
-    const response = await api.get(`/admin/parents`, {
-      params: { id }, // Send parameters in the query string
+    console.log('ha1');
+    const response = await api.patch(`/resetPassword/${token}`, {
+      password,
+      confirmPassword
+    });
+    console.log('ha2');
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error resetting password:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+};
+
+export const getParents = async (name,id) => {
+  try {
+    const response = await api.get(`/admin/parent`, {
+      params: { name, id }, // Send parameters in the query string
     });
     return response.data;
   } catch (error) {
@@ -81,3 +97,51 @@ export const getParents = async (id) => {
     throw error;
   }
 }
+export const getParent = async (name, id) => {
+  try {
+    const response = await api.post(`/parent/profile`, {
+      name, id
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching parent data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+export const ListKids = async (name, id) => {
+  try {
+    const response = await api.get('/admin/school' , {
+      params: { name, id}
+    })
+    console.log("✅ ListKids response:", response.data);
+    return response.data;
+  } catch(error) {
+    console.error(
+      "Error fetching kids data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+export const deleteKid = async (kid) => {
+  try {
+    const response = await api.delete('/admin/manage-kids', {
+      data: {
+        name: kid.name,
+        id: kid.id
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error deleting kid:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+};
+

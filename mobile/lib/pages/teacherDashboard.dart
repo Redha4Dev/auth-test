@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kidergarten/components/studentCard.dart';
 import 'package:kidergarten/components/timetable.dart';
 import 'package:kidergarten/global.dart';
+import 'package:kidergarten/pages/childPTeacher.dart';
+import 'package:kidergarten/services/api_service.dart';
 
 class TeacherDashboard extends StatefulWidget {
   const TeacherDashboard({super.key});
@@ -16,6 +18,8 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   int selectedClassIndex = 0;
   String searchQuery = "";
   String selectedSearchCriterion = "name";
+
+  final apiService = ApiService();
 
   final List<List<Map<String, dynamic>>> studentsPerClass = [
     [
@@ -107,6 +111,8 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 .toLowerCase()
                 .contains(searchQuery.toLowerCase()))
             .toList();
+    final kids = globalParentData?['PARENT']?['kids'] as List<dynamic>?;
+    final parent = globalParentData?['PARENT'] as Map<String, dynamic>?;
 
     return SingleChildScrollView(
       child: Column(
@@ -123,9 +129,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("Name: ", style: TextStyle(color: Colors.white)),
-                    Text("Email: ", style: TextStyle(color: Colors.white)),
-                    Text("Phone Number ",
+                    Text('Name: ${parent?['name'] ?? 'No name'}',
+                        style: TextStyle(color: Colors.white)),
+                    Text('Email: ${parent?['email'] ?? 'No email'}',
                         style: TextStyle(color: Colors.white)),
                   ],
                   //+ globalParentData?['name']
@@ -227,20 +233,37 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 ),
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  children: (globalParentData?['kids'] as List<dynamic>)
-                      .map((student) {
-                    final Map<String, dynamic> s =
-                        student as Map<String, dynamic>;
-                    return StudentCard(
-                      name: s['name'] ?? 'No name',
-                      age: 0,
-                      gender: 'Unknown',
-                    );
-                  }).toList(),
-                ),
-              ),
+                  height: 400,
+                  child: // Update your ListView in the teacher dashboard
+                      ListView(
+                    children: (kids ?? []).map((student) {
+                      final s = student as Map<String, dynamic>;
+                      return GestureDetector(
+                        onTap: () async {
+                          final name = s['name'];
+                          final id = s['id'];
+                          final gender = s['gender'] ??
+                              'male'; // Default to male if not provided
+
+                          // Navigate to the child profile page within the navigation spine
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ChildProfilePage(
+                                childId: id,
+                                childName: name,
+                                gender: gender,
+                              ),
+                            ),
+                          );
+                        },
+                        child: StudentCard(
+                          name: s['name'] ?? 'No name',
+                          age: s['age'] ?? 0,
+                          gender: s['gender'] ?? 'Unknown',
+                        ),
+                      );
+                    }).toList(),
+                  )),
             ],
           ),
         ],

@@ -9,6 +9,10 @@ const kidschema = mongoose.Schema({
         type : String,
         required : [true, 'Please enter your parent name']
     },
+    parentId : {
+        type : String,
+        required : [true, 'Please enter your parent ID']
+    },
     teacher: {
         type : String,
         required : [true, 'Please enter your teacher name']

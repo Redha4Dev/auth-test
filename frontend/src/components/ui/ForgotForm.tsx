@@ -1,5 +1,4 @@
-import React , {useState} from 'react'
-import axios from 'axios'
+import {useState} from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -23,7 +22,7 @@ export function Forgot() {
         try {
           ForgotPassword(email);
         } catch (err) {
-          setMessage(err.response?.data?.message || 'Something went wrong.');
+          setMessage('Something went wrong.');
           console.log('bad')
         }
       };

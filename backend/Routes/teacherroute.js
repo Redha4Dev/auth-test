@@ -28,7 +28,7 @@ router
     .delete()
 
 router 
-    .route('/teacher/manage-kids/:id')
+    .route('/teacher/manage-kids/')
     .get(kidcontroller.getKid)
     .post(kidcontroller.addKid )
     // .patch()
@@ -55,4 +55,5 @@ router
     .patch()
     .delete()
 
+    
     module.exports = router

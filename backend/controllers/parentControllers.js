@@ -25,7 +25,6 @@ exports.updateme = catchError(async (req, res , next) =>{
 
 
 exports.getParentInfo = catchError (async(req,res,next) =>{
-console.log("rrr");
 
     //get the user based on his unique id
     const user = await User.findById({_id : req.body.id , name: req.body.name})
@@ -67,17 +66,16 @@ exports.getParents = catchError(async (req, res, next) => {
 
 exports.addParent = catchError(async (req , res , next) => {
 
-
     const name  = req.body.name;
 
-    const exists = await Kid.findOne({ name });
+    const exists = await User.findOne({ name });
     
     if (exists) {
         return res.status(400).send({message : 'this parent already exists'})
 
     }
-        //create and save the newKid
-        const newParent = await User.create(req.body);
+        
+        const newParent = req.body;
 
         const parentObject = {
             name: newParent.name,
@@ -108,10 +106,38 @@ exports.addParent = catchError(async (req , res , next) => {
 
         
         res.status(200).send({
-            message: 'Parent successfully created',
+            message: 'Parent added successfully ',
             parent : newParent
         });
 })
 
 
+exports.displayParentKidList = catchError(async (req, res, next) => {
+    const { name, id } = req.query;
+
+    if (!name || !id) {
+        return next(new AppError('Both name and id are required as query parameters.', 400));
+    }
+
+    const parent = await User.findOne({
+        role: 'parent',
+        name,
+        _id: id
+    }); 
+
+    if (!parent) {
+        return next(new AppError('Parent not found. Please check your credentials.', 404));
+    }
+
+    const kids = await Kid.find({ 
+        parent : parent.name
+    })
+
+    
+
+    res.status(200).send({
+        status: 'success',
+        kids
+    });
+});
 

@@ -159,11 +159,11 @@ console.log(req.body.name);
  exports.removeKid = catchError(async (req, res, next) => {
         // Find the kid
         const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
-
+        console.log(req.body.name, req.body.id);
         if (!kid) {
             return next(new Error('This kid does not exist'));
         }
-
+        
         // Remove the kid from the parent's kids array
         await User.findOneAndUpdate(
             { name : kid.parent }, // assuming this is parent's _id
@@ -243,88 +243,12 @@ exports.displaySchoolKidList = catchError(async (req, res, next) => {
 
     res.status(200).send({
         status: 'success',
-        kids: {
-            kids
-        }
+        kids
     });
 });
 
 
-exports.displayParentKidList = catchError(async (req, res, next) => {
-    const { name, id } = req.query;
-
-    if (!name || !id) {
-        return next(new AppError('Both name and id are required as query parameters.', 400));
-    }
-
-    const parent = await User.findOne({
-        role: 'parent',
-        name,
-        _id: id
-    }); 
-
-    if (!parent) {
-        return next(new AppError('Admin not found. Please check your credentials.', 404));
-    }
-
-    const kids = await Kid.find({ 
-        parent : parent.name
-    })
-
-    if (kids.length === 0) {
-        return res.status(200).send({
-            status: 'success',
-            message: 'No kids found for this parent',
-            kids: {
-                kids: []
-            }
-        });
-    }
-
-    res.status(200).send({
-        status: 'success',
-        kids: {
-            kids
-        }
-    });
-});
 
 
-exports.displayTeacherKidList = catchError(async (req, res, next) => {
-    const { name, id } = req.query;
 
-    if (!name || !id) {
-        return next(new AppError('Both name and id are required as query parameters.', 400));
-    }
 
-    const teacher = await User.findOne({
-        role: 'teacher',
-        name,
-        _id: id
-    }); 
-
-    if (!teacher) {
-        return next(new AppError('Admin not found. Please check your credentials.', 404));
-    }
-
-    const kids = await Kid.find({ 
-        teacher : teacher.name
-    })
-
-    if (kids.length === 0) {
-        return res.status(200).send({
-            status: 'success',
-            message: 'No kids found for this teacher',
-            kids: {
-                kids: []
-            }
-        });
-    }
-
-    res.status(200).send({
-        status: 'success',
-        kids: {
-            kids
-        }
-    });
-});

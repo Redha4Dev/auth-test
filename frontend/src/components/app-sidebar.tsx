@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
-import { logout } from "@/Services/authService";
+import { getCurrentUser, logout } from "@/Services/authService";
 import {
   Calendar,
   ChartBar,
@@ -34,6 +34,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "@/context/AuthContext";
 
 
 export function AppSidebar() {
@@ -41,12 +42,20 @@ export function AppSidebar() {
   const { open } = useSidebar();
   const [usersOpen, setUsersOpen] = useState(false);
   const [username , setUsername] = useState("Username");
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decode = jwtDecode(token);
-      setUsername(decode.name);
+  const [role, setRole] = useState("parent")
+  const handleGetUser = async () => {
+    try {
+      const reponse = await getCurrentUser();
+      console.log(reponse);
+      setUsername(reponse.name);
+      setRole(reponse.role);
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
+    handleGetUser();
   }, []);
   
   const Logout = async () => {
@@ -58,28 +67,17 @@ export function AppSidebar() {
     }
   };
 
-  const Routes = [
-    {
-      name: "Dashboard",
-      icon: <Home />,
-    },
-    {
-      name: "Analyse",
-      icon: <ChartBar />,
-    },
-    {
-      name: "Meals",
-      icon: <CookieIcon />,
-    },
-    {
-      name: "Scheduling",
-      icon: <Calendar />,
-    },
-    {
-      name: "Inbox",
-      icon: <Inbox />,
-    },
-  ];
+  const getFilteredRoutes = () => {
+    const allRoutes = [
+      { name: "Dashboard", icon: <Home />, roles: ["admin", "teacher", "parent"] },
+      { name: "Analyse", icon: <ChartBar />, roles: ["admin", "teacher"] },
+      { name: "Meals", icon: <CookieIcon />, roles: ["admin", "parent", "teacher"] },
+      { name: "Scheduling", icon: <Calendar />, roles: ["admin", "parent", "teacher"] },
+      { name: "Inbox", icon: <Inbox />, roles: ["admin", "parent", "teacher"] },
+    ];
+  
+    return allRoutes.filter(route => route.roles.includes(role));
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -89,7 +87,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <ul className="mx-auto space-y-2">
-          {Routes.map((route, index) => (
+          {getFilteredRoutes().map((route, index) => (
             <li key={index}>
               <Button
                 variant="ghost"
@@ -150,7 +148,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem>
-                  <Button className="w-full" variant='ghost'>
+                  <Button className="w-full" variant='ghost' onClick={() => navigate("/settings")}>
                     Settings
                   </Button>
                 </DropdownMenuItem>

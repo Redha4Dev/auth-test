@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/table";
 import { getKids } from "@/Services/api";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "@/context/AuthContext";
+import { getCurrentUser } from "@/Services/authService";
 
 function Dashboard() {
 
@@ -45,15 +47,23 @@ function Dashboard() {
       console.error("Error fetching kids:", error);
     }
   };
+  const {user} = useAuth();
   
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decode = jwtDecode(token);
-      console.log("Decoded token:", decode);
-      setUsername(decode.name);
-      setId(decode.id); // This triggers the second useEffect
+  const handleGetUser = async () => {
+    try {
+      const reponse = await getCurrentUser();
+      console.log(reponse);
+      setUsername(reponse.username);
+      setId(reponse.id);
+      setKidsNumber(reponse.kids.length);
+      
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
+    handleGetUser();
   }, []);
   
    useEffect(() => {
@@ -123,6 +133,7 @@ function Dashboard() {
 
   return (
     <FormProvider>
+      
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

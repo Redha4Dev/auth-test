@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getKids, addKid, getKid } from "@/Services/api";
+import { getKids, addKid, getKid, ListKids, deleteKid } from "@/Services/api";
 import { jwtDecode } from "jwt-decode";
 import {
   SidebarInset,
@@ -51,6 +51,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
+import { getCurrentUser } from "@/Services/authService";
 
 const childrenData = Array.from({ length: 50 }, (_, i) => ({
   id: `${i + 1}`,
@@ -78,26 +79,29 @@ function Kids() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const handleGetUser = async () => {
+      try {
+        const reponse = await getCurrentUser();
+        console.log(reponse);
+        setUsername(reponse.name);
+        setId(reponse._id);
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decode = jwtDecode(token);
-      console.log("Decoded token:", decode); // Verify token structure
-      setUsername(decode.name);
-      // Ensure you're using the correct field name for user ID (e.g., _id)
-      setId(decode.id); // Use appropriate field from token
+      handleGetUser();
       setKids(prev => ({
         ...prev,
-        parent: decode.name,
-        id: decode.id,
+        parent: username,
+        id: id,
       }));
-    }
   }, []);
 
   useEffect(() => {
     if (id) { // Only call when ID is available
-      ListKids();
+      HandleListKids();
     }
   }, [id]);
   
@@ -114,7 +118,7 @@ function Kids() {
   );
   
 
-  const ListKids = async () => {
+  const HandleListKids = async () => {
     try {
       const newkids = await getKids(username, id);
       console.log(newkids.kids);
@@ -131,6 +135,13 @@ function Kids() {
       console.log("Error adding kid", error);
     }
   };
+  const handleRemoveKid = async (kid) => {
+    try {
+      await deleteKid(kid);
+    } catch (error) {
+      console.log("Error deleting kid", error);
+    }
+  }
 
   return (
     <SidebarProvider>
@@ -263,6 +274,11 @@ function Kids() {
                             onClick={() => alert(`Editing ${child.name}`)}
                           >
                             Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleRemoveKid(child)}
+                          >
+                            Remove
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

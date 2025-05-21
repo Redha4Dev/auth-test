@@ -8,11 +8,11 @@ import { jwtDecode } from "jwt-decode";
 
 function Home() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  if (token) {
-    const decode = jwtDecode(token);
-    console.log("User ID: ", decode.name);
-  }
+  // const token = localStorage.getItem("token");
+  // if (token) {
+  //   const decode = jwtDecode(token);
+  //   console.log("User ID: ", decode.name);
+  // }
   return (
     <div className="w-screen min-h-screen h-fit">
       <FormProvider>

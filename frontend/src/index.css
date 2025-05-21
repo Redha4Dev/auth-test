@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -40,7 +39,7 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    
+
   }
 
   .dark {
@@ -77,8 +76,10 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+  .theme {
+    --animate-grid: grid 15s linear infinite;
+  }
 }
-
 
 @layer base {
   * {
@@ -94,7 +95,7 @@
     --chart-4: 210 98% 78%;
     --chart-5: 212 97% 87%;
   }
- 
+
   .dark {
     --chart-1: 236 55% 55%;
     --chart-2: 160 60% 45%;
@@ -108,7 +109,7 @@
     --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
     --fc-neutral-text-color: #808080;
     --fc-border-color: #ddd;
-  
+
     --fc-button-text-color: #fff;
     --fc-button-bg-color: #7c3bed;
     --fc-button-border-color: #7c3bed;
@@ -116,19 +117,19 @@
     --fc-button-hover-border-color: #a075eb;
     --fc-button-active-bg-color: #7c3bed;
     --fc-button-active-border-color: #7c3bed;
-  
+
     --fc-event-bg-color: #3788d8;
     --fc-event-border-color: #3788d8;
     --fc-event-text-color: #fff;
     --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
-  
+
     --fc-more-link-bg-color: #d0d0d0;
     --fc-more-link-text-color: inherit;
-  
+
     --fc-event-resizer-thickness: 8px;
     --fc-event-resizer-dot-total-width: 8px;
     --fc-event-resizer-dot-border-width: 1px;
-  
+
     --fc-non-business-color: rgba(215, 215, 215, 0.3);
     --fc-bg-event-color: rgb(143, 223, 130);
     --fc-bg-event-opacity: 0.3;
@@ -141,4 +142,15 @@
   font-family: "Jomhuria", serif;
   font-weight: 400;
   font-style: normal;
+}
+
+@theme inline {
+  @keyframes grid {
+  0% {
+    transform: translateY(-50%);
+    }
+  100% {
+    transform: translateY(0);
+    }
+  }
 }

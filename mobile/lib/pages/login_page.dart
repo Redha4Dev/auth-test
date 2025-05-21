@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kidergarten/components/myButton.dart';
 import 'package:kidergarten/components/textField.dart';
 import 'package:kidergarten/pages/navigator.dart';
-import 'package:kidergarten/pages/teacherDashboard.dart';
 import 'package:kidergarten/services/api_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -86,48 +83,38 @@ class _LoginPageState extends State<LoginPage> {
                   height: screenHeight * .05,
                 ),
                 myOutlinedButton(
-                  text: "Submit",
-                  onTap: () async {
-                    print('🔐 Attempting to log in...');
-                    final response = await apiService.loginUser(
-                      'nox',
-                      'nox',
-                    );
+                    text: "Submit",
+                    onTap: () async {
+                      print('🔐 Attempting to log in...');
+                      final response = await apiService.loginUser('nox', 'nox');
 
-                    if (response != null) {
-                      print('✅ Login successful, token saved.');
+                      if (response != null) {
+                        print('✅ Login successful, token saved.');
 
-                      // Try to extract user info from token
-                      final userData = await apiService.getUserFromToken();
-                      if (userData != null) {
-                        print(
-                            '🧾 User extracted from token: ${userData['id']}, ${userData['name']}');
+                        final userData = await apiService.getUserFromToken();
+                        if (userData != null) {
+                          print(
+                              '🧾 User extracted from token: ${userData['id']}, ${userData['name']}');
 
-                        // Use the extracted user data to fetch parent info
-                        final parentInfo = await apiService.getParentInfo(
-                            '67e865fa467eeb7c40462f0a', 'ESI'
-                            //userData['id'],
-                            //userData['name'],
-                            );
-                        print('👨‍👩‍👧 Parent Info: $parentInfo');
-                        if (parentInfo != null) {
+                          final parentInfo = await apiService.getParentInfo(
+                              '67e2df3db2dd97b0c4542fa1', 'zakaria');
                           print('👨‍👩‍👧 Parent Info: $parentInfo');
                         } else {
-                          print('⚠️ No parent info found or error occurred.');
+                          print('❌ Failed to extract user info from token.');
+                        }
+
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NavigationSpine()),
+                          );
                         }
                       } else {
-                        print('❌ Failed to extract user info from token.');
+                        print('❌ Login failed, cannot fetch parent info.');
+                        // You could show a snackbar here to alert the user
                       }
-                    } else {
-                      print('❌ Login failed, cannot fetch parent info.');
-                    }
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NavigationSpine(),
-                        ));
-                  },
-                ),
+                    }),
                 SizedBox(
                   height: screenHeight * .02,
                 ),

@@ -1,7 +1,8 @@
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
+import { set } from "date-fns";
 
 const API_URL = "http://localhost:5000"; // Adjust based on your backend
-
 // Sign up function
 export const signUpAdmin = async (userData) => {
   try {
@@ -18,7 +19,7 @@ export const signUpAdmin = async (userData) => {
 export const logIn = async (credentials) => {
   try {
     const response = await axios.post(`${API_URL}/login`, credentials);
-    localStorage.setItem("token", response.data.token); // Save token
+    console.log(response.data.data.user);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -27,13 +28,26 @@ export const logIn = async (credentials) => {
 };
 
 // Logout function "Will be removed after using only http cookies"
-export const logout = () => {
-  localStorage.removeItem("token"); // Remove token
+export const logout = async () => {
+   try {
+    await axios.get(`${API_URL}/logout`);
+   } catch (error) {
+    console.error(error);
+    throw error;
+   }
 };
 
 // Get Authenticated User
-export const getCurrentUser = () => {
-  return localStorage.getItem("token");
+export const getCurrentUser = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/getUserData`, {
+      withCredentials: true,
+    });
+    console.log(response);
+    return response.data;
+  } catch (err) {
+    console.log('error fetching user data' , err);
+  }
 };
 
 // export const fetchUserData = () => {
