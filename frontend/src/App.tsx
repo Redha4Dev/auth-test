@@ -46,7 +46,6 @@ function App() {
       <Routes>
         <Route element={<LandingPage />} path="/LandingPage" />
         <Route element={<Login />} path="/Login" />
-          <Route element={<Settings />} path="/settings"  />
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
         <Route element={<ResetPassword />} path="/ResetPassword/:token" />
@@ -54,6 +53,7 @@ function App() {
         <Route element={<ProtectedRouters />}>
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
+          <Route element={<Settings />} path="/settings"  />
           <Route element={<Kids />} path="Users/Kids" />
           <Route element={<KidProfile />} path="Users/Kids/:id/:name" />
           <Route element={<Parents />} path="Users/Parents" />
@@ -62,7 +62,6 @@ function App() {
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />
           <Route element={<Mail/>} path="/Inbox/:id"/>
-
         </Route>
       </Routes>
     </BrowserRouter>
