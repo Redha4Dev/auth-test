@@ -37,4 +37,6 @@ router.route("/getUserData").get(authController.getUserData);
 
 router.get("/logout", authController.logout);
 
+
+
 module.exports = router;

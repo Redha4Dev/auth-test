@@ -65,7 +65,7 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         await email ({
             email : user.email,
             subject : 'Email verification code',
-            message
+            text : message
         })
 
         res.status(200).json({
