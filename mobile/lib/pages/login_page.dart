@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                     text: "Submit",
                     onTap: () async {
                       print('🔐 Attempting to log in...');
-                      final response = await apiService.loginUser('nox', 'nox');
+                      final response = await apiService.loginUser('zaki', 'zaki13');
 
                       if (response != null) {
                         print('✅ Login successful, token saved.');
@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                               '🧾 User extracted from token: ${userData['id']}, ${userData['name']}');
 
                           final parentInfo = await apiService.getParentInfo(
-                              '67e2df3db2dd97b0c4542fa1', 'zakaria');
+                              '682f8096deb11f8bca6dcec0', 'zaki');
                           print('👨‍👩‍👧 Parent Info: $parentInfo');
                         } else {
                           print('❌ Failed to extract user info from token.');

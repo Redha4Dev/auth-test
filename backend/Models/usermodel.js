@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const crypto = require('crypto');
 const { parsePhoneNumberFromString } = require('libphonenumber-js');
+const { notify } = require('../Routes/mealroute');
 
 const Userschema =  mongoose.Schema ({
     name: {
@@ -107,7 +108,9 @@ const Userschema =  mongoose.Schema ({
     qualifications: {
         type: String,
     },
-    code: Number
+    code: Number,
+
+    notifyMe : String
 }
 );
 
@@ -171,11 +174,15 @@ Userschema.methods.createPasswordResetToken = function (){
     return token
 }
 
-Userschema.methods.createVerificationCode = async  function () {  
+Userschema.methods.createVerificationCode =  function () {  
     //create verification code
-    const code = (Math.floor(1000 + Math.random())* 900000).toString();
+    const code = Math.floor(10000 + Math.random() * 900000).toString();
+    console.log(code);
     //save hashed code in his field
     this.verificationCode = crypto.createHash('sha256').update(code).digest('hex');
+
+    this.verificationCodeExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
     //return the code
     return code
 }

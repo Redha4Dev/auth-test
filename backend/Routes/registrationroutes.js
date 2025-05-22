@@ -27,6 +27,7 @@ router.route("/verify").post(authController.verificationCode);
 router.route("/forgotPassword").post(authController.forgotPassword);
 router.route("/settings").post(authController.updatePassword);
 router.route("/resetPassword/:token").patch(authController.resetPassword);
+router.post("/updatePassword", authController.updatePassword);
 
 router.get("/protected", authController.protectroute, (req, res) => {
   res.json({ message: `Welcome, ${req.user.name}` });
@@ -35,5 +36,7 @@ router.get("/protected", authController.protectroute, (req, res) => {
 router.route("/getUserData").get(authController.getUserData);
 
 router.get("/logout", authController.logout);
+
+
 
 module.exports = router;

@@ -32,8 +32,31 @@ const kidschema = mongoose.Schema({
         enum: ['Boy', 'Girl']
     },
     code: String,
-    marks: Number,
+    
     medicalStatus : String,
+
+    marks: {
+    Islamic : { type: Number, min: 0, max: 10 },
+    English: { type: Number, min: 0, max: 10 },
+    Arabic: { type: Number, min: 0, max: 10 },
+    French: { type: Number, min: 0, max: 10 },
+    Math: { type: Number, min: 0, max: 10 },
+    },
+    
+    
+    skills: {
+    Discipline : { type: Number, min: 0, max: 10 },
+    Emotions: { type: Number, min: 0, max: 10 },
+    Teamwork: { type: Number, min: 0, max: 10 },
+    Confidence: { type: Number, min: 0, max: 10 },
+    Speaking: { type: Number, min: 0, max: 10 },
+    Creativity: { type: Number, min: 0, max: 10 },
+    Psychology: { type: Number, min: 0, max: 10 },
+    communication: { type: Number, min: 0, max: 10 },
+    Listening: { type: Number, min: 0, max: 10 },
+    Imagintion: { type: Number, min: 0, max: 10 },
+    Independence: { type: Number, min: 0, max: 10 },
+    }
 })
 
 const Kid = mongoose.model('Kid', kidschema)
