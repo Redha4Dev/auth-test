@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { updatePassword } from "@/Services/api";
 import { 
   SidebarInset,
   SidebarProvider, 
@@ -40,6 +41,12 @@ function Settings() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [role, setRole] = useState("");
   const [adress, setAdress] = useState("");
+  const [isLoading , setIsLoading] = useState(false);
+  const [userID, setUserID] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [changePasswordResponseMessage, setChangePasswordResponseMessage] = useState("");
   
   const handleGetUser = async () => {
     try {
@@ -50,10 +57,42 @@ function Settings() {
       setRole(response.role);
       setPhoneNumber(response.phone || "No phone");
       setAdress(response.adress || "No adress");
+      setUserID(response._id);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleUpdatePassword = async (e:any) => {
+            if (!userID) {
+                setChangePasswordResponseMessage("User not authenticated");
+                return;
+            }
+            
+            setIsLoading(true);
+            setChangePasswordResponseMessage("");
+          e.preventDefault();
+          setIsLoading(true);
+          try {
+              if (newPassword.length < 8) {
+                setChangePasswordResponseMessage('Password must be at least 8 characters long');
+                setIsLoading(false);
+                return;
+              }
+  
+              if (newPassword !== confirmPassword) {
+                setChangePasswordResponseMessage('Passwords do not match');
+                setIsLoading(false);
+                return;
+                }
+              const res = await updatePassword(userID, currentPassword, newPassword, confirmPassword);
+              setChangePasswordResponseMessage(res.message || 'Password reset successful');
+          } catch (error) {
+            console.log(error);
+          } finally {
+              setIsLoading(false);
+          }
+        };
 
   useEffect(() => {
     handleGetUser();
@@ -133,22 +172,29 @@ function Settings() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                {changePasswordResponseMessage && (<div className="p-3 bg-primary rounded">
+                                         {changePasswordResponseMessage}
+                                     </div>
+                                    )
+                }
                   <div className="space-y-2">
                     <Label htmlFor="current-password">Current Password</Label>
-                    <Input id="current-password" type="password" />
+                    <Input id="current-password" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)}/>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="new-password">New Password</Label>
-                    <Input id="new-password" type="password" />
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <Input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}/>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirm-password">Confirm New Password</Label>
-                    <Input id="confirm-password" type="password" />
+                    <Input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button variant="outline">Cancel</Button>
-                  <Button>Update Password</Button>
+                  <Button onClick={handleUpdatePassword} disabled={isLoading} >
+                    {isLoading ? "Updating..." : "Update Password"}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
