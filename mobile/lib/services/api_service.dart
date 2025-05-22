@@ -162,41 +162,51 @@ class ApiService {
     }
   }
 
-  Future<bool> updatePassword({
-    required String id,
-    required String currentPassword,
-    required String newPassword,
-    required String confirmNewPassword,
-  }) async {
-    final url = Uri.parse('http://10.0.2.2:5000/updatePassword');
+  Future<Map<String, dynamic>> updatePassword({
+  required String id,
+  required String currentPassword,
+  required String newPassword,
+  required String confirmNewPassword,
+}) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'id': id,
-          'currentPassword': currentPassword,
-          'newPassword': newPassword,
-          'confirmNewPassword': confirmNewPassword,
-        }),
-      );
+  final url = Uri.parse('http://10.0.2.2:5000/updatePassword');
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+  try {
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'id': id,
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+        'confirmNewPassword': confirmNewPassword,
+      }),
+    );
 
-        // Save new token
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', data['token']);
+    final responseData = jsonDecode(response.body);
 
-        return true;
-      } else {
-        print('Failed: ${response.body}');
-        return false;
-      }
-    } catch (e) {
-      print('Error: $e');
-      return false;
+    if (response.statusCode == 200 && responseData['status'] == 'success') {
+      return {
+        'success': true,
+        'message': responseData['message'],
+        'token': responseData['token'],
+      };
+    } else {
+      return {
+        'success': false,
+        'message': responseData['message'] ?? 'Unknown error occurred',
+      };
     }
+  } catch (e) {
+    return {
+      'success': false,
+      'message': 'Exception: $e',
+    };
   }
+}
 }
