@@ -7,26 +7,27 @@ import 'package:kidergarten/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-Future<Map<String, dynamic>?> getKidInfo(String name, String id) async {
-  final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
-      .replace(queryParameters: {'name': name, 'id': id});
+  Future<Map<String, dynamic>?> getKidInfo(String name, String id) async {
+    final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
+        .replace(queryParameters: {'name': name, 'id': id});
 
-  try {
-    final response = await http.get(uri);
+    try {
+      final response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print('👶 Kid Info: ${data['kid']}');
-      return data['kid'];
-    } else {
-      final error = jsonDecode(response.body);
-      print('⚠️ Failed to fetch kid info: ${error['message']}');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('👶 Kid Info: ${data['kid']}');
+        return data['kid'];
+      } else {
+        final error = jsonDecode(response.body);
+        print('⚠️ Failed to fetch kid info: ${error['message']}');
+      }
+    } catch (e) {
+      print('❌ Error fetching kid info: $e');
     }
-  } catch (e) {
-    print('❌ Error fetching kid info: $e');
+    return null;
   }
-  return null;
-}
+
   Future<Map<String, dynamic>?> getUserFromToken() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -48,21 +49,21 @@ Future<Map<String, dynamic>?> getKidInfo(String name, String id) async {
       return null;
     }
   }
-  Future<void> logoutUser(BuildContext context) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.remove('token');
 
-  // Navigate to LoginPage and remove all previous routes
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const MainApp()),
-    (route) => false,
-  );
-}
+  Future<void> logoutUser(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+
+    // Navigate to LoginPage and remove all previous routes
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MainApp()),
+      (route) => false,
+    );
+  }
 
   Future<Map<String, dynamic>?> loginUser(String email, String password) async {
-    final url = Uri.parse(
-        'http://10.0.2.2:5000/login');
+    final url = Uri.parse('http://10.0.2.2:5000/login');
 
     final response = await http.post(
       url,
@@ -158,6 +159,44 @@ Future<Map<String, dynamic>?> getKidInfo(String name, String id) async {
       }
     } catch (e) {
       print('Error: $e');
+    }
+  }
+
+  Future<bool> updatePassword({
+    required String id,
+    required String currentPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    final url = Uri.parse('http://10.0.2.2:5000/updatePassword');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'id': id,
+          'currentPassword': currentPassword,
+          'newPassword': newPassword,
+          'confirmNewPassword': confirmNewPassword,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // Save new token
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', data['token']);
+
+        return true;
+      } else {
+        print('Failed: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
     }
   }
 }
