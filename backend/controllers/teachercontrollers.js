@@ -111,7 +111,7 @@ exports.displayTeachers = catchError(async (req, res, next) => {
 
     const teacherIds = admin.teachers.map(teacher => teacher.id);
 
-    const teachers = await User.find({
+    const teachers = await User.findOne({
       _id:  teacherIds ,
       role: 'teacher'
     });
