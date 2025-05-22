@@ -7,9 +7,9 @@ const authController = require('../controllers/authentication')
 router
     .route('/:id')
     .get()
-    .post(authController.protectroute , mealController.createMeal)
+    .post(mealController.createMeal)
     .patch()
-    .delete(authController.protectroute , mealController.removeMeal)
+    .delete(mealController.removeMeal)
     
 
 module.exports = router;
