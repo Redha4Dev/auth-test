@@ -67,16 +67,32 @@ export const ForgotPassword = async (email) => {
 
 export const resetPassword = async (token, password, confirmPassword) => {
   try {
-    console.log('ha1');
     const response = await api.patch(`/resetPassword/${token}`, {
       password,
       confirmPassword
     });
-    console.log('ha2');
     return response.data;
   } catch (error) {
     console.error(
       "Error resetting password:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+};
+
+export const updatePassword = async (userId, currentPassword, newPassword, confirmNewPassword) => {
+  try {
+    const response = await api.patch('/updatePassword', {
+      id: userId,
+      currentPassword,
+      newPassword,
+      confirmNewPassword
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error updating password:",
       error.response?.data?.message || error.message
     );
     throw error;
@@ -144,4 +160,40 @@ export const deleteKid = async (kid) => {
     throw error;
   }
 };
+export const getAllMessages = async (id) => {
+  try {
+    const response = await api.get(`/chat/${id}`);
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
 
+export const SendMessage = async (sender, recevier, message) => {
+  try {
+    const response = await api.post(`/chat/${recevier}`, { message , _id : sender});
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+export const getMessage = async (id) => {
+  try {
+    const response = await api.get(`/chat/message/${id}`);
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}

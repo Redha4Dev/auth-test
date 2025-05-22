@@ -17,6 +17,9 @@ import Scheduling from "./Pages/Scheduling";
 import Meals from "./Pages/Meals";
 import KidProfile from "./Pages/Users/KidProfile";
 import ParentProfile from "./Pages/Users/ParentProfile";
+import Inbox from "./Pages/Inbox";
+import Mail from "./Pages/Mail";
+import Settings from "./Pages/Settings";
 
 function App() {
 
@@ -43,11 +46,12 @@ function App() {
       <Routes>
         <Route element={<LandingPage />} path="/LandingPage" />
         <Route element={<Login />} path="/Login" />
+          <Route element={<Settings />} path="/settings"  />
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
         <Route element={<ResetPassword />} path="/ResetPassword/:token" />
+        <Route element={<Home />} path="/" />
         <Route element={<ProtectedRouters />}>
-          <Route element={<Home />} path="/" />
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
           <Route element={<Kids />} path="Users/Kids" />
@@ -56,6 +60,8 @@ function App() {
           <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
           <Route element={<Scheduling />} path="/Scheduling" />
           <Route element={<Meals />} path="/Meals" />
+          <Route element={<Inbox/>} path="/Inbox" />
+          <Route element={<Mail/>} path="/Inbox/:id"/>
 
         </Route>
       </Routes>

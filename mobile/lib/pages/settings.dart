@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kidergarten/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Common widgets
 class LogoWidget extends StatelessWidget {
@@ -289,12 +291,12 @@ class _SettingsPageState extends State<SettingsPage> {
   bool notificationsEnabled = false;
   bool isEditProfileExpanded = false;
   bool isChangePasswordExpanded = false;
-  
+
   // Controllers for edit profile
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  
+
   // Controllers for change password
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
@@ -319,7 +321,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             // Logo
             const Center(child: LogoWidget()),
-            
+
             // Settings Title
             const Text(
               'Settings',
@@ -328,16 +330,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Account Section
             const SectionTitle(
               title: 'Account',
               icon: Icons.person_outline,
             ),
             const Divider(height: 1),
-            
+
             // Edit Profile Section with Accordion
             NavigationItem(
               title: 'Edit profile',
@@ -351,7 +353,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
             ),
-            
+
             // Edit Profile Fields (Expanded Content)
             if (isEditProfileExpanded) ...[
               InputField(
@@ -359,20 +361,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 icon: Icons.person,
                 controller: nameController,
               ),
-              
               InputField(
                 label: 'Change Email:',
                 icon: Icons.email,
                 controller: emailController,
               ),
-              
               InputField(
                 label: 'Change Phone Number:',
                 icon: Icons.phone,
                 controller: phoneController,
               ),
             ],
-            
+
             // Change Password Section with Accordion
             NavigationItem(
               title: 'Change password',
@@ -386,7 +386,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
             ),
-            
+
             // Change Password Fields (Expanded Content)
             if (isChangePasswordExpanded) ...[
               InputField(
@@ -395,7 +395,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 isPassword: true,
                 controller: oldPasswordController,
               ),
-              
               InputField(
                 label: 'New password:',
                 icon: Icons.lock_outline,
@@ -403,16 +402,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 controller: newPasswordController,
               ),
             ],
-            
+
             const SizedBox(height: 10),
-            
+
             // Notifications Section
             const SectionTitle(
               title: 'Notifications',
               icon: Icons.notifications_none,
             ),
             const Divider(height: 1),
-            
+
             NotificationToggle(
               initialValue: notificationsEnabled,
               onChanged: (value) {
@@ -421,42 +420,50 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
             ),
-            
+
             const SizedBox(height: 10),
-            
+
             // More Section
             const SectionTitle(
               title: 'More',
               icon: Icons.menu,
             ),
             const Divider(height: 1),
-            
+
             NavigationItem(
               title: 'Language',
               onTap: () {
                 // Handle language settings
               },
             ),
-            
+
             NavigationItem(
               title: 'About us',
               onTap: () {
                 // Handle about us
               },
             ),
-            
+
             // Illustration
             const Center(child: IllustrationWidget()),
-            
+
             // Logout Button
             Center(
               child: LogoutButton(
-                onTap: () {
-                  // Handle logout
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('token');
+
+                  // Navigate to LoginPage and remove all previous routes
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false,
+                  );
                 },
               ),
             ),
-            
+
             const SizedBox(height: 20),
           ],
         ),

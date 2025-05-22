@@ -25,7 +25,7 @@ export function Reset() {
     const { token } = useParams();
     const navigate = useNavigate();
 
-    const handleReset = async (e) => {
+    const handleReset = async (e:any) => {
         e.preventDefault();
         setIsLoading(true);
         try {
@@ -48,7 +48,7 @@ export function Reset() {
         //   navigate('/login');
         } catch (error) {
           console.error(error);
-          setMessage('Something went wrong');
+        //   setMessage('Something went wrong'); need to look up later
         } finally {
             setIsLoading(false);
         }
@@ -76,8 +76,8 @@ export function Reset() {
                                 </div>
                             </div>
                             {message && <p className={`mt-4 text-sm ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
-                            <CardFooter className="flex justify-between">
-                                <Button type='submit' disabled={isLoading}> {isLoading ? 'Resetting...' : 'Reset Password'} </Button>
+                            <CardFooter className="flex justify-between p-0">
+                                <Button type='submit' disabled={isLoading} className='mt-6'> {isLoading ? 'Resetting...' : 'Reset Password'} </Button>
                             </CardFooter>
                         </form>
                     </CardContent>

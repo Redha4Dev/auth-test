@@ -22,6 +22,7 @@ export function SecondStepsPhoto() {
         src='https://lottie.host/873a174e-ad13-4cb3-b909-3ef9034ba5fc/fqRnG6Ts3m.lottie'
         loop
         autoplay
+        speed={2}
         />
     )
 }

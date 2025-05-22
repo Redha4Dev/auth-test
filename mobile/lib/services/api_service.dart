@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kidergarten/global.dart';
+import 'package:kidergarten/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  Future<void> getKidInfo(String name, String id) async {
+Future<Map<String, dynamic>?> getKidInfo(String name, String id) async {
   final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
       .replace(queryParameters: {'name': name, 'id': id});
 
@@ -15,6 +17,7 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print('👶 Kid Info: ${data['kid']}');
+      return data['kid'];
     } else {
       final error = jsonDecode(response.body);
       print('⚠️ Failed to fetch kid info: ${error['message']}');
@@ -22,8 +25,8 @@ class ApiService {
   } catch (e) {
     print('❌ Error fetching kid info: $e');
   }
+  return null;
 }
-
   Future<Map<String, dynamic>?> getUserFromToken() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -45,10 +48,21 @@ class ApiService {
       return null;
     }
   }
+  Future<void> logoutUser(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token');
+
+  // Navigate to LoginPage and remove all previous routes
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const MainApp()),
+    (route) => false,
+  );
+}
 
   Future<Map<String, dynamic>?> loginUser(String email, String password) async {
     final url = Uri.parse(
-        'http://10.0.2.2:5000/login'); // replace <your-ip> with actual IP
+        'http://10.0.2.2:5000/login');
 
     final response = await http.post(
       url,

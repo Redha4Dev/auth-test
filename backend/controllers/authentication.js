@@ -174,15 +174,12 @@ exports.forgotPassword = catchError(async (req,res,next) => {
         return next( new AppError('user not exists please signUp or LogIn to continue', 404))
     }
         //generate the reset token
-        console.log('first step');
         const token = user.createPasswordResetToken();
                 //desactivate the validator because there is no password
-        console.log('second step');
         await user.save({validateBeforeSave : false});
         //send the email to the user email
         //create the link url
-        console.log('third step');
-        const url = `http://localhost:5000/resetPassword/${token}`; // React route
+        const url = `http://localhost:5173/resetPassword/${token}`; // React route
  
         console.log('url : ', url);    
         //the message within the email
