@@ -1,28 +1,32 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:kidergarten/global.dart';
+import 'package:kidergarten/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  Future<void> getKidInfo(String name, String id) async {
-  final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
-      .replace(queryParameters: {'name': name, 'id': id});
+  Future<Map<String, dynamic>?> getKidInfo(String name, String id) async {
+    final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
+        .replace(queryParameters: {'name': name, 'id': id});
 
-  try {
-    final response = await http.get(uri);
+    try {
+      final response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print('👶 Kid Info: ${data['kid']}');
-    } else {
-      final error = jsonDecode(response.body);
-      print('⚠️ Failed to fetch kid info: ${error['message']}');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('👶 Kid Info: ${data['kid']}');
+        return data['kid'];
+      } else {
+        final error = jsonDecode(response.body);
+        print('⚠️ Failed to fetch kid info: ${error['message']}');
+      }
+    } catch (e) {
+      print('❌ Error fetching kid info: $e');
     }
-  } catch (e) {
-    print('❌ Error fetching kid info: $e');
+    return null;
   }
-}
 
   Future<Map<String, dynamic>?> getUserFromToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -46,9 +50,20 @@ class ApiService {
     }
   }
 
+  Future<void> logoutUser(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+
+    // Navigate to LoginPage and remove all previous routes
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MainApp()),
+      (route) => false,
+    );
+  }
+
   Future<Map<String, dynamic>?> loginUser(String email, String password) async {
-    final url = Uri.parse(
-        'http://10.0.2.2:5000/login'); // replace <your-ip> with actual IP
+    final url = Uri.parse('http://10.0.2.2:5000/login');
 
     final response = await http.post(
       url,
@@ -146,4 +161,52 @@ class ApiService {
       print('Error: $e');
     }
   }
+
+  Future<Map<String, dynamic>> updatePassword({
+  required String id,
+  required String currentPassword,
+  required String newPassword,
+  required String confirmNewPassword,
+}) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+
+  final url = Uri.parse('http://10.0.2.2:5000/updatePassword');
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'id': id,
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+        'confirmNewPassword': confirmNewPassword,
+      }),
+    );
+
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && responseData['status'] == 'success') {
+      return {
+        'success': true,
+        'message': responseData['message'],
+        'token': responseData['token'],
+      };
+    } else {
+      return {
+        'success': false,
+        'message': responseData['message'] ?? 'Unknown error occurred',
+      };
+    }
+  } catch (e) {
+    return {
+      'success': false,
+      'message': 'Exception: $e',
+    };
+  }
+}
 }

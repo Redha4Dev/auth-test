@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kidergarten/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kidergarten/services/api_service.dart';
 
 // Common widgets
 class LogoWidget extends StatelessWidget {
-  const LogoWidget({Key? key}) : super(key: key);
+  LogoWidget({Key? key}) : super(key: key);
 
   @override
+  final apiService = ApiService();
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 20, bottom: 10),
@@ -289,12 +293,12 @@ class _SettingsPageState extends State<SettingsPage> {
   bool notificationsEnabled = false;
   bool isEditProfileExpanded = false;
   bool isChangePasswordExpanded = false;
-  
+
   // Controllers for edit profile
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  
+
   // Controllers for change password
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
@@ -310,6 +314,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   @override
+  final apiService = ApiService();
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -318,8 +323,8 @@ class _SettingsPageState extends State<SettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Logo
-            const Center(child: LogoWidget()),
-            
+            const Center(child: Text("data")),
+
             // Settings Title
             const Text(
               'Settings',
@@ -328,16 +333,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Account Section
             const SectionTitle(
               title: 'Account',
               icon: Icons.person_outline,
             ),
             const Divider(height: 1),
-            
+
             // Edit Profile Section with Accordion
             NavigationItem(
               title: 'Edit profile',
@@ -351,7 +356,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
             ),
-            
+
             // Edit Profile Fields (Expanded Content)
             if (isEditProfileExpanded) ...[
               InputField(
@@ -359,20 +364,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 icon: Icons.person,
                 controller: nameController,
               ),
-              
               InputField(
                 label: 'Change Email:',
                 icon: Icons.email,
                 controller: emailController,
               ),
-              
               InputField(
                 label: 'Change Phone Number:',
                 icon: Icons.phone,
                 controller: phoneController,
               ),
             ],
-            
+
             // Change Password Section with Accordion
             NavigationItem(
               title: 'Change password',
@@ -386,7 +389,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
             ),
-            
+
             // Change Password Fields (Expanded Content)
             if (isChangePasswordExpanded) ...[
               InputField(
@@ -395,68 +398,92 @@ class _SettingsPageState extends State<SettingsPage> {
                 isPassword: true,
                 controller: oldPasswordController,
               ),
-              
               InputField(
                 label: 'New password:',
                 icon: Icons.lock_outline,
                 isPassword: true,
                 controller: newPasswordController,
               ),
+              const SizedBox(height: 10),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final user = await apiService.getUserFromToken();
+                    final userId = user?['id'];
+
+                    if (userId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('User ID not found. Please login again.')),
+                      );
+                      return;
+                    }
+
+                    final result = await apiService.updatePassword(
+                      id: userId,
+                      currentPassword: oldPasswordController.text,
+                      newPassword: newPasswordController.text,
+                      confirmNewPassword: newPasswordController.text,
+                    );
+
+                    if (result['success']) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('✅ ${result['message']}')),
+                      );
+
+                      // Optionally update token
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('token', result['token']);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('❌ ${result['message']}')),
+                      );
+                    }
+                  },
+                  child: const Text('Confirm Password Change'),
+                ),
+              ),
             ],
-            
+
             const SizedBox(height: 10),
-            
-            // Notifications Section
-            const SectionTitle(
-              title: 'Notifications',
-              icon: Icons.notifications_none,
-            ),
-            const Divider(height: 1),
-            
-            NotificationToggle(
-              initialValue: notificationsEnabled,
-              onChanged: (value) {
-                setState(() {
-                  notificationsEnabled = value;
-                });
-              },
-            ),
-            
+
             const SizedBox(height: 10),
-            
+
             // More Section
             const SectionTitle(
               title: 'More',
               icon: Icons.menu,
             ),
             const Divider(height: 1),
-            
-            NavigationItem(
-              title: 'Language',
-              onTap: () {
-                // Handle language settings
-              },
-            ),
-            
+
             NavigationItem(
               title: 'About us',
               onTap: () {
                 // Handle about us
               },
             ),
-            
+
             // Illustration
             const Center(child: IllustrationWidget()),
-            
+
             // Logout Button
             Center(
               child: LogoutButton(
-                onTap: () {
-                  // Handle logout
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('token');
+
+                  // Navigate to LoginPage and remove all previous routes
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false,
+                  );
                 },
               ),
             ),
-            
+
             const SizedBox(height: 20),
           ],
         ),
