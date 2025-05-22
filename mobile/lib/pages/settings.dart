@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kidergarten/services/api_service.dart';
 
 // Common widgets
 class LogoWidget extends StatelessWidget {
-  const LogoWidget({Key? key}) : super(key: key);
+  LogoWidget({Key? key}) : super(key: key);
 
   @override
+  final apiService = ApiService();
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 20, bottom: 10),
@@ -312,6 +314,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   @override
+  final apiService = ApiService();
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -320,7 +323,7 @@ class _SettingsPageState extends State<SettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Logo
-            const Center(child: LogoWidget()),
+            const Center(child: Text("data")),
 
             // Settings Title
             const Text(
@@ -400,6 +403,44 @@ class _SettingsPageState extends State<SettingsPage> {
                 icon: Icons.lock_outline,
                 isPassword: true,
                 controller: newPasswordController,
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    final userId = prefs.getString('userId');
+
+                    if (userId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('User ID not found. Please login again.')),
+                      );
+                      return;
+                    }
+
+                    final response = await apiService.updatePassword(
+                      id: userId,
+                      currentPassword: oldPasswordController.text,
+                      newPassword: newPasswordController.text,
+                      confirmNewPassword: newPasswordController.text,
+                    );
+
+                    if (response) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('✅ Password updated successfully!')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('❌ Failed to update password.')),
+                      );
+                    }
+                  },
+                  child: const Text('Confirm Password Change'),
+                ),
               ),
             ],
 
