@@ -18,7 +18,7 @@ export default function KindergartenModel() {
         frameBorder="0"
         allowFullScreen
         // mozAllowFullScreen="true"
-        webkitAllowFullScreen="true"
+        // webkitAllowFullScreen="true"
         allow="autoplay; fullscreen; xr-spatial-tracking"
         xr-spatial-tracking="true"
         execution-while-out-of-viewport="true"
