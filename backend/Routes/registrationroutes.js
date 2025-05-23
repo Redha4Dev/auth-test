@@ -35,6 +35,8 @@ router.get("/protected", authController.protectroute, (req, res) => {
 
 router.route("/getUserData").get(authController.getUserData);
 
+router.route("/updateUserData").patch(authController.updateUserData);
+
 router.get("/logout", authController.logout);
 
 
