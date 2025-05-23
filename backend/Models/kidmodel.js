@@ -18,7 +18,7 @@ const kidschema = mongoose.Schema({
         //required : [true, 'Please enter your school']
     },
     age: {
-        type : String,
+        type : Date,
         max: [4,'your son age is not valid'],
         required: [true, 'enter your sons age']
     },
