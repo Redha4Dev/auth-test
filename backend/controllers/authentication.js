@@ -11,7 +11,37 @@ const AppError = require('../utils/apperror.js');
 //signUp authentication
 exports.signUp = catchError (async (req,res, next) => {
   const newUser = await User.create(req.body)
-      
+  
+  if(newUser.role === 'parent'){
+    const school = await User.findOne( { role : 'admin',name : req.body.school});
+               
+  if (!school) {
+      return res.status(404).send({ message: 'School not found' });
+  } 
+  //to see if the parent exists in the school list
+  if (!school.parents.includes(newUser.name)) {
+    school.parents.push({
+      name: newUser.name,
+      id: newUser._id,
+    })
+    await school.save();
+  }
+  }else if (newUser.role === 'teacher') {
+    const school = await User.findOne({ role : 'admin', name : req.body.school});
+                   
+    if (!school) {
+      return res.status(404).send({ message: 'School not found' });
+    }
+    
+    //to see if the teacher exists in the school list
+    if (!school.teachers.includes(newUser.name)) {
+      school.teachers.push({
+        name: newUser.name,
+        id: newUser._id,
+      })
+      await school.save();
+    }
+  }
   //create the token for the user
   const token = jwt.sign({id : newUser._id ,  name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         

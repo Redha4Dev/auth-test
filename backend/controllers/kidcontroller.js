@@ -248,26 +248,28 @@ exports.displaySchoolKidList = catchError(async (req, res, next) => {
 });
 
 exports.getKidsGraph = catchError(async (req,res,next)=>{
-    const gender = res.body.gender;
+    const gen = res.body.gender;
     const kidslist = await Kid.aggregate([
-        {
-        $match: {
-            gender: gender
-        },
-        $group:{
-            _id: "$age",
-            kidlist: { $sum: 1 }
-        }
-        },
-        {
-        $project: {
-            _id: 0,
-        }
-        }
-    ])
+ [
+  {
+    $match: {
+      gender: gen,// filter,
+      age: { $gte: 3, $lte: 5 }
+    }
+  },
+  {
+    $group: {
+      _id: "$age",         // Group by age value
+      count: { $sum: 1 }   // Count number of boys in each age
+    }
+  }
+]
+
+])
+console.log(kidslist);
 
     res.status(200).send({
         status: 'success',
-        message
+        kidslist
     })
 })
