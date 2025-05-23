@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom"
 export default function FeaturesBenefits() {
+    const navigate = useNavigate();
     return(
         <>
             <h1 className="text-[hsl(262.1,83.3%,57.8%)] text-3xl font-semibold">
@@ -62,7 +64,7 @@ export default function FeaturesBenefits() {
             <h1 className="font-bold">
             {" "}
             Ready to Transform Communication in Your Kindergarten?{" "}
-            <span className="text-violet-600"> Try It for Free Today! </span>{" "}
+            <span className="text-violet-600 cursor-pointer" onClick={()=> navigate('/SignUp')}> Try It for Free Today! </span>{" "}
             </h1>
         </>
     )
