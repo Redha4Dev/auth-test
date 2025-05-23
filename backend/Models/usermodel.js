@@ -95,6 +95,10 @@ const Userschema =  mongoose.Schema ({
         default : false
     },
 
+    school: {
+        type : String,
+        required : [true, 'Please enter your school name'],
+    },
     teachers: [{ 
         type :Array,
         _id : false,
@@ -114,7 +118,7 @@ const Userschema =  mongoose.Schema ({
     qualifications: {
         type: String,
     },
-    code: Number,
+    // code: Number,
 
     notifyMe : String
 }
@@ -129,6 +133,9 @@ Userschema.pre('save', async function (req,res,next) {
     //check if the user cahnged the password
     if (!this.isModified('password')) {
         return next
+    }
+    if(this.role == 'admin'){
+        this.school = undefined
     }
     if (this.role != 'admin') {
         this.teachers = undefined

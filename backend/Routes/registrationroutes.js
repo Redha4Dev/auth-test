@@ -14,6 +14,15 @@ router
   })
   .post(authController.logIn);
 
+router
+  .route("/loginAsAdmin")
+  .get((req, res) => {
+    console.log("test");
+
+    res.sendFile(path.join(__dirname, "../../frontend/src/Pages/Login.tsx"));
+  })
+  .post(authController.logInAsAdmin);
+
 //signUp routes
 
 router
