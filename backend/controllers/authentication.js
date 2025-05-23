@@ -49,7 +49,6 @@ exports.verificationCode = catchError (async (req,res,next) =>{
         
         //generate and save L code
         const code = user.createVerificationCode();
-        console.log(code);
         
         //disabable validation before save
         await user.save({validateBeforeSave : false})
@@ -312,3 +311,39 @@ exports.logout = catchError(async (req, res, next) => {
     next(error);
   }
 }); 
+
+exports.updateUserData = catchError(async (req, res) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(401).json({ message: 'Not logged in!' });
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  const allowedUpdates = {
+    name: req.body.name,
+    email: req.body.email,
+    address: req.body.address,
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(
+    decoded.id,
+    { $set: allowedUpdates },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const userData = {
+    name: updatedUser.name,
+    email: updatedUser.email,
+    address: updatedUser.address,
+  };
+
+  res.status(200).json({
+    status: 'success',
+    userData
+  });
+});
