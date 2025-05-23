@@ -408,8 +408,8 @@ class _SettingsPageState extends State<SettingsPage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    final userId = prefs.getString('userId');
+                    final user = await apiService.getUserFromToken();
+                    final userId = user?['id'];
 
                     if (userId == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -420,22 +420,24 @@ class _SettingsPageState extends State<SettingsPage> {
                       return;
                     }
 
-                    final response = await apiService.updatePassword(
+                    final result = await apiService.updatePassword(
                       id: userId,
                       currentPassword: oldPasswordController.text,
                       newPassword: newPasswordController.text,
                       confirmNewPassword: newPasswordController.text,
                     );
 
-                    if (response) {
+                    if (result['success']) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('✅ Password updated successfully!')),
+                        SnackBar(content: Text('✅ ${result['message']}')),
                       );
+
+                      // Optionally update token
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('token', result['token']);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('❌ Failed to update password.')),
+                        SnackBar(content: Text('❌ ${result['message']}')),
                       );
                     }
                   },
@@ -446,22 +448,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
             const SizedBox(height: 10),
 
-            // Notifications Section
-            const SectionTitle(
-              title: 'Notifications',
-              icon: Icons.notifications_none,
-            ),
-            const Divider(height: 1),
-
-            NotificationToggle(
-              initialValue: notificationsEnabled,
-              onChanged: (value) {
-                setState(() {
-                  notificationsEnabled = value;
-                });
-              },
-            ),
-
             const SizedBox(height: 10),
 
             // More Section
@@ -470,13 +456,6 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: Icons.menu,
             ),
             const Divider(height: 1),
-
-            NavigationItem(
-              title: 'Language',
-              onTap: () {
-                // Handle language settings
-              },
-            ),
 
             NavigationItem(
               title: 'About us',

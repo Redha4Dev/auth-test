@@ -83,7 +83,7 @@ export const resetPassword = async (token, password, confirmPassword) => {
 
 export const updatePassword = async (userId, currentPassword, newPassword, confirmNewPassword) => {
   try {
-    const response = await api.patch('/updatePassword', {
+    const response = await api.patch('/settings', {
       id: userId,
       currentPassword,
       newPassword,
