@@ -44,12 +44,15 @@ exports.verificationCode = catchError (async (req,res,next) =>{
   //generate and save the code
   const code = user.createVerificationCode();
         
-  //disabable validation before save
-  await user.save({validateBeforeSave : false})
+        //disabable validation before save
+        await user.save({validateBeforeSave : false})
+        //send the email to the user email
+        //create the url
+    
+      const url = `http://localhost:5173/verify/${code}`
 
   //send the email to the user email
   //1- create the url   
-  const url = `${req.protocol}://${req.get('host')}/api/v1/users/verify/${code}`
 
   //2- create the message
   const message = `Your verification code is ${code} please follow this link ${url} to verify your account`
@@ -342,7 +345,11 @@ exports.logout = catchError(async (req, res, next) => {
 }); 
 
 exports.updateUserData = catchError(async (req, res) => {
-  const token = req.cookies.jwt;
+  
+  
+    const token = req.cookies.jwt;
+
+
   if (!token) {
     return res.status(401).json({ message: 'Not logged in!' });
   }
@@ -354,6 +361,11 @@ exports.updateUserData = catchError(async (req, res) => {
     email: req.body.email,
     address: req.body.address,
   };
+  
+  const existingUser = await User.findOne({ email: req.body.email });
+  if (existingUser && existingUser._id.toString() !== decoded.id) {
+  return res.status(400).json({ message: 'Email already in use by another user' });
+  }
 
   const updatedUser = await User.findByIdAndUpdate(
     decoded.id,
@@ -375,4 +387,40 @@ exports.updateUserData = catchError(async (req, res) => {
     status: 'success',
     userData
   });
+});
+
+
+exports.validateVerificationCode = catchError(async (req, res, next) => {
+
+  const code  = req.params.id;
+  
+  if (!code) {
+    return next(new AppError('Verification code is required', 400));
+  }
+
+
+  
+  const verificationCode = crypto.createHash('sha256').update(code).digest('hex');
+
+  const user = await User.findOne({
+    verificationCode,
+    verified : false
+  });
+
+ 
+  
+  if (!user) {
+    return next(new AppError('Invalid or expired verification code', 400));
+  }
+
+  user.verified = true;
+  user.verificationCode = undefined;
+  
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).send({
+    status: 'success',
+    user
+  });
+
 });

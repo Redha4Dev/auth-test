@@ -15,22 +15,22 @@ const Userschema =  mongoose.Schema ({
         required :[true , 'please enter youe email'],
         unique : true,
         lowercase: true,
-        validate: {
-            //to validate the email
-            validator: async function(email) {
-                //to see if the email exists in the db already default true
-              const user = await this.constructor.findOne({ email });
-              if(user) {
-                //check if the existing email is the same as the one written
-                if(this.id === user.id) {
-                  return true;
-                }
-                return false;
-              }
-              return true;
-            },
-            message: 'The specified email address is already exists.'
-          },
+        // validate: {
+        //     //to validate the email
+        //     validator: async function(email) {
+        //         //to see if the email exists in the db already default true
+        //       const user = await this.constructor.findOne({ email });
+        //       if(user) {
+        //         //check if the existing email is the same as the one written
+        //         if(this.id === user.id) {
+        //           return true;
+        //         }
+        //         return false;
+        //       }
+        //       return true;
+        //     },
+        //     message: 'The specified email address is already exists.' }
+          
         
     },
     phone: {
@@ -89,6 +89,12 @@ const Userschema =  mongoose.Schema ({
     passwordResetToken: String,
     passwordResetExpires: Date,
     verificationCode : String,
+
+    verified : {
+        type : Boolean,
+        default : false
+    },
+
     school: {
         type : String,
         required : [true, 'Please enter your school name'],
