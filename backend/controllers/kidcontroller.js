@@ -203,7 +203,7 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
             { $set : updateData },
             {new : true}
             )
-        kid.save
+        kid.save()
         res.status(200).send({
             message : 'updated',
             kid

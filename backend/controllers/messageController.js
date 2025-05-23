@@ -1,5 +1,6 @@
 const Message = require('../Models/messagemodel');
 const catchError = require('../utils/catchError');
+const AppError = require('../utils/apperror');
 const User = require('../Models/usermodel')
 
 
@@ -84,3 +85,17 @@ exports.getMessageDetails = catchError(async (req, res, next) => {
         name : user.name
       }
     )})
+
+
+
+exports.deleteMessage = catchError(async (req, res, next) => {
+  const { id } = req.params;
+
+  const message = await Message.findById(id);
+  if (!message) {
+    return next(new AppError('Message not found', 404));
+  }
+  
+  await Message.findByIdAndDelete(id);
+  res.status(204).json({ status: 'success' });
+});
