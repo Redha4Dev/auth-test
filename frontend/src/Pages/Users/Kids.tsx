@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { getKids, addKid, getKid, ListKids, deleteKid } from "@/Services/api";
-import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState, useMemo } from "react";
+import { getKids, addKid, deleteKid } from "@/Services/api";
+import { getCurrentUser } from "@/Services/authService";
 import {
   SidebarInset,
   SidebarProvider,
@@ -39,7 +39,6 @@ import { Label } from "@/components/ui/label";
 import {
   ChevronLeft,
   ChevronRight,
-  Copy,
   MoreVertical,
   Plus,
 } from "lucide-react";
@@ -51,23 +50,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { getCurrentUser } from "@/Services/authService";
-
-const childrenData = Array.from({ length: 50 }, (_, i) => ({
-  id: `${i + 1}`,
-  name: `Child ${i + 1}`,
-  age: Math.floor(Math.random() * 4) + 3, // Random age between 3-6
-  class: `Class ${String.fromCharCode(65 + (i % 3))}`, // Class A, B, C
-  status: ["Active", "Inactive", "Pending"][i % 3], // Cycle statuses
-}));
 
 function Kids() {
   const [username, setUsername] = useState("");
-  const [id, setId] = useState("");
+  const [userId, setUserId] = useState("");
   const [childs, setChilds] = useState([]);
   const [kids, setKids] = useState({
     name: "",
-    code: "",
+    code: "67890",
     parent: "",
     id: "",
     school: "ESI",
@@ -79,82 +69,88 @@ function Kids() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 10;
-  const handleGetUser = async () => {
-      try {
-        const reponse = await getCurrentUser();
-        console.log(reponse);
-        setUsername(reponse.name);
-        setId(reponse._id);
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
   useEffect(() => {
-      handleGetUser();
-      setKids(prev => ({
-        ...prev,
-        parent: username,
-        id: id,
-      }));
+    const fetchUser = async () => {
+      try {
+        const response = await getCurrentUser();
+        setUsername(response.name);
+        setUserId(response._id);
+        setKids((prev) => ({
+          ...prev,
+          parent: response.name,
+          id: response._id,
+        }));
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
   }, []);
 
   useEffect(() => {
-    if (id) { // Only call when ID is available
-      HandleListKids();
+    if (userId) {
+      handleListKids();
     }
-  }, [id]);
-  
-  const filteredChildren = childs.filter(
-    (child) =>
-      child.name?.toLowerCase().includes(search.toLowerCase()) ||
-      child.class?.toLowerCase().includes(search.toLowerCase())
-  );
-  
+  }, [userId]);
+
+  const handleListKids = async () => {
+    try {
+      const res = await getKids(username, userId);
+      setChilds(res.kids);
+    } catch (error) {
+      console.error("Error fetching kids:", error);
+    }
+  };
+
+  const handleAddKid = async () => {
+    if (!kids.name || !kids.gender) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      await addKid(kids);
+      await handleListKids(); // refresh list
+    } catch (error) {
+      console.error("Error adding kid:", error);
+    }
+  };
+
+  const handleRemoveKid = async (kid) => {
+    try {
+      await deleteKid(kid);
+      setChilds((prev) => prev.filter((c) => c.id !== kid.id));
+    } catch (error) {
+      console.error("Error deleting kid:", error);
+    }
+  };
+
+  const filteredChildren = useMemo(() => {
+    return childs.filter(
+      (child) =>
+        child.name?.toLowerCase().includes(search.toLowerCase()) ||
+        child.class?.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search, childs]);
+
   const totalPages = Math.ceil(filteredChildren.length / pageSize);
   const displayedChildren = filteredChildren.slice(
     (page - 1) * pageSize,
     page * pageSize
   );
-  
-
-  const HandleListKids = async () => {
-    try {
-      const newkids = await getKids(username, id);
-      console.log(newkids.kids);
-      setChilds(newkids.kids);
-      console.log(newkids.kids);
-    } catch (error) {
-      console.error("Error fetching kids:", error);
-    }
-  };
-  const AddKid = async () => {
-    try {
-      await addKid(kids);
-    } catch (error) {
-      console.log("Error adding kid", error);
-    }
-  };
-  const handleRemoveKid = async (kid) => {
-    try {
-      await deleteKid(kid);
-    } catch (error) {
-      console.log("Error deleting kid", error);
-    }
-  }
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-16 items-center gap-2">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
         </header>
         <div className="p-4 bg-white mx-4 rounded-lg shadow">
-          {/* Header with Search */}
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Children List</h2>
             <div className="flex items-center gap-2">
@@ -180,9 +176,9 @@ function Kids() {
                          }}
                       />
                       <Input
-                        placeholder="Code"
+                        placeholder="Parent Name"
                          onChange={(e) => {
-                           setKids({ ...kids, code: e.target.value });
+                           setKids({ ...kids, parent: e.target.value });
                          }}
                       />
                     </div>
@@ -200,7 +196,9 @@ function Kids() {
                           <SelectItem value="Girl">Girl</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Input placeholder="Birth Date" type="date" />
+                      <Input placeholder="Age" type="number" onChange={(e) => {
+                           setKids({ ...kids, age: e.target.value });
+                         }} />
                     </div>
                   </div>
                   <DialogFooter className="sm:justify-start">
@@ -209,7 +207,7 @@ function Kids() {
                         Close
                       </Button>
                     </DialogClose>
-                    <Button type="submit" onClick={AddKid}>
+                    <Button type="submit" onClick={handleAddKid}>
                       Add Kid
                     </Button>
                   </DialogFooter>
@@ -224,7 +222,6 @@ function Kids() {
             </div>
           </div>
 
-          {/* Table */}
           <Table>
             <TableHeader>
               <TableRow>
@@ -265,10 +262,13 @@ function Kids() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            
-                          >
-                            <Link className="w-full" to={`/Users/Kids/${child.id}/${child.name}`}>View</Link>
+                          <DropdownMenuItem>
+                            <Link
+                              className="w-full"
+                              to={`/Users/Kids/${child.id}/${child.name}`}
+                            >
+                              View
+                            </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => alert(`Editing ${child.name}`)}
@@ -295,12 +295,12 @@ function Kids() {
             </TableBody>
           </Table>
 
-          {/* Pagination Controls */}
+          {/* Pagination */}
           <div className="flex justify-end gap-4 items-center mt-4">
             <Button
               variant="outline"
               disabled={page === 1}
-              onClick={() => setPage(page - 1)}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             >
               <ChevronLeft />
             </Button>
@@ -310,7 +310,7 @@ function Kids() {
             <Button
               variant="outline"
               disabled={page === totalPages}
-              onClick={() => setPage(page + 1)}
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
             >
               <ChevronRight />
             </Button>

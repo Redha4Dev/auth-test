@@ -177,7 +177,7 @@ Userschema.methods.createPasswordResetToken = function (){
 Userschema.methods.createVerificationCode =  function () {  
     //create verification code
     const code = Math.floor(10000 + Math.random() * 900000).toString();
-    console.log(code);
+    
     //save hashed code in his field
     this.verificationCode = crypto.createHash('sha256').update(code).digest('hex');
 

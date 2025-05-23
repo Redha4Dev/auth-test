@@ -103,8 +103,6 @@ function Step1() {
               <SelectContent>
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
-                <SelectItem value="Bird">Bird</SelectItem>
-                <SelectItem value="Mouad">Mouad</SelectItem>
               </SelectContent>
             </Select>
           </div>
