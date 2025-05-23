@@ -38,7 +38,6 @@ import { Switch } from "@/components/ui/switch";
 function Settings() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [role, setRole] = useState("");
   const [adress, setAdress] = useState("");
   const [isLoading , setIsLoading] = useState(false);
@@ -55,7 +54,6 @@ function Settings() {
       setUsername(response.name);
       setEmail(response.email);
       setRole(response.role);
-      setPhoneNumber(response.phone || "No phone");
       setAdress(response.adress || "No adress");
       setUserID(response._id);
     } catch (error) {
@@ -142,10 +140,6 @@ function Settings() {
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="role">Role</Label>
