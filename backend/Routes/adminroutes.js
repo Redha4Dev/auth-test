@@ -114,7 +114,7 @@ router
     .delete()
 
     router
-    .route('/kid/teachers')
+    .route('/ListTeachers')
     .get(teacherController.displayTeachers)
     .post()
     .patch()

@@ -24,6 +24,9 @@ router
   .post(authController.signUp);
 
 router.route("/verify").post(authController.verificationCode);
+router.route("/verify/:id").post(authController.validateVerificationCode);
+
+
 router.route("/forgotPassword").post(authController.forgotPassword);
 router.route("/settings").patch(authController.updatePassword);
 router.route("/resetPassword/:token").patch(authController.resetPassword);
