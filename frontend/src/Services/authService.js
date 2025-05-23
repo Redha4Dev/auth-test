@@ -50,6 +50,19 @@ export const getCurrentUser = async () => {
   }
 };
 
+// Update Authenticated User info
+export const updateUserData = async (userData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/updateUserData`, userData, {
+      withCredentials: true,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // export const fetchUserData = () => {
 //   try {
 //     // this to get the user info but the "/user" not ready now

@@ -8,6 +8,7 @@ import {
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { getCurrentUser } from "@/Services/authService";
+import { updateUserData } from "@/Services/authService";
 import {
   Card,
   CardContent,
@@ -41,11 +42,13 @@ function Settings() {
   const [role, setRole] = useState("");
   const [adress, setAdress] = useState("");
   const [isLoading , setIsLoading] = useState(false);
+  const [isUpdatingAccount , setIsUpdatingAccount] = useState(false);
   const [userID, setUserID] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changePasswordResponseMessage, setChangePasswordResponseMessage] = useState("");
+  const [updateAccountMessage, setUpdateAccountMessage] = useState("");
   
   const handleGetUser = async () => {
     try {
@@ -60,6 +63,27 @@ function Settings() {
       console.log(error);
     }
   };
+
+
+  const handleUpdateAccount = async (e: any) => {
+    e.preventDefault();
+    setIsUpdatingAccount(true);
+    setUpdateAccountMessage("");
+    
+    try {
+      const updateData = { name: username, email: email, address: adress };
+      
+      const response = await updateUserData(updateData);
+      setUpdateAccountMessage("Account updated successfully!");
+      await handleGetUser();
+    } catch (error:any) {
+      console.log(error);
+      setUpdateAccountMessage(error.message || "Failed to update account");
+    } finally {
+      setIsUpdatingAccount(false);
+    }
+  };
+
 
   const handleUpdatePassword = async (e:any) => {
             if (!userID) {
@@ -133,6 +157,12 @@ function Settings() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                {updateAccountMessage && (
+                                            <div className={`p-3 rounded ${updateAccountMessage.includes('successfully') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                            {updateAccountMessage}
+                                            </div>
+                                         )
+                }
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input id="name" value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -147,12 +177,14 @@ function Settings() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="adress">Adress</Label>
-                    <Input id="adress" value={adress} disabled />
+                    <Input id="adress" value={adress} onChange={(e) => setAdress(e.target.value)} />
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button variant="outline">Cancel</Button>
-                  <Button>Save Changes</Button>
+                  <Button variant="outline" onClick={handleGetUser}>Cancel</Button>
+                  <Button onClick={handleUpdateAccount} disabled={isUpdatingAccount}>
+                    {isUpdatingAccount ? "Saving..." : "Save Changes"}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
