@@ -40,6 +40,11 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
+
+    --color-yellow: #F7DC6F;
+    --color-green: #34C759;
+    --color-blue: #2196F3;
+
   }
 
   .dark {
@@ -153,4 +158,10 @@
     transform: translateY(0);
     }
   }
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 20ch; /* 20 characters */
 }

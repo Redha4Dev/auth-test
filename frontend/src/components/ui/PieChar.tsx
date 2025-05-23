@@ -46,15 +46,13 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Piechart({ chartData, title }) {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+  const totalVisitors = chartData.reduce((total, item) => total + item.visitors, 0);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>{title}</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>January - may 2025</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer

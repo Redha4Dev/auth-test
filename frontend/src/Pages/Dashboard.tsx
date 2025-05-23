@@ -33,6 +33,9 @@ function Dashboard() {
   const [UsersNumber, setUsersNumber] = useState(0); // Update with actual value if available
   const [messages, setMessages] = useState([]);
   const [dailyMessages, setDailyMessages] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalTeachers, setTotalTeachers] = useState(0);
+  const [totalParents, setTotalParents] = useState(0);
 
   const { user } = useAuth();
 
@@ -52,6 +55,9 @@ function Dashboard() {
       setUsername(response.name);
       setId(response._id);
       setKidsNumber(response.kids?.length || 0);
+      setTotalParents(response.parents.length || 0);
+      setTotalTeachers(response.teachers.length || 0);
+      setTotalUsers(response.kids.length + response.teachers.length + response.parents.length || 0);
     } catch (error) {
       console.error("Error fetching user:", error);
     }
@@ -92,7 +98,7 @@ function Dashboard() {
   }, [messages]);
 
   const generalData = [
-    { title: "Total Users", value: UsersNumber, icon: <User />, color: "green" },
+    { title: "Total Users", value: totalUsers, icon: <User />, color: "green" },
     { title: "Total Kids", value: kidsNumber, icon: <ToyBrick />, color: "blue" },
     { title: "Daily Messages", value: dailyMessages, icon: <Mail />, color: "red" },
   ];
@@ -104,11 +110,9 @@ function Dashboard() {
   };
 
   const PiechartData = [
-    { browser: "Intact", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "Attention-Deficit", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "Eating Disorders", visitors: 287, fill: "var(--color-firefox)" },
-    { browser: "ASD", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "Depression", visitors: 190, fill: "var(--color-other)" },
+    { browser: "Teachers", visitors: totalTeachers, fill: "var(--color-yellow)" },
+    { browser: "Parents", visitors: totalParents, fill: "var(--color-green)" },
+    { browser: "Kids", visitors: kidsNumber, fill: "var(--color-blue)" },
   ];
 
   const chartData = [
@@ -166,7 +170,7 @@ function Dashboard() {
                   </div>
 
                   <div className="md:col-span-2 col-span-5">
-                    <Piechart chartData={PiechartData} title="Kids Status" />
+                    <Piechart chartData={PiechartData} title="School Users" />
                   </div>
 
                   <div className="col-span-5 p-4 shadow-lg rounded-xl bg-white w-full">
