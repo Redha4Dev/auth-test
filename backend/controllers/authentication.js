@@ -390,6 +390,8 @@ exports.updateUserData = catchError(async (req, res) => {
 });
 
 
+
+
 exports.validateVerificationCode = catchError(async (req, res, next) => {
 
   const code  = req.params.id;
