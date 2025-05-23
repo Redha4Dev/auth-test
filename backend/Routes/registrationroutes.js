@@ -14,6 +14,15 @@ router
   })
   .post(authController.logIn);
 
+router
+  .route("/loginAsAdmin")
+  .get((req, res) => {
+    console.log("test");
+
+    res.sendFile(path.join(__dirname, "../../frontend/src/Pages/Login.tsx"));
+  })
+  .post(authController.logInAsAdmin);
+
 //signUp routes
 
 router
@@ -24,6 +33,9 @@ router
   .post(authController.signUp);
 
 router.route("/verify").post(authController.verificationCode);
+router.route("/verify/:id").post(authController.validateVerificationCode);
+
+
 router.route("/forgotPassword").post(authController.forgotPassword);
 router.route("/settings").patch(authController.updatePassword);
 router.route("/resetPassword/:token").patch(authController.resetPassword);
