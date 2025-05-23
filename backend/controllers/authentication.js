@@ -227,135 +227,118 @@ exports.forgotPassword = catchError(async (req,res,next) => {
   //1- create the link url
   const url = `http://localhost:5173/resetPassword/${token}`; // React route
  
-      //the message within the email
-      const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
-      //send the email
-      await email ({
-          email : user.email,
-          subject : 'your password reset link (valide for 10 min)',
-          message
-      })
-      res.status(200).json({
-          message : 'token sent'
-      })       
-      next()
+  //2- the message within the email
+  const message = `forgot your password please follow this link ${url}. \n ignore the message if you didnt`
+
+  //3- send the email
+  await email ({
+    email : user.email,
+    subject : 'your password reset link (valide for 10 min)',
+    message
+  })
+  res.status(200).json({
+    message : 'token sent'
+  })       
+  next()
 })
 
 //reset the password
-
 exports.resetPassword = catchError (async (req,res,next) => {
-    //get the user based on the token sent
-    //hash the token 
-    const hashToken = crypto.createHash('sha256')
-    .update(req.params.token)
-    .digest('hex');
+  //get the user based on the token sent
+  //hash the token 
+  const hashToken = crypto.createHash('sha256')
+  .update(req.params.token)
+  .digest('hex');
     
+  const user = await User.findOne({
+    passwordResetToken: hashToken,
+    passwordResetExpires: { $gt: Date.now() } 
+  });
 
-    console.log(hashToken)
-    
-    console.log('here')
+  if (!user) {
+    return next( new AppError('user not exists please signUp or LogIn to continue', 404));
+  }
+  //set the new password
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
 
-    const user = await User.findOne({
-      passwordResetToken: hashToken,
-      passwordResetExpires: { $gt: Date.now() } 
-    });
+  //delete the token and the expiration date
+  user.passwordResetExpires = undefined;
+  user.passwordResetToken = undefined;
+  user.passwordChangedAt = Date.now();
 
+  //save the user to validate the password
+  await user.save();
 
-    if (!user) {
-        return next( new AppError('user not exists please signUp or LogIn to continue', 404));
-    }
-        //set the new password
-        user.password = req.body.password;
-        user.confirmPassword = req.body.confirmPassword;
-        //delete the token and the expiration date
-
-        user.passwordResetExpires = undefined;
-        user.passwordResetToken = undefined;
-        user.passwordChangedAt = Date.now();
-        //save the user to validate the password
-        await user.save();
-
-        // login the user and send the new token
-        const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET, { expiresIn : process.env.JWT_EXPIRES_IN});
-        res.status(200).json({
-            message : 'password changed successfully',
-            token
-        })
+  // login the user and send the new token
+  const token = jwt.sign({id : user._id , role : user.role}, process.env.JWT_SECRET, { expiresIn : process.env.JWT_EXPIRES_IN});
+  res.status(200).json({
+    message : 'password changed successfully',
+    token
+  })
 })
-
-
-
 
 exports.updatePassword = catchError(async (req,res,next) => {
 
-    const userId = req.body.id; 
+  const userId = req.body.id; 
 
-    const { currentPassword, newPassword, confirmNewPassword } = req.body;
+  const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
-    const user = await User.findById(userId).select('+password');
-    console.log(user.name)
-    if (!user) {
-      return next ( new AppError('user not found', 404))
-    }
+  const user = await User.findById(userId).select('+password');
+  if (!user) {
+    return next ( new AppError('user not found', 404))
+  }
 
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!isMatch) {
-      return res.status(404).json({ message: 'Current password is incorrect' });
-    }
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) {
+    return next(new AppError('current password is incorrect', 401));
+  }
 
-    if (newPassword !== confirmNewPassword) {
-      return res.status(400).json({ message: 'Passwords do not match' });
-    }
+  if (newPassword !== confirmNewPassword) {
+    return next(new AppError('new password and confirm password do not match', 400));
+  }
 
-    user.password = newPassword;
-    await user.save();
+  user.password = newPassword;
+  await user.save();
 
-    const token = jwt.sign(
-      { id: user._id }, 
-      process.env.JWT_SECRET, 
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
+  const token = jwt.sign(
+    { id: user._id }, 
+    process.env.JWT_SECRET, 
+     { expiresIn: process.env.JWT_EXPIRES_IN }
+ );
 
-    res.status(200).json({
-      status: 'success',
-      token,    
-      message: 'Password updated successfully'
-    });
+  res.status(200).json({
+    status: 'success',
+    token,    
+    message: 'Password updated successfully'
+  });
 })
 
-
-
 exports.getUserData = catchError(async (req, res) => {
-  
-    
-    const token = req.cookies.jwt;
-    
-    if (!token) {
-      return res.status(401).json({ message: 'Authentication required' });
-    }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const token = req.cookies.jwt;
     
-    const user = await User.findOne({
-        id : decoded.userId,
-        name : decoded.name});
-    
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+  if (!token) {
+    return next(new AppError('Not logged in!', 401));
+  }
 
-    res.status(200).send(user);
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-  
+  const user = await User.findOne({
+    id : decoded.userId,
+    name : decoded.name
+  });
+    
+  if (!user) {
+    return next(new AppError('User not found', 404));
+  }
+
+    res.status(200).send(user);    
 });
 
 exports.logout = catchError(async (req, res, next) => {
-  try {
     res.clearCookie('jwt', { httpOnly: true, secure: true });
     res.status(200).send({ message: 'Logged out successfully' });
-  } catch (error) {
-    next(error);
-  }
 }); 
 
 exports.updateUserData = catchError(async (req, res) => {

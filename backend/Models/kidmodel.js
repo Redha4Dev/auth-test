@@ -19,7 +19,8 @@ const kidschema = mongoose.Schema({
     },
     age: {
         type : Date,
-        max: [4,'your son age is not valid'],
+        min: [3, 'your son age is not valid'],
+        max: [5,'your son age is not valid'],
         required: [true, 'enter your sons age']
     },
     gender :{
@@ -29,7 +30,10 @@ const kidschema = mongoose.Schema({
     },
     code: String,
     
-    medicalStatus : String,
+    medicalStatus : {
+        type : Array,
+        default: []
+    },
 
     marks: {
     Islamic : { type: Number, min: 0, max: 10 },
