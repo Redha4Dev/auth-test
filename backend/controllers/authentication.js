@@ -323,9 +323,7 @@ exports.updateUserData = catchError(async (req, res) => {
   const allowedUpdates = {
     name: req.body.name,
     email: req.body.email,
-    phone: req.body.phone,
     address: req.body.address,
-    gender: req.body.gender
   };
 
   const updatedUser = await User.findByIdAndUpdate(
@@ -341,9 +339,7 @@ exports.updateUserData = catchError(async (req, res) => {
   const userData = {
     name: updatedUser.name,
     email: updatedUser.email,
-    phone: updatedUser.phone,
     address: updatedUser.address,
-    gender: updatedUser.gender
   };
 
   res.status(200).json({
