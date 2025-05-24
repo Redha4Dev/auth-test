@@ -24,8 +24,7 @@ const sendEmail = async (emailOptions) => {
       to: emailOptions.email,
       subject: emailOptions.subject || 'No Subject',
       text: emailOptions.text || '',
-      html: emailOptions.html || '', 
-      attachments: emailOptions.attachments || [] 
+  
 };
 
     // Send email
