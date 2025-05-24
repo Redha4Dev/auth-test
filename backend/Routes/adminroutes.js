@@ -42,6 +42,11 @@ router
     .patch()
     .delete()
 
+router
+    .route('/chartData')
+    .get(kidControllers.getKidsGraph) 
+    
+
 
 router 
     .route('/admin/manage-teachers')
@@ -154,7 +159,7 @@ router
         }
       });
 
-
+router
 
 
     module.exports = router

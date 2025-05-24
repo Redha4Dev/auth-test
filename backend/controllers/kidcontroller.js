@@ -248,7 +248,7 @@ exports.displaySchoolKidList = catchError(async (req, res, next) => {
 });
 
 exports.getKidsGraph = catchError(async (req,res,next)=>{
-    const gen = res.body.gender;
+    const gen = req.body.gender;
     const kidslist = await Kid.aggregate([
  [
   {
