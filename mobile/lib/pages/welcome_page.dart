@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/components/myButton.dart';
 import 'package:kidergarten/pages/login_page.dart';
 import 'package:kidergarten/pages/signup_page.dart';
+import 'package:kidergarten/components/my_button.dart';
+
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});

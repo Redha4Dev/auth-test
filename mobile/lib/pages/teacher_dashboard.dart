@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/components/studentCard.dart';
+import 'package:kidergarten/components/student_card.dart';
 import 'package:kidergarten/components/timetable.dart';
 import 'package:kidergarten/global.dart';
 import 'package:kidergarten/services/api_service.dart';
