@@ -3,11 +3,8 @@ const mealController = require("../controllers/mealcontroller");
 const router = express.Router();
 
 router
-  .route("/:id")
-  .get()
-  .patch()
-  .delete(mealController.removeMeal);
-router
+    .route('/:id')
+    .get(mealController.getMeal)
     .post(mealController.createMeal)
 
 module.exports = router;

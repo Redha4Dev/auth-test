@@ -27,13 +27,29 @@ exports.createMeal = catchError(async (req, res, next) => {
 });
 
 exports.removeMeal = catchError(async (req, res, next) => {
-  const meal = await Meal.findByIdAndDelete(req.params.id);
+    const meal = await Meal.findByIdAndDelete(req.params.id);
+  
+    if (!meal) {
+      return next(new AppError('No meal found with that ID', 404));
+    }
+  
+    res.status(204).send({
+      status: 'success',
+    });
+  });
+
+
+exports.getMeal = catchError(async (req, res, next) => {
+  const meal = await Meal.findById(req.params.id)
+    
 
   if (!meal) {
-    return next(new AppError("No meal found with that ID", 404));
+    return next(new AppError('Meal not found', 404));
   }
 
-  res.status(204).send({
-    status: "success",
+  res.status(200).json({
+    status: 'success',
+    meal
+    
   });
 });
