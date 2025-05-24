@@ -21,12 +21,9 @@ import Inbox from "./Pages/Inbox";
 import Mail from "./Pages/Mail";
 import Settings from "./Pages/Settings";
 import Teachers from "./Pages/Users/Teachers";
-<<<<<<< HEAD
 import EditKidPage from "./Pages/editKidPage";
 import EmailVerification from "./Pages/emailVerif";
-=======
 import TeacherProfile from "./Pages/Users/TeacherProfile";
->>>>>>> dd8f0c89cba939ae61c691af502ef7140a91829e
 
 function App() {
 
@@ -68,7 +65,6 @@ function App() {
           <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
           <Route element={<Teachers/>} path="Users/Teachers" />
           <Route element={<TeacherProfile/>} path="Users/Teachers/:id/:name" />
-          <Route element={<Scheduling />} path="/Scheduling" />
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />
           <Route element={<Mail/>} path="/Inbox/:id"/>

@@ -23,37 +23,28 @@ function Inbox() {
     const [recever, setRecever] = useState("");
     const [message, setMessage] = useState("");
 
-    const handleGetUser = async () => {
-        try {
-          const reponse = await getCurrentUser();
-          console.log(reponse);
-          setUsername(reponse.id);
-          console.log(username)
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    
-      useEffect(() => {
-        handleGetUser();
-      }, []);
-    const handleGetAllMessages = async () => {
-            try {
-                const response = await getAllMessages(username);
-                console.log("✅ getAllMessages response:", response);
-                setMessages(response.messages.reverse());
-            }
-            catch (error) {
-                console.error(
-                    "Error fetching messages:",
-                    error.response?.data?.message || error.message
-                );
-                throw error;
-            }
-        }
-        useEffect(() => {
-            handleGetAllMessages();
-        }, [username])
+    useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const user = await getCurrentUser();
+      setUsername(user._id);
+      const response = await getAllMessages(user._id);
+      console.log("✅ getAllMessages response:", response);
+      setMessages(response.messages.reverse());
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  fetchData();
+  console.log(username)
+}, []);
+useEffect(() => {
+  if (username) {
+    console.log("Updated username:", username);
+  }
+}, [username]);
+
+
     const handleSendMessage = async () => {
         try {
             const response = await SendMessage(username, recever, message);
@@ -102,7 +93,6 @@ function Inbox() {
                     <TableHeader>
                     <TableRow>
                           <TableHead className="w-[100px]">From</TableHead>
-                          <TableHead>To</TableHead>
                           <TableHead className="w-full">Subject</TableHead>
                           <TableHead className="text-right">
                             Date
@@ -113,7 +103,6 @@ function Inbox() {
                         {messages.map((message) => (
                             <TableRow className='cursor-pointer bg-white' onClick={() => navigate(`/Inbox/${message._id}`)} key={message._id}>
                                 <TableCell>{message.sender.name}</TableCell>
-                                <TableCell>{message.receiver.name}</TableCell>
                                 <TableCell className='text-gray-500 truncate'>{message.message}</TableCell>
                                 <TableCell className="text-right">{message.sentAt.substring(0, 10)}</TableCell>
                             </TableRow>
