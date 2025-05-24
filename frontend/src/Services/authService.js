@@ -18,7 +18,7 @@ export const signUpAdmin = async (userData) => {
 // Login function
 export const logIn = async (credentials) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials);
+    const response = await axios.post(`${API_URL}/loginAsAdmin`, credentials);
     console.log(response.data.data.user);
     return response.data;
   } catch (error) {
