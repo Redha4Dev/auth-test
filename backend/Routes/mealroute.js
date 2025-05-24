@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/:id')
-    .get()
+    .get(mealController.getMeal)
     .post(mealController.createMeal)
     .patch()
     .delete(mealController.removeMeal)

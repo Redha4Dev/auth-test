@@ -38,3 +38,19 @@ exports.removeMeal = catchError(async (req, res, next) => {
       status: 'success',
     });
   });
+
+
+exports.getMeal = catchError(async (req, res, next) => {
+  const meal = await Meal.findById(req.params.id)
+    
+
+  if (!meal) {
+    return next(new AppError('Meal not found', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    meal
+    
+  });
+});

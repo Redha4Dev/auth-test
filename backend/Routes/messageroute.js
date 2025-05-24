@@ -5,7 +5,7 @@ const authController = require('../controllers/authentication')
 
 router
     .route('/:id')
-    .get(authController.protectroute , messageController.getAllMessages)
+    .get(messageController.getAllMessages)
     .post(authController.protectroute ,messageController.sendMessage)
     .patch()
     .delete()
