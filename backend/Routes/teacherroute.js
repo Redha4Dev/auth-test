@@ -3,15 +3,8 @@ const authController = require('../controllers/authentication');
 const teacherController = require('../controllers/teachercontrollers');
 const kidcontroller = require('../controllers/kidcontroller');
 
-
-
 //start the route
 const router = express.Router()
-
-// router
-//     .route('/SignUpAdmin')
-//     .get()
-//     .post()
 
 router
     .route('/teacher/dashboard')

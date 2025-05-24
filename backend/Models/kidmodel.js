@@ -10,9 +10,8 @@ const kidschema = mongoose.Schema({
         required : [true, 'Please enter your parent name']
     },
     teacher: {
-        type : Array,
+        type : String,
         required : [true, 'Please enter your teacher name'],
-        default: []
     },
     school: {
         type : String,
@@ -31,7 +30,6 @@ const kidschema = mongoose.Schema({
     },
     classRoom:{
         type: Number,
-        required: [true, 'Please enter you class please'],
         min: [1, 'class must be greater than 0'],
     },
     

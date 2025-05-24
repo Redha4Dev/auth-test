@@ -78,12 +78,14 @@ const Userschema =  mongoose.Schema ({
             message : 'passwords are not the same'
         }
     },
-    kids: [{
-        name: String,
-        id: String,
-        _id : false,
+    kids: {
+        type:[{
+            name: String,
+            id: String,
+            _id : false
+        }],
         default: [],
-    }],
+    },
     adress : String,
     passwordchangedAt: Date,
     passwordResetToken: String,
@@ -107,14 +109,13 @@ const Userschema =  mongoose.Schema ({
         }],
         default: []
     },
-    parents: [{ 
-        name: String,
-        id: String,
-        default : [],
-        _id : false
-    }],
-    subject: {
-        type: String,
+    parents: { 
+        type: [{
+            name: String,
+            id: String,
+            _id: false
+        }],
+        default: []
     },
     experience: {
         type: Number,

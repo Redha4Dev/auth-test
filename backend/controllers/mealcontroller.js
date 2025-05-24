@@ -15,7 +15,7 @@ exports.createMeal = catchError(async (req, res, next) => {
     daysOfWeek,
     startTime,
     endTime,
-    startRecur: startRecur || '2024-01-01', 
+    startRecur: startRecur || '2025-01-01', 
 
   });
 

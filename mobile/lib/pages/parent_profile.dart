@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/components/studentCard.dart';
+import 'package:kidergarten/components/student_card.dart';
 
 class HomePage extends StatelessWidget {
   final Color primaryColor = Color(0xFF5F3DC4);
@@ -43,7 +43,6 @@ class HomePage extends StatelessWidget {
                     children: [
                       CircleAvatar(
                           radius: 40, backgroundColor: Colors.grey[300]),
-                      
                       SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -48,7 +48,9 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : errorMessage != null
-                ? Center(child: Text(errorMessage!, style: const TextStyle(color: Colors.red)))
+                ? Center(
+                    child: Text(errorMessage!,
+                        style: const TextStyle(color: Colors.red)))
                 : Column(
                     children: [
                       _buildProfileSection(),
@@ -68,7 +70,8 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
     final familyName = childData?['family_name'] ?? 'Unknown';
     final className = childData?['class'] ?? 'N/A';
 
-    print("✅ Loaded Profile - Name: $name, Family: $familyName, Class: $className");
+    print(
+        "✅ Loaded Profile - Name: $name, Family: $familyName, Class: $className");
 
     return Container(
       color: Colors.lightBlue,
@@ -83,9 +86,12 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Name : $name", style: const TextStyle(color: Colors.white, fontSize: 16)),
-              Text("Family Name : $familyName", style: const TextStyle(color: Colors.white, fontSize: 16)),
-              Text("Class : $className", style: const TextStyle(color: Colors.white, fontSize: 16)),
+              Text("Name : $name",
+                  style: const TextStyle(color: Colors.white, fontSize: 16)),
+              Text("Family Name : $familyName",
+                  style: const TextStyle(color: Colors.white, fontSize: 16)),
+              Text("Class : $className",
+                  style: const TextStyle(color: Colors.white, fontSize: 16)),
             ],
           )
         ],
@@ -103,7 +109,9 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
               padding: const EdgeInsets.symmetric(vertical: 10),
               color: Colors.lightBlueAccent,
               child: const Center(
-                child: Text("Child Notes", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                child: Text("Child Notes",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
               ),
             ),
           ),
@@ -112,7 +120,8 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
               padding: const EdgeInsets.symmetric(vertical: 10),
               color: Colors.blue[100],
               child: const Center(
-                child: Text("Add Remarks", style: TextStyle(color: Colors.black)),
+                child:
+                    Text("Add Remarks", style: TextStyle(color: Colors.black)),
               ),
             ),
           ),
@@ -138,15 +147,23 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
           const TableRow(
             decoration: BoxDecoration(color: Colors.lightBlueAccent),
             children: [
-              Padding(padding: EdgeInsets.all(8), child: Text("Subject", style: TextStyle(fontWeight: FontWeight.bold))),
-              Padding(padding: EdgeInsets.all(8), child: Text("Note", style: TextStyle(fontWeight: FontWeight.bold))),
+              Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text("Subject",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text("Note",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
             ],
           ),
           for (int i = 0; i < subjects.length; i++)
             TableRow(
               children: [
-                Padding(padding: const EdgeInsets.all(8), child: Text(subjects[i])),
-                Padding(padding: const EdgeInsets.all(8), child: Text(values[i])),
+                Padding(
+                    padding: const EdgeInsets.all(8), child: Text(subjects[i])),
+                Padding(
+                    padding: const EdgeInsets.all(8), child: Text(values[i])),
               ],
             ),
         ],
@@ -176,7 +193,8 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
       child: Row(
         children: const [
           Expanded(
-            child: Text("Important", style: TextStyle(color: Colors.white, fontSize: 16)),
+            child: Text("Important",
+                style: TextStyle(color: Colors.white, fontSize: 16)),
           ),
           Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18),
         ],
@@ -191,7 +209,8 @@ class _ChildNotesPageState extends State<ChildNotesPage> {
       unselectedItemColor: Colors.white70,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ""),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
       ],
     );
