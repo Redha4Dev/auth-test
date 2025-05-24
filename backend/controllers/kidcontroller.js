@@ -273,3 +273,28 @@ console.log(kidslist);
         kidslist
     })
 })
+
+
+exports.updateMarks = catchError(async (req, res, next) => {
+  const kidId = req.params.id;
+  const { marks } = req.body;
+
+  const updatedKid = await Kid.findByIdAndUpdate(
+    kidId,
+    { $set: { marks } },  
+    { new: true }  
+  );
+
+  if (!updatedKid) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'No kid found with that ID'
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    kid: updatedKid
+    
+  });
+});

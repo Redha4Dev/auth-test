@@ -126,6 +126,13 @@ router
     .delete()
 
     router
+    .route('/kid/:id')
+    .get()
+    .post()
+    .patch(kidControllers.updateMarks)
+    .delete()
+
+    router
     .route('/teachers')
     .get(teacherController.getTeacher)
     .post()

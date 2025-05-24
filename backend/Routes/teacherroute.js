@@ -55,5 +55,12 @@ router
     .patch()
     .delete()
 
-    
+router
+    .route('/kid/:id')
+    .get()
+    .post()
+    .patch(kidcontroller.updateMarks)
+    .delete()
+
+
     module.exports = router
