@@ -34,6 +34,8 @@ function Teachers() {
         const response = await getCurrentUser();
         setUsername(response.name);
         setUserId(response._id);
+        console.log(response);
+        setList(response.teachers);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -41,21 +43,7 @@ function Teachers() {
     fetchUser();
   }, []);
 
-  const handleGetTeachers = async () => {
-    try {
-      const response = await getAllTeacher(username, userId);
-      console.log(response);
-      setList(response.teachers);
-    } catch (error) {
-      console.error('Error fetching teachers:', error);
-    }
-  };
 
-  useEffect(() => {
-    if (username && userId) {
-      handleGetTeachers();
-    }
-  }, [username, userId]);
 
   return (
     <SidebarProvider>
@@ -89,7 +77,7 @@ function Teachers() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              { list ? ( list.map((teacher) => (
+              { list.length > 0 ? ( list.map((teacher) => (
                 <TableRow key={teacher.id}>
                   <TableCell>{teacher.id}</TableCell>
                   <TableCell>{teacher.name}</TableCell>

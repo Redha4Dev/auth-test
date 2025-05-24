@@ -160,6 +160,26 @@ export const deleteKid = async (kid) => {
     throw error;
   }
 };
+export const deleteParent = async (parent) => {
+  try {
+    const response = await api.delete('/parent', {
+      data: {
+        name: parent.name,
+        id: parent.id
+      }
+    });
+
+    return response.data;
+    } catch (error) {
+      console.error(
+        "Error deleting parent:",
+        error.response?.data?.message || error.message
+      );
+      throw error;
+    }
+
+
+}
 export const getAllMessages = async (id) => {
   try {
     const response = await api.get(`/chat/${id}`);
@@ -212,4 +232,15 @@ export const getAllTeacher = async (name, id) => {
     throw error;
   }
 }
-
+export const removeMessage = async (id) => {
+  try {
+    const response = await api.delete(`/chat/message/${id}`);
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}

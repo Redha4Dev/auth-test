@@ -1,16 +1,19 @@
 import { AppSidebar } from '@/components/app-sidebar'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { getAllMessages, getMessage } from '@/Services/api'
+import { getAllMessages, getMessage, removeMessage } from '@/Services/api'
 import { set } from 'date-fns'
+import { Trash } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 function Mail() {
     const {id} = useParams();
     const [sender, setSender] = useState('User');
     const [message, setMessage] = useState('');
     const [ID, setID] = useState('');
+    const navigate = useNavigate();
 
     const handleGetMessage = async () => {
         try {
@@ -34,6 +37,21 @@ function Mail() {
         handleGetMessage();
     },[])
 
+    const handleRemove = async () => {
+        try {
+            const response = await removeMessage(id);
+            console.log("✅ removeMessage response:", response);
+            navigate('/inbox')
+        }
+        catch (error) {
+            console.error(
+                "Error fetching messages:",
+                error.response?.data?.message || error.message
+            );
+            throw error;
+        }
+    }
+
   return (
     <SidebarProvider>
         <AppSidebar/>
@@ -54,6 +72,10 @@ function Mail() {
                     <p className='text-gray-400 text-xs font-normal'>
                             {ID}
                     </p>
+                    <Button onClick={handleRemove} variant={'destructive'}  className='text-xs text-red-100 ml-auto font-normal'>
+                        delete
+                        <Trash/>
+                        </Button>
                 </div>
                 <div className='my-4 w-full min-h-24 p-4 rounded-xl mx-2 bg-white'>
                     <p>
