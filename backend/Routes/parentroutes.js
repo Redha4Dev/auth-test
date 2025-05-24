@@ -9,9 +9,6 @@ const router = express.Router();
 router
   .route("/profile")
   .get(parentControllers.getParentInfo)
-  .post(parentControllers.getParentInfo)
-  .patch()
-  .delete();
 
 
 router
@@ -19,7 +16,7 @@ router
   .get()
   .post()
   .patch()
-  .delete(parentControllers.removeParent);
+  // .delete(parentControllers.removeParent);
 
 
 router  
@@ -28,21 +25,7 @@ router
   .post(kidControllers.addKid)
   .patch(kidControllers.updatekidinfo)
   .delete(kidControllers.removeKid);
-
-router
-  .route("/parent/kids/one")
-  // .get(kidControllers.getKid)
-  .post();
-// .patch(kidControllers.updatekidinfo)
-// .delete(kidControllers.removeKid , authController.restrictTo(['admin' ]))
-
-router.route("/parent/chats").get().post().patch().delete();
-
-router.route("/parent/announcement").get();
-// .post()
-// .patch()
-// .delete()
-
+  
 router.route("/parent/settings").get().post().patch().delete();
 
 module.exports = router;

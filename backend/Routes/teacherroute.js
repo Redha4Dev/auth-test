@@ -3,15 +3,8 @@ const authController = require('../controllers/authentication');
 const teacherController = require('../controllers/teachercontrollers');
 const kidcontroller = require('../controllers/kidcontroller');
 
-
-
 //start the route
 const router = express.Router()
-
-// router
-//     .route('/SignUpAdmin')
-//     .get()
-//     .post()
 
 router
     .route('/teacher/dashboard')
@@ -34,7 +27,7 @@ router
     // .patch()
     .delete(kidcontroller.removeKid)
 
- router 
+router 
     .route('/')
     .get()
     .post()
@@ -48,7 +41,7 @@ router
     // .patch()
     // .delete()
 
-    router 
+router 
     .route('/teacher/settings')
     .get()
     .post()

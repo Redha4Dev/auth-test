@@ -15,5 +15,5 @@ router
     .get(authController.protectroute , messageController.getMessageDetails)
     .post()
     .patch()
-    .delete(authController.protectroute , messageController.deleteMessage)
+    .delete( messageController.deleteMessage, authController.protectroute )
 module.exports = router  
