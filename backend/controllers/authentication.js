@@ -271,7 +271,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
   await email ({
     email : user.email,
     subject : 'your password reset link (valide for 10 min)',
-    message
+    text : message
   })
   res.status(200).json({
     message : 'token sent'
