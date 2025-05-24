@@ -63,6 +63,18 @@ export const updateUserData = async (userData) => {
   }
 };
 
+export const updateKidInfos = async (kidData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/updateKidData` , kidData , {
+      withCredentials : true,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // export const fetchUserData = () => {
 //   try {
 //     // this to get the user info but the "/user" not ready now

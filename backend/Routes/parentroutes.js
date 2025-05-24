@@ -13,7 +13,16 @@ router
   .patch()
   .delete();
 
+
 router
+  .route("/")
+  .get()
+  .post()
+  .patch()
+  .delete(parentControllers.removeParent);
+
+
+router  
   .route("/kids")
   .get(kidControllers.getAllKids)
   .post(kidControllers.addKid)
