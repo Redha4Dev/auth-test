@@ -42,6 +42,11 @@ router
     .patch()
     .delete()
 
+router
+    .route('/chartData')
+    .get(kidControllers.getKidsGraph) 
+    
+
 
 router 
     .route('/admin/manage-teachers')
@@ -131,7 +136,7 @@ router
     router.post('/send-email', async (req, res) => {
         try {
           // Extract from request body
-          const { email, subject, text, html, attachments } = req.body;
+          const { email, subject, text, } = req.body;
           
           // Validate required fields
           if (!email || !text) {
@@ -143,8 +148,6 @@ router
             email,
             subject,
             text,
-            html,
-            attachments
           });
       
           res.status(200).json({ message: 'Email sent successfully' });
@@ -154,7 +157,7 @@ router
         }
       });
 
-
+router
 
 
     module.exports = router

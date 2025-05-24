@@ -54,19 +54,16 @@ exports.getTeacher = catchError(async (req,res,next) =>{
         return next(new appError('Please enter either name or id as query parameter', 400));
     }
 
-    const searchQuery = { role: 'admin' };
+    const searchQuery = { role: 'teacher' };
     if (name) searchQuery.name = name;
     if (id) searchQuery._id = id;
 
-    const admin = await User.findOne(searchQuery);
+    const teacher = await User.findOne(searchQuery);
 
-    console.log(admin)
 
         //check if teachers exists in the list
-        const teachers = admin.teachers;
-        console.log(teachers)
     res.status(200).send({
-        teachers : teachers
+        teacher
     })
     })
 
