@@ -203,7 +203,7 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
             { $set : updateData },
             {new : true}
             )
-        kid.save
+        kid.save()
         res.status(200).send({
             message : 'updated',
             kid
@@ -247,27 +247,29 @@ exports.displaySchoolKidList = catchError(async (req, res, next) => {
     });
 });
 
-// exports.getKidsGraph = catchError(async (req,res,next)=>{
-//     const gender = res.body.gender;
-//     const kidslist = await Kid.aggregate([
-//         {
-//         $match: {
-//             gender: gender
-//         },
-//         $group:{
-//             _id: "$gender",
-//             count: { $sum: 1 }
-//         }
-//         },
-//         {
-//         $project: {
-//             _id: 0,
-//         }
-//         }
-//     ])
+exports.getKidsGraph = catchError(async (req,res,next)=>{
+    const gen = req.body.gender;
+    const kidslist = await Kid.aggregate([
+ [
+  {
+    $match: {
+      gender: gen,// filter,
+      age: { $gte: 3, $lte: 5 }
+    }
+  },
+  {
+    $group: {
+      _id: "$age",         // Group by age value
+      count: { $sum: 1 }   // Count number of boys in each age
+    }
+  }
+]
 
-//     res.status(200).send({
-//         status: 'success',
-//         message
-//     })
-// })
+])
+console.log(kidslist);
+
+    res.status(200).send({
+        status: 'success',
+        kidslist
+    })
+})

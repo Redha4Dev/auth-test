@@ -20,6 +20,7 @@ import ParentProfile from "./Pages/Users/ParentProfile";
 import Inbox from "./Pages/Inbox";
 import Mail from "./Pages/Mail";
 import Settings from "./Pages/Settings";
+import Teachers from "./Pages/Users/Teachers";
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
           <Route element={<KidProfile />} path="Users/Kids/:id/:name" />
           <Route element={<Parents />} path="Users/Parents" />
           <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
+          <Route element={<Teachers/>} path="Users/Teachers" />
           <Route element={<Scheduling />} path="/Scheduling" />
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />

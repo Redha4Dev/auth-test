@@ -197,3 +197,19 @@ export const getMessage = async (id) => {
     throw error;
   }
 }
+
+export const getAllTeacher = async (name, id) => {
+  try {
+    const response = await api.get('/admin/ListTeachers', {
+      params: { name, id }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching teacher data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+

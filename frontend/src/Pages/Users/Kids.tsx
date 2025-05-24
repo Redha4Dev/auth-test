@@ -227,9 +227,6 @@ function Kids() {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Age</TableHead>
-                <TableHead>Class</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -239,21 +236,6 @@ function Kids() {
                   <TableRow key={child.id}>
                     <TableCell>{child.id}</TableCell>
                     <TableCell>{child.name}</TableCell>
-                    <TableCell>{child.age}</TableCell>
-                    <TableCell>{child.class}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          child.status === "Active"
-                            ? "success"
-                            : child.status === "Inactive"
-                            ? "destructive"
-                            : "warning"
-                        }
-                      >
-                        {child.status}
-                      </Badge>
-                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

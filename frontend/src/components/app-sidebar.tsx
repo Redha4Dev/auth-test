@@ -70,7 +70,6 @@ export function AppSidebar() {
   const getFilteredRoutes = () => {
     const allRoutes = [
       { name: "Dashboard", icon: <Home />, roles: ["admin", "teacher", "parent"] },
-      { name: "Analyse", icon: <ChartBar />, roles: ["admin", "teacher"] },
       { name: "Meals", icon: <CookieIcon />, roles: ["admin", "parent", "teacher"] },
       { name: "Scheduling", icon: <Calendar />, roles: ["admin", "parent", "teacher"] },
       { name: "Inbox", icon: <Inbox />, roles: ["admin", "parent", "teacher"] },
@@ -114,6 +113,16 @@ export function AppSidebar() {
                 <li>
                   <Button
                     variant="ghost"
+                    onClick={() => navigate("/Users/Teachers")}
+                    className="flex items-center w-full justify-start"
+                  >
+                    <User2 />
+                    <span className="ml-2">Teacher</span>
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    variant="ghost"
                     onClick={() => navigate("/Users/Parents")}
                     className="flex items-center w-full justify-start"
                   >
@@ -131,6 +140,7 @@ export function AppSidebar() {
                     <span className="ml-2">Kids</span>
                   </Button>
                 </li>
+                
               </ul>
             )}
           </li>

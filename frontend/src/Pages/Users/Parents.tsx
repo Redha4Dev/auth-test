@@ -9,16 +9,40 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getParents } from '@/Services/api';
+import { getCurrentUser } from '@/Services/authService';
 import { ChevronLeft, ChevronRight, MoreVertical, Plus } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { c } from 'vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf';
 
 function Parents() {
   const [list, setList] = useState([]);
+  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
+
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const response = await getCurrentUser();
+      console.log(response);
+      console.log(response.name);
+      setUsername(response.name);
+      setUserId(response._id);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+  fetchUser();
+}, []);
+
+useEffect(() => {
+  console.log(username, userId); // This will log both updated values
+}, [username, userId]);
+
   const handleGetParents = async () => {
     try {
-      const response = await getParents('ESI', '67e865fa467eeb7c40462f0a');
+      const response = await getParents(username, userId);
       setList(response.data.parents);
       console.log(response.data.parents);
 
@@ -26,9 +50,12 @@ function Parents() {
       console.error('Error fetching parents:', error);
     }
   }
-  useEffect(() => {
+useEffect(() => {
+  if (username && userId) {
     handleGetParents();
-  }, []);
+  }
+}, [username, userId]);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -44,66 +71,9 @@ function Parents() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Children List</h2>
             <div className="flex items-center gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">
-                    Add Kid <Plus />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Add new kid</DialogTitle>
-                    <DialogDescription>
-                      Enter the details of the new kid.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex space-x-2">
-                    <div className="grid w-full grid-cols-1 md:gird-cols-2 gap-2">
-                      <Input
-                        placeholder="Name"
-                        // onChange={(e) => {
-                        //   setKids({ ...kids, name: e.target.value });
-                        // }}
-                      />
-                      <Input
-                        placeholder="Code"
-                        // onChange={(e) => {
-                        //   setKids({ ...kids, code: e.target.value });
-                        // }}
-                      />
-                    </div>
-                    <div className="grid w-full grid-cols-1 md:gird-cols-2 gap-2">
-                      <Select
-                        // onValueChange={(v) => {
-                        //   setKids({ ...kids, gender: v });
-                        // }}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Boy">Male</SelectItem>
-                          <SelectItem value="Girl">Female</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Input placeholder="Birth Date" type="date" />
-                    </div>
-                  </div>
-                  <DialogFooter className="sm:justify-start">
-                    <DialogClose asChild>
-                      <Button type="button" variant="secondary">
-                        Close
-                      </Button>
-                    </DialogClose>
-                    <Button type="submit" //onClick={AddKid}
-                    >
-                      Add Parent
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              
               <Input
-                placeholder="Search children..."
+                placeholder="Search Parents..."
                 //value={search}
                 //onChange={(e) => setSearch(e.target.value)}
                 className="w-64"

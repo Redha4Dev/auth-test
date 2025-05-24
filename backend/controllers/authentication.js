@@ -11,20 +11,54 @@ const AppError = require('../utils/apperror.js');
 //signUp authentication
 exports.signUp = catchError (async (req,res, next) => {
   const newUser = await User.create(req.body)
-      
+  
+  if(newUser.role === 'parent'){
+    const school = await User.findOne( { role : 'admin',name : req.body.school});
+               
+  if (!school) {
+      return res.status(404).send({ message: 'School not found' });
+  } 
+  //to see if the parent exists in the school list
+  if (!school.parents.includes(newUser.name)) {
+    school.parents.push({
+      name: newUser.name,
+      id: newUser._id,
+    })
+    await school.save();
+  }
+  }else if (newUser.role === 'teacher') {
+    const school = await User.findOne({ role : 'admin', name : req.body.school});
+                   
+    if (!school) {
+      return res.status(404).send({ message: 'School not found' });
+    }
+    
+    //to see if the teacher exists in the school list
+    if (!school.teachers.includes(newUser.name)) {
+      school.teachers.push({
+        name: newUser.name,
+        id: newUser._id,
+      })
+      await school.save();
+    }
+  }
   //create the token for the user
   const token = jwt.sign({id : newUser._id ,  name : newUser.name}, process.env.JWT_SECRET , {expiresIn : process.env.JWT_EXPIRES_IN})
         
   const cookieOptions = {
       expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
       httpOnly: true,
-            
+    
+      
+
   };
     
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     
   res.cookie('jwt', token, cookieOptions);
               
+
+    
   //send the response
   res.status(201).json({
       token
@@ -237,7 +271,7 @@ exports.forgotPassword = catchError(async (req,res,next) => {
   await email ({
     email : user.email,
     subject : 'your password reset link (valide for 10 min)',
-    message
+    text : message
   })
   res.status(200).json({
     message : 'token sent'
@@ -388,6 +422,8 @@ exports.updateUserData = catchError(async (req, res) => {
     userData
   });
 });
+
+
 
 
 exports.validateVerificationCode = catchError(async (req, res, next) => {

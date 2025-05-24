@@ -101,8 +101,9 @@ function Inbox() {
                 <Table>
                     <TableHeader>
                     <TableRow>
-                          <TableHead className="w-[100px]">Name</TableHead>
-                          <TableHead>Role</TableHead>
+                          <TableHead className="w-[100px]">From</TableHead>
+                          <TableHead>To</TableHead>
+                          <TableHead className="w-full">Subject</TableHead>
                           <TableHead className="text-right">
                             Date
                           </TableHead>
@@ -112,8 +113,9 @@ function Inbox() {
                         {messages.map((message) => (
                             <TableRow className='cursor-pointer bg-white' onClick={() => navigate(`/Inbox/${message._id}`)} key={message._id}>
                                 <TableCell>{message.sender.name}</TableCell>
-                                <TableCell>{message.sender.name}</TableCell>
-                                <TableCell className="text-right">{message.sentAt}</TableCell>
+                                <TableCell>{message.receiver.name}</TableCell>
+                                <TableCell className='text-gray-500 truncate'>{message.message}</TableCell>
+                                <TableCell className="text-right">{message.sentAt.substring(0, 10)}</TableCell>
                             </TableRow>
                         ))}
                         

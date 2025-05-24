@@ -33,6 +33,9 @@ function Dashboard() {
   const [UsersNumber, setUsersNumber] = useState(0); // Update with actual value if available
   const [messages, setMessages] = useState([]);
   const [dailyMessages, setDailyMessages] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalTeachers, setTotalTeachers] = useState(0);
+  const [totalParents, setTotalParents] = useState(0);
 
   const { user } = useAuth();
 
@@ -40,7 +43,7 @@ function Dashboard() {
     try {
       const response = await getKids(username, id);
       setKids(response.data);
-      setKidsNumber(response.size);
+      setKidsNumber(40);
     } catch (error) {
       console.error("Error fetching kids:", error);
     }
@@ -51,7 +54,10 @@ function Dashboard() {
       const response = await getCurrentUser();
       setUsername(response.name);
       setId(response._id);
-      setKidsNumber(response.kids?.length || 0);
+      setKidsNumber(response.kids.length || 0);
+      setTotalParents(response.parents.length || 0);
+      setTotalTeachers(response.teachers.length || 0);
+      setTotalUsers(response.kids.length + response.parents.length + response.teachers.length || 0);
     } catch (error) {
       console.error("Error fetching user:", error);
     }
@@ -92,7 +98,7 @@ function Dashboard() {
   }, [messages]);
 
   const generalData = [
-    { title: "Total Users", value: UsersNumber, icon: <User />, color: "green" },
+    { title: "Total Users", value: totalUsers, icon: <User />, color: "green" },
     { title: "Total Kids", value: kidsNumber, icon: <ToyBrick />, color: "blue" },
     { title: "Daily Messages", value: dailyMessages, icon: <Mail />, color: "red" },
   ];
@@ -104,20 +110,15 @@ function Dashboard() {
   };
 
   const PiechartData = [
-    { browser: "Intact", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "Attention-Deficit", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "Eating Disorders", visitors: 287, fill: "var(--color-firefox)" },
-    { browser: "ASD", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "Depression", visitors: 190, fill: "var(--color-other)" },
+    { browser: "Teachers", visitors: totalTeachers, fill: "var(--color-yellow)" },
+    { browser: "Parents", visitors: totalParents, fill: "var(--color-green)" },
+    { browser: "Kids", visitors: kidsNumber, fill: "var(--color-blue)" },
   ];
 
   const chartData = [
-    { grade: "1st", boys: 6, girls: 6 },
-    { grade: "2nd", boys: 7, girls: 7 },
-    { grade: "3rd", boys: 8, girls: 8 },
-    { grade: "4th", boys: 9, girls: 9 },
-    { grade: "5th", boys: 10, girls: 10 },
-    { grade: "6th", boys: 11, girls: 11 },
+    { grade: "3", boys: 7, girls: 8 },
+    { grade: "4", boys: 7, girls: 7 },
+    { grade: "5", boys: 8, girls: 8 },
   ];
 
   const chartConfig = {
@@ -134,6 +135,7 @@ function Dashboard() {
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
+              <h1 className="text-xl font-semibold">Dashboard</h1>
             </div>
           </header>
           <div className="flex flex-1 flex-col my-3 p-4 pt-0">
@@ -159,14 +161,14 @@ function Dashboard() {
                       xAxisKey="grade"
                       bars={[{ dataKey: "boys" }, { dataKey: "girls" }]}
                       title="Average Age of Kids"
-                      description="Per Grade Level"
+                      description="Per age group"
                       footerTrendText="Age trend is consistent"
-                      footerNote="Ages for boys and girls from 1st to 6th grade"
+                      footerNote="Ages for boys and girls from 3 to 6 years old"
                     />
                   </div>
 
                   <div className="md:col-span-2 col-span-5">
-                    <Piechart chartData={PiechartData} title="Kids Status" />
+                    <Piechart chartData={PiechartData} title="School Users" />
                   </div>
 
                   <div className="col-span-5 p-4 shadow-lg rounded-xl bg-white w-full">

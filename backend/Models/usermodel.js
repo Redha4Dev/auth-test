@@ -100,12 +100,14 @@ const Userschema =  mongoose.Schema ({
         required : [true, 'Please enter your school name'],
     },
     teachers: [{ 
-        type :Array,
+        name: String,
+        id: String,
         _id : false,
         default : []
     }],
     parents: [{ 
-        type :Array,
+        name: String,
+        id: String,
         default : [],
         _id : false
     }],
@@ -204,3 +206,4 @@ const User = mongoose.model('User', Userschema);
 //teacher extra fields
 
 module.exports = User
+
