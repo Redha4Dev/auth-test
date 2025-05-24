@@ -80,6 +80,13 @@ router
     .get(teacherController.displayTeachers)
 
     router
+    .route('/kid/:id')
+    .get()
+    .post()
+    .patch(kidControllers.updateMarks)
+    .delete()
+
+    router
     .route('/teacher')
     .get(teacherController.getTeacher)
 

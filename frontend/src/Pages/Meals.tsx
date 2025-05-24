@@ -6,6 +6,14 @@ import { List, Sidebar } from 'lucide-react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list'
 import React, { useEffect, useState } from 'react'
+import Pancake from "../assets/pancake.svg";
+import Omelet from "../assets/omelet.svg";
+import Wrap from "../assets/wrap.svg";
+import Muffins from "../assets/muffins.svg";
+
+import Rice from "../assets/rice.svg";
+import Smoothie from "../assets/smoothie.svg";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 function Meals() {
     
@@ -50,8 +58,71 @@ function Meals() {
     },
   ]}
 />
+  <div className='h-fit my-4 text-center p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-2xl">Pancake</CardTitle>
+        <CardDescription>Breakfast</CardDescription>
+      </CardHeader>
+      <CardContent className='flex justify-between'>
+        <img src={Pancake} alt="" />
+      </CardContent>  
+    </Card>
+    <Card>
+  <CardHeader>
+    <CardTitle className="text-2xl">Omelet</CardTitle>
+    <CardDescription>Breakfast</CardDescription>
+  </CardHeader>
+  <CardContent className='flex justify-between'>
+    <img src={Omelet} alt="Omelet" />
+  </CardContent>
+</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle className="text-2xl">Chicken Wrap</CardTitle>
+    <CardDescription>Lunch</CardDescription>
+  </CardHeader>
+  <CardContent className='flex justify-between'>
+    <img src={Wrap} alt="Chicken Wrap" />
+  </CardContent>
+</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle className="text-2xl">Mini Muffins</CardTitle>
+    <CardDescription>Breakfast Snack</CardDescription>
+  </CardHeader>
+  <CardContent className='flex justify-between'>
+    <img src={Muffins} alt="Mini Muffins" />
+  </CardContent>
+</Card>
+
+
+<Card>
+  <CardHeader>
+    <CardTitle className="text-2xl">Rice</CardTitle>
+    <CardDescription>Lunch</CardDescription>
+  </CardHeader>
+  <CardContent className='flex justify-between'>
+    <img src={Rice} alt="Veggie Rice" />
+  </CardContent>
+</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle className="text-2xl">Smoothie</CardTitle>
+    <CardDescription>Snack</CardDescription>
+  </CardHeader>
+  <CardContent className='flex justify-between'>
+    <img src={Smoothie} alt="Smoothie" />
+  </CardContent>
+</Card>
+
+  </div>
 
                 </div>
+
             </SidebarInset>
         </SidebarProvider>
   )
