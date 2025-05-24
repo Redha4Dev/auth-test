@@ -62,34 +62,6 @@ exports.getTeacher = catchError(async (req,res,next) =>{
     })
     })
 
-// exports.displayTeacherKidList = catchError(async (req, res, next) => {
-//     const { name, id } = req.query;
-
-//     if (!name || !id) {
-//         return next(new AppError('Both name and id are required as query parameters.', 400));
-//     }
-
-//     const teacher = await User.findOne({
-//         role: 'teacher',
-//         name,
-//         _id: id
-//     }); 
-
-//     if (!teacher) {
-//         return next(new AppError('Admin not found. Please check your credentials.', 404));
-//     }
-
-//     const kids = await Kid.find({ 
-//         teacher : teacher.name
-//     })
-
-
-//     res.status(200).send({
-//         status: 'success',
-//         kids
-//     });
-// });
-
 exports.displayTeachers = catchError(async (req, res, next) => {
     const { name, id } = req.query; 
   

@@ -1,7 +1,7 @@
 const express = require('express');
 const authController = require('../controllers/authentication');
 const kidControllers = require('../controllers/kidcontroller')
-const adminControllers = require('../controllers/adminControllers');
+const adminControllers = require('../controllers/admincontrollers');
 const parentControllers = require('../controllers/parentControllers');
 const sendEmail = require('../utils/email.js');
 const teacherController = require('../controllers/teachercontrollers');
@@ -27,39 +27,25 @@ router
 
 router 
     .route('/admin/manage-teachers')
-    .get()
-    .post()
-    .patch()
-    .delete()
-
+   
 router 
     .route('/admin/manage-teachers/: name')
-    .get()
-    .post()
-    .patch()
-    .delete()
+    
 
 router 
     .route('/kids')
     .get(kidControllers.getAllKids)
     .post(kidControllers.addKid)
-    .patch()
     .delete(kidControllers.removeKid)
 
  router 
     .route('/manage-kids')
     .get(kidControllers.getKid)
-    .post()
-    .patch()
     .delete(kidControllers.removeKid , authController.restrictTo(['admin', 'parent' , 'teacher']))
 
 router 
     .route('/admin/manage-classes')
-    .get()
-    .post()
-    .patch()
-    .delete()
-
+   
     router 
     .route('/admin/settings')
     .get()
@@ -94,18 +80,7 @@ router
     .get(teacherController.displayTeachers)
 
     router
-<<<<<<< HEAD
     .route('/teacher')
-=======
-    .route('/kid/:id')
-    .get()
-    .post()
-    .patch(kidControllers.updateMarks)
-    .delete()
-
-    router
-    .route('/teachers')
->>>>>>> 31659db6b107317b4a1bf92dcb3754a1078b4662
     .get(teacherController.getTeacher)
 
     router.post('/send-email', async (req, res) => {

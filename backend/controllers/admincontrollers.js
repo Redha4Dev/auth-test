@@ -25,17 +25,6 @@ exports.updateSchoolInfo = catchError(async(req,res,next) =>{
     if (!user) {
         return next( new appError('user not exists please signUp or LogIn to continue', 404))
     }
-
-    //the user will be asked to enter his password to confrim that he has the access to update the school info
-    // const {password} = req.body;
-
-    // //check if the password is correct
-    // const correct = user.correctPassword(password , user.password)
-
-    //check if the user has the access to update the school info
-    // if(user.role != 'admin' || !correct){
-    //    return next( new appError('user not exists please signUp or LogIn to continue', 404))
-    // }
         
     //get the updated data
     const updateData = req.body;
