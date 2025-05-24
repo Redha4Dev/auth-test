@@ -30,7 +30,8 @@ class ApiService {
 
   Future<Map<String, dynamic>?> getUserFromToken() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    final String? token = prefs.getString('token');
+    print('🔍 Retrieved token from SharedPreferences: $token');
 
     if (token != null && token.isNotEmpty) {
       try {
@@ -128,19 +129,31 @@ class ApiService {
     }
   }
 
-  Future<void> createUser(String name, email, password, confirmPassword, role,
-      phone, gender) async {
-    final url = Uri.parse(
-        'http://10.0.2.2:5000/signup'); // or your actual local IP if on real phone
+  Future<void> createUser({
+    required String name,
+    required String email,
+    required String phone,
+    required String role,
+    required String gender,
+    required String password,
+    required String confirmPassword,
+    required String school,
+    required List<dynamic> kids,
+    required String address,
+  }) async {
+    final url = Uri.parse('http://10.0.2.2:5000/signup');
 
     final Map<String, dynamic> userData = {
       'name': name,
       'email': email,
+      'phone': phone,
+      'role': role,
+      'gender': gender,
       'password': password,
       'confirmPassword': confirmPassword,
-      'role': role,
-      'phone': phone,
-      'gender': gender,
+      'school': school,
+      'kids': kids,
+      'address': address,
     };
 
     try {
@@ -151,11 +164,17 @@ class ApiService {
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        print('User created: ${response.body}');
-        // Optionally, show a success message or navigate to another page
+        final responseData = jsonDecode(response.body);
+        final String token = responseData['token'];
+        print('🔐 Token received: $token');
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+        print('💾 Token saved to SharedPreferences');
+
+        print('User created: \\${response.body}');
       } else {
-        print('Failed to create user: ${response.body}');
-        // Optionally, show an error message
+        print('Failed to create user: \\${response.body}');
       }
     } catch (e) {
       print('Error: $e');
@@ -163,50 +182,123 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> updatePassword({
-  required String id,
-  required String currentPassword,
-  required String newPassword,
-  required String confirmNewPassword,
-}) async {
-  final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token');
+    required String id,
+    required String currentPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
-  final url = Uri.parse('http://10.0.2.2:5000/updatePassword');
+    final url = Uri.parse('http://10.0.2.2:5000/updatePassword');
 
-  try {
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({
-        'id': id,
-        'currentPassword': currentPassword,
-        'newPassword': newPassword,
-        'confirmNewPassword': confirmNewPassword,
-      }),
-    );
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'id': id,
+          'currentPassword': currentPassword,
+          'newPassword': newPassword,
+          'confirmNewPassword': confirmNewPassword,
+        }),
+      );
 
-    final responseData = jsonDecode(response.body);
+      final responseData = jsonDecode(response.body);
 
-    if (response.statusCode == 200 && responseData['status'] == 'success') {
-      return {
-        'success': true,
-        'message': responseData['message'],
-        'token': responseData['token'],
-      };
-    } else {
+      if (response.statusCode == 200 && responseData['status'] == 'success') {
+        return {
+          'success': true,
+          'message': responseData['message'],
+          'token': responseData['token'],
+        };
+      } else {
+        return {
+          'success': false,
+          'message': responseData['message'] ?? 'Unknown error occurred',
+        };
+      }
+    } catch (e) {
       return {
         'success': false,
-        'message': responseData['message'] ?? 'Unknown error occurred',
+        'message': 'Exception: $e',
       };
     }
-  } catch (e) {
-    return {
-      'success': false,
-      'message': 'Exception: $e',
-    };
   }
-}
+
+  Future<bool> verifyUserCode({
+    required String userId,
+    required String code,
+  }) async {
+    final url = Uri.parse('http://10.0.2.2:5000/verify');
+    print('🔵 Starting verification for user: $userId');
+    print('🔵 Verification code submitted: $code');
+    print('🔵 Sending to URL: $url');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'id': userId,
+          'code': code,
+        }),
+      );
+
+      print('🔵 Response status code: ${response.statusCode}');
+      print('🔵 Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        // Check for backend-specific success indicators
+        final success = responseData['success'] ?? false;
+        print('🟢 Verification success: $success');
+        return success;
+      }
+
+      print('🔴 Verification failed with status: ${response.statusCode}');
+      return false;
+    } catch (e) {
+      print('🔥 Error during verification: $e');
+      return false;
+    }
+  }
+
+  Future<bool> getVerificationCode({
+    required String userId,
+  }) async {
+    final url = Uri.parse('http://10.0.2.2:5000/verify');
+    print('🔵 Requesting verification code for user: $userId');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'id': userId,
+        }),
+      );
+
+      print('🔵 Response status code: ${response.statusCode}');
+      print('🔵 Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        // Check for backend-specific success indicators
+        final success = responseData['success'] ?? false;
+        print('🟢 Verification code sent successfully: $success');
+        return success;
+      }
+
+      print(
+          '🔴 Failed to send verification code with status: ${response.statusCode}');
+      return false;
+    } catch (e) {
+      print('🔥 Error requesting verification code: $e');
+      return false;
+    }
+  }
 }
