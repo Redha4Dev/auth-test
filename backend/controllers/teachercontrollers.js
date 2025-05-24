@@ -6,11 +6,10 @@ const AppError = require('../utils/apperror.js');
 
 
 exports.updateMe = catchError(async (req,res,next)=>{
-    //get user based on his id
     const user = await User.findById({_id: req.body.id})
         //check if the user exists
         if (!user) {
-            return next( new appError('user not exists please signUp or LogIn to continue', 404))
+            return next( new AppError('user not exists please signUp or LogIn to continue', 404))
         }
 
         //get update data
@@ -28,21 +27,17 @@ exports.updateMe = catchError(async (req,res,next)=>{
 })
 exports.getTeacherInfo = catchError(async(req,res,next) =>{
     //get the user based on his unique id
-    const user = await User.findById({_id : req.body.id , name: req.body.name})
+    const teacher = await User.findById({_id : req.body.id , name: req.body.name, role: 'teacher'})
 
-        //check if the use exists
-        if (!user) {
-            return next( new appError('user not exists please signUp or LogIn to continue', 404))
-        }
-        const teacher = await User.findById({_id : req.body.id, role : 'teacher' , name: req.body.name})
-        if (!teacher) {
-            return next( new appError('teacher does not exists ', 404))
-        }
-
-        //send the response
-        res.status(200).json({
-            teacher
-        })
+    //check if the use exists
+    if (!teacher) {
+        return next( new AppError('user not exists please signUp or LogIn to continue', 404))
+    }
+        
+    //send the response
+    res.status(200).json({
+        teacher
+    })
         
 })
 //this function accessed by the admin only
@@ -51,7 +46,7 @@ exports.getTeacher = catchError(async (req,res,next) =>{
     const {name , id} = req.query;
 
     if (!name && !id) {
-        return next(new appError('Please enter either name or id as query parameter', 400));
+        return next(new AppError('Please enter either name or id as query parameter', 400));
     }
 
     const searchQuery = { role: 'teacher' };
@@ -67,33 +62,33 @@ exports.getTeacher = catchError(async (req,res,next) =>{
     })
     })
 
-exports.displayTeacherKidList = catchError(async (req, res, next) => {
-    const { name, id } = req.query;
+// exports.displayTeacherKidList = catchError(async (req, res, next) => {
+//     const { name, id } = req.query;
 
-    if (!name || !id) {
-        return next(new AppError('Both name and id are required as query parameters.', 400));
-    }
+//     if (!name || !id) {
+//         return next(new AppError('Both name and id are required as query parameters.', 400));
+//     }
 
-    const teacher = await User.findOne({
-        role: 'teacher',
-        name,
-        _id: id
-    }); 
+//     const teacher = await User.findOne({
+//         role: 'teacher',
+//         name,
+//         _id: id
+//     }); 
 
-    if (!teacher) {
-        return next(new AppError('Admin not found. Please check your credentials.', 404));
-    }
+//     if (!teacher) {
+//         return next(new AppError('Admin not found. Please check your credentials.', 404));
+//     }
 
-    const kids = await Kid.find({ 
-        teacher : teacher.name
-    })
+//     const kids = await Kid.find({ 
+//         teacher : teacher.name
+//     })
 
 
-    res.status(200).send({
-        status: 'success',
-        kids
-    });
-});
+//     res.status(200).send({
+//         status: 'success',
+//         kids
+//     });
+// });
 
 exports.displayTeachers = catchError(async (req, res, next) => {
     const { name, id } = req.query; 

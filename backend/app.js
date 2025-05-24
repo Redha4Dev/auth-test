@@ -52,7 +52,6 @@ app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
 
-// ✅ Proper CORS config (ONLY this one)
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true

@@ -10,29 +10,6 @@ const teacherController = require('../controllers/teachercontrollers');
 const router = express.Router()
 
 //admin routes
-// router
-//     .route('/signup')
-//     .get((req,res)=>{
-//         res.send([{
-//             name: 'John Doe',
-//             age: 25,
-//             id: 1
-//         },{
-//             name: 'Jane Doe',
-//             age: 24,
-//             id: 2
-//         },
-//         {
-//             name: 'John Smith',
-//             age: 30,
-//             id: 3
-//         },{
-//             name: 'Jane Smith',
-//             age: 29,
-//             id: 4
-//         }])
-//     })
-    // .post(authController.signUp )
 
 
 router
@@ -93,27 +70,21 @@ router
     router 
     .route('/parent')
     .get(parentControllers.getParents)
-    .post(parentControllers.addParent)
-    .patch()
-    .delete()
-
+    
     router
     .route('/school')
-    .get(kidControllers.displaySchoolKidList)
-    .post()
-    .patch()
-    .delete()
+    .get(kidControllers.getAllKids)
     
     router
     .route('/parent/kids')
-    .get(parentControllers.displayParentKidList)
+    // .get(parentControllers.displayParentKidList)
     .post()
     .patch()
     .delete()
 
     router
     .route('/teacher/kids')
-    .get(teacherController.displayTeacherKidList)
+    // .get(teacherController.displayTeacherKidList)
     .post()
     .patch()
     .delete()
@@ -121,17 +92,10 @@ router
     router
     .route('/ListTeachers')
     .get(teacherController.displayTeachers)
-    .post()
-    .patch()
-    .delete()
 
     router
-    .route('/teachers')
+    .route('/teacher')
     .get(teacherController.getTeacher)
-    .post()
-    .patch()
-    .delete()
-
 
     router.post('/send-email', async (req, res) => {
         try {
@@ -156,8 +120,5 @@ router
           res.status(500).json({ error: 'Failed to send email' });
         }
       });
-
-router
-
 
     module.exports = router
