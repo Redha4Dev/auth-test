@@ -52,7 +52,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<LandingPage />} path="/LandingPage" />
-        <Route element={<EmailVerification />} path="/Verify" />
+        <Route element={<EmailVerification />} path="/verify/:code" />
         <Route element={<Login />} path="/Login" />
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
