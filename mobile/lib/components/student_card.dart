@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class StudentCard extends StatelessWidget {
   final String name;
-  final int? age;
+  final String? age;
   final String? gender;
 
   const StudentCard({super.key, required this.name, this.age, this.gender});
