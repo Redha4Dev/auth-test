@@ -279,3 +279,18 @@ export const removeMessage = async (id) => {
     throw error;
   }
 }
+
+export const addMeal = async (meal) => {
+  try {
+    const response = await api.post(`/meals` , meal);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error adding meal:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+
+

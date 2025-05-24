@@ -28,19 +28,22 @@ exports.sendMessage = catchError(async (req, res, next) => {
 exports.getAllMessages = catchError(async (req,res,next) => {
   const userId = req.user._id;
         
-  const messages = await Message.find({
-      $or: [
-        { sender: userId },
-        { receiver: userId }
-      ]
-  })
+          const messages = await Message.find({
+          $or: [
+            { sender: userId },
+            { receiver: userId }
+          ]
+        })
+        .sort({ createdAt: -1 })
+        .populate('sender receiver', 'name email');
+      
+        res.status(200).json({
+          status: 'success',
+          messages
+          
+        });
+      });
 
-  res.status(200).send({
-    status: 'success',
-    messages          
-  });
-
-});
     
 
 
