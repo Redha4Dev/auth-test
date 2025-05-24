@@ -252,10 +252,13 @@ function Kids() {
                               View
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => alert(`Editing ${child.name}`)}
-                          >
-                            Edit
+                          <DropdownMenuItem>
+                            <Link
+                              className="w-full"
+                              to={`/Users/Kids/${child.id}/${child.name}/oo`}
+                            >
+                              Edit
+                            </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleRemoveKid(child)}
