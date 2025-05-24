@@ -16,7 +16,7 @@ exports.updateMe = catchError(async (req,res,next)=>{
         //get update data
         const updateData = req.body;
         //update data
-        await User.teacher.findOneAndUpdate(
+        await User.findOneAndUpdate(
             {_id : req.body.id},
             {$set : updateData},
             {new : true})

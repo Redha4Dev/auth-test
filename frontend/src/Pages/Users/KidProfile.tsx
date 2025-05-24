@@ -71,10 +71,6 @@ function KidProfile() {
               <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl">id:</h1>
               <p className="text-sm font-medium">{profile._id}</p>
             </div>
-            <div className="flex gap-3 w-full bg-[#a075eb4a] items rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl">Code:</h1>
-              <p className="text-sm font-medium">{profile.code}</p>
-            </div>
         </div>
       </div>
     </div>

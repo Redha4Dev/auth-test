@@ -113,6 +113,16 @@ export function AppSidebar() {
                 <li>
                   <Button
                     variant="ghost"
+                    onClick={() => navigate("/Users/Teachers")}
+                    className="flex items-center w-full justify-start"
+                  >
+                    <User2 />
+                    <span className="ml-2">Teacher</span>
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    variant="ghost"
                     onClick={() => navigate("/Users/Parents")}
                     className="flex items-center w-full justify-start"
                   >
@@ -130,6 +140,7 @@ export function AppSidebar() {
                     <span className="ml-2">Kids</span>
                   </Button>
                 </li>
+                
               </ul>
             )}
           </li>

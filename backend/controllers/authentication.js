@@ -29,18 +29,23 @@ exports.signUp = catchError (async (req,res, next) => {
   }
   }else if (newUser.role === 'teacher') {
     const school = await User.findOne({ role : 'admin', name : req.body.school});
-                   
+    console.log(1, school);
+                 
     if (!school) {
       return res.status(404).send({ message: 'School not found' });
     }
     
     //to see if the teacher exists in the school list
     if (!school.teachers.includes(newUser.name)) {
+      console.log(newUser);
+      
       school.teachers.push({
         name: newUser.name,
         id: newUser._id,
       })
+      
       await school.save();
+      console.log(33, school);
     }
   }
   //create the token for the user

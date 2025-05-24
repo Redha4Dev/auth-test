@@ -1,5 +1,6 @@
 const express = require("express");
 const authController = require("../controllers/authentication");
+const kidController = require("../controllers/kidcontroller");
 const path = require("path");
 
 const router = express.Router();
@@ -47,7 +48,7 @@ router.get("/protected", authController.protectroute, (req, res) => {
 router.route("/getUserData").get(authController.getUserData);
 
 router.route("/updateUserData").patch(authController.updateUserData);
-
+router.route("/updateKidData").patch(kidController.updatekidinfo);
 router.get("/logout", authController.logout);
 
 

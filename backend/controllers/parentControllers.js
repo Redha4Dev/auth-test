@@ -15,7 +15,7 @@ exports.updateme = catchError(async (req, res , next) =>{
         //get updated data
         const updateData = req.body;
         //update data
-        await user.findOneAndUpdate(
+        await User.findOneAndUpdate(
             { _id: req.body.id },
             { $set: updateData },
             { new: true, runvalidators: true }
