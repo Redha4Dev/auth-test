@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/pages/chatPage.dart';
+import 'package:kidergarten/pages/chat_page.dart';
 import 'package:kidergarten/pages/settings.dart';
-import 'package:kidergarten/pages/teacherDashboard.dart';
+import 'package:kidergarten/pages/teacher_dashboard.dart';
 
 class NavigationSpine extends StatefulWidget {
   const NavigationSpine({super.key});
@@ -34,10 +34,10 @@ class _NavigationSpineState extends State<NavigationSpine> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: 'Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );
   }
 }
-

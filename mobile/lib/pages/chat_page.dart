@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/components/studentCard.dart';
-import 'package:kidergarten/pages/chatDetailsPage.dart';
-
+import 'package:kidergarten/components/student_card.dart';
+import 'package:kidergarten/pages/chat_details_page.dart';
 
 class ChatPage extends StatelessWidget {
   final List<Map<String, dynamic>> students = [

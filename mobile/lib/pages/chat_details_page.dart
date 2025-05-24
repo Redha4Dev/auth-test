@@ -50,8 +50,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               itemBuilder: (context, index) {
                 final msg = _messages[_messages.length - 1 - index];
                 return Align(
-                  alignment:
-                      msg["isMe"] ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: msg["isMe"]
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     padding: const EdgeInsets.all(10),

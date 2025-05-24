@@ -15,11 +15,11 @@ exports.createMeal = catchError(async (req, res, next) => {
     daysOfWeek,
     startTime,
     endTime,
-    startRecur: startRecur || '2024-01-01', 
+    startRecur: startRecur || '2025-01-01', 
 
   });
 
-  res.status(201).json({
+  res.status(201).send({
     status: 'success',
     
       meal: newMeal
@@ -34,7 +34,7 @@ exports.removeMeal = catchError(async (req, res, next) => {
       return next(new AppError('No meal found with that ID', 404));
     }
   
-    res.status(204).json({
+    res.status(204).send({
       status: 'success',
     });
   });

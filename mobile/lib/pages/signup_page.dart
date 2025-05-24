@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kidergarten/components/myButton.dart';
+import 'package:kidergarten/components/my_button.dart';
 import 'package:kidergarten/components/textField.dart';
 import 'package:kidergarten/pages/login_page.dart';
+import 'package:kidergarten/pages/verification.dart';
 import 'package:kidergarten/services/api_service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -18,6 +19,8 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
+  final TextEditingController schoolController = TextEditingController();
 
   bool isLoading = false;
   String gender = "Male";
@@ -112,6 +115,12 @@ class _SignupPageState extends State<SignupPage> {
                                         ),
                                         const SizedBox(height: 10),
                                         myTextField(
+                                          labelText: 'School',
+                                          icon: Icons.school,
+                                          controller: schoolController,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        myTextField(
                                           isPassword: true,
                                           labelText: 'Password',
                                           icon: Icons.lock,
@@ -155,19 +164,65 @@ class _SignupPageState extends State<SignupPage> {
                                       : myOutlinedButton(
                                           text: "Submit",
                                           onTap: () async {
+                                            print("📩 Submit button tapped");
                                             setState(() => isLoading = true);
-                                            await apiService.createUser(
-                                              fullNameController.text,
-                                              emailController.text,
-                                              passwordController.text,
-                                              confirmPasswordController.text,
-                                              role,
-                                              phoneController.text,
-                                              gender,
-                                            );
-                                            setState(() => isLoading = false);
-                                          },
-                                        ),
+                                            try {
+                                              // Step 1: Call createUser (which saves token in SharedPreferences)
+                                              await apiService.createUser(
+                                                name: 'ESI',
+                                                email: 'zadrojagne@gufum.com',
+                                                phone: '02222222',
+                                                role: 'teacher',
+                                                gender: 'Male',
+                                                password: 'qwerty1',
+                                                confirmPassword: 'qwerty1',
+                                                school: 'ilyestest1234',
+                                                kids: [],
+                                                address: 'sba',
+                                              );
+
+                                              // Step 2: Extract user ID from token
+                                              final userData = await apiService
+                                                  .getUserFromToken();
+
+                                              setState(() => isLoading = false);
+
+                                              if (userData != null &&
+                                                  userData['id'] != null) {
+                                                final userId = userData['id'];
+                                                print(
+                                                    "✅ Extracted user ID from token: $userId");
+
+                                                // Step 3: Navigate to verification screen
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        VerifyCodePage(
+                                                            userId: userId),
+                                                  ),
+                                                );
+                                              } else {
+                                                print(
+                                                    "❌ Could not extract user ID from token");
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                          "Signup succeeded, but verification failed.")),
+                                                );
+                                              }
+                                            } catch (e) {
+                                              print(
+                                                  "🔥 Error during signup: $e");
+                                              setState(() => isLoading = false);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text("Error: $e")),
+                                              );
+                                            }
+                                          }),
                                   const SizedBox(height: 20),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

@@ -127,6 +127,20 @@ export const getParent = async (name, id) => {
     throw error;
   }
 }
+export const getTeacher = async (name, id) => {
+  try {
+    const response = await api.get(`/admin/teacher`, {
+      params: { name, id }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching teacher data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
 export const ListKids = async (name, id) => {
   try {
     const response = await api.get('/admin/school' , {
@@ -160,6 +174,47 @@ export const deleteKid = async (kid) => {
     throw error;
   }
 };
+export const deleteParent = async (parent) => {
+  try {
+    const response = await api.delete('/parent', {
+      data: {
+        name: parent.name,
+        id: parent.id
+      }
+    });
+
+    return response.data;
+    } catch (error) {
+      console.error(
+        "Error deleting parent:",
+        error.response?.data?.message || error.message
+      );
+      throw error;
+    }
+
+
+}
+export const deleteTeacher = async (teacher) => {
+  try {
+    const response = await api.delete('/teacher', {
+      data: {
+        name: teacher.name,
+        id: teacher.id
+      }
+    });
+
+    return response.data;
+    } catch (error) {
+      console.error(
+        "Error deleting parent:",
+        error.response?.data?.message || error.message
+      );
+      throw error;
+    }
+
+
+
+}
 export const getAllMessages = async (id) => {
   try {
     const response = await api.get(`/chat/${id}`);
@@ -212,4 +267,15 @@ export const getAllTeacher = async (name, id) => {
     throw error;
   }
 }
-
+export const removeMessage = async (id) => {
+  try {
+    const response = await api.delete(`/chat/message/${id}`);
+    return response.data;
+  } catch {
+    console.error(
+      "Error fetching messages:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
