@@ -26,14 +26,18 @@ exports.sendMessage = catchError(async (req, res, next) => {
 });
 
 exports.getAllMessages = catchError(async (req,res,next) => {
-  const userId = req.user._id;
+  
+  
+  const userId = req.params.id;
         
-  const messages = await Message.find({
+ 
+   const messages = await Message.find({
       $or: [
         { sender: userId },
         { receiver: userId }
       ]
-  })
+  }).sort({ createdAt: -1 })
+    .populate('sender receiver', 'name email');
 
   res.status(200).send({
     status: 'success',
@@ -41,7 +45,6 @@ exports.getAllMessages = catchError(async (req,res,next) => {
   });
 
 });
-    
 
 
 exports.getMessageDetails = catchError(async (req, res, next) => {
