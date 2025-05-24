@@ -99,7 +99,7 @@ router
 
     router
     .route('/school')
-    .get(kidControllers.displaySchoolKidList)
+   // .get(kidControllers.displaySchoolKidList)
     .post()
     .patch()
     .delete()
@@ -133,7 +133,7 @@ router
     .delete()
 
     router
-    .route('/teachers')
+    .route('/teacher')
     .get(teacherController.getTeacher)
     .post()
     .patch()

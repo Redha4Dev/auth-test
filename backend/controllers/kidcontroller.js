@@ -9,21 +9,17 @@ const AppError = require('../utils/apperror.js');
 
 exports.getAllKids = catchError(async (req,res,next) =>{
 
-            //getting user based on the information sent from the from the ftront-end part
             const { name, id } = req.query;
             const user = await User.findOne(
-                {name , _id: id.trim()},
+                {name , _id: id},
             )
     
-            //check if the user exists
     
             if (!user) {
                 return next( new AppError('user not exists please signUp or LogIn to continue', 404))
             }
     
-            //send back the list from the document        
             res.status(200).send({
-                size : user.kids.length,
                 kids : user.kids
             })
 })
@@ -159,7 +155,8 @@ console.log(req.body.name);
  exports.removeKid = catchError(async (req, res, next) => {
         // Find the kid
         const kid = await Kid.findOne({ name: req.body.name, _id: req.body.id });
-        console.log(req.body.name, req.body.id);
+
+
         if (!kid) {
             return next(new Error('This kid does not exist'));
         }
@@ -194,9 +191,11 @@ console.log(req.body.name);
 
 //to update kid info in the db
 exports.updatekidinfo = catchError(async (req,res,next) => {
+
+
     const updateData = req.body;
-    
-    //basiclly works waiting for other updates
+
+
         
         const kid = await Kid.findOneAndUpdate(
             { _id : req.params.id},
@@ -210,42 +209,6 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
         })
 })
 
-exports.displaySchoolKidList = catchError(async (req, res, next) => {
-    const { name, id } = req.query;
-
-    if (!name || !id) {
-        return next(new AppError('Both name and id are required as query parameters.', 400));
-    }
-
-    const admin = await User.findOne({
-        role: 'admin',
-        name,
-        _id: id
-    }); 
-
-    if (!admin) {
-        return next(new AppError('Admin not found. Please check your credentials.', 404));
-    }
-
-    const kids = await Kid.find({ 
-        school: admin.name 
-    })
-
-    if (kids.length === 0) {
-        return res.status(200).send({
-            status: 'success',
-            message: 'No kids found for this school',
-            kids: {
-                kids: []
-            }
-        });
-    }
-
-    res.status(200).send({
-        status: 'success',
-        kids
-    });
-});
 
 exports.getKidsGraph = catchError(async (req,res,next)=>{
     const gen = req.body.gender;
@@ -286,13 +249,13 @@ exports.updateMarks = catchError(async (req, res, next) => {
   );
 
   if (!updatedKid) {
-    return res.status(404).json({
+    return res.status(404).send({
       status: 'fail',
       message: 'No kid found with that ID'
     });
   }
 
-  res.status(200).json({
+  res.status(200).send({
     status: 'success',
     kid: updatedKid
     

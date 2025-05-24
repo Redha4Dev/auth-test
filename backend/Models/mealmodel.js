@@ -32,9 +32,14 @@ const eventSchema = new mongoose.Schema({
   startRecur: {
     type: Date,
     required: [true, 'Specify when the recurrence starts'],
-    default: Date.now
+    default: () => {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      return `${day}-${month}-${year}`;
   }
-});
+  }})
 
 const Meal = mongoose.model('Meal', eventSchema);
 

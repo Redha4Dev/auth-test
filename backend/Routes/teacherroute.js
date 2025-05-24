@@ -34,7 +34,7 @@ router
     // .patch()
     .delete(kidcontroller.removeKid)
 
- router 
+router 
     .route('/')
     .get()
     .post()
@@ -48,7 +48,7 @@ router
     // .patch()
     // .delete()
 
-    router 
+router 
     .route('/teacher/settings')
     .get()
     .post()

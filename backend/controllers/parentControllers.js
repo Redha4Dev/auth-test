@@ -144,7 +144,7 @@ exports.displayParentKidList = catchError(async (req, res, next) => {
 exports.removeParent= catchError(async (req, res, next) => {
         // Find the kid
         const parent = await User.findOne({ name: req.body.name, _id: req.body.id });
-        console.log(req.body.name, req.body.id);
+
         if (!parent) {
             return next(new Error('This parent does not exist'));
         }
