@@ -121,3 +121,37 @@ exports.displayTeachers = catchError(async (req, res, next) => {
       
     });
   });
+
+
+exports.removeTeacher= catchError(async (req, res, next) => {
+
+
+        const teacher = await User.findOne({ name: req.body.name, _id: req.body.id });
+
+        if (!teacher) {
+            return next(new Error('This teacher does not exist'));
+        }
+        
+        const updatedSchool = await User.findOneAndUpdate(
+            { 
+                role: 'admin', 
+                name: teacher.school 
+            },
+            { 
+                $pull: { 
+                    teachers: { 
+                    id: teacher._id 
+            } 
+            } 
+        },
+  );
+
+
+        
+
+        await User.findByIdAndDelete(teacher._id);
+
+        res.status(200).send({
+            message: 'teacher deleted successfully',
+        });
+})

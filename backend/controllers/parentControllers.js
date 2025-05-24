@@ -140,3 +140,37 @@ exports.displayParentKidList = catchError(async (req, res, next) => {
         kids
     });
 });
+
+exports.removeParent= catchError(async (req, res, next) => {
+        // Find the kid
+        const parent = await User.findOne({ name: req.body.name, _id: req.body.id });
+        console.log(req.body.name, req.body.id);
+        if (!parent) {
+            return next(new Error('This parent does not exist'));
+        }
+        
+        // Remove the kid from the parent's kids array
+        const updatedSchool = await User.findOneAndUpdate(
+            { 
+                role: 'admin', 
+                name: parent.school 
+            },
+            { 
+                $pull: { 
+                    parents: { 
+                    id: parent._id 
+            } 
+            } 
+        },
+  );
+
+
+        
+
+        // Finally delete the kid from the kid collection
+        await User.findByIdAndDelete(parent._id);
+
+        res.status(200).send({
+            message: 'parent deleted successfully',
+        });
+})

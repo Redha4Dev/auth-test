@@ -35,11 +35,11 @@ router
     .delete(kidcontroller.removeKid)
 
  router 
-    .route('/teacher/chats')
+    .route('/')
     .get()
     .post()
     .patch()
-    .delete()
+    .delete(teacherController.removeTeacher)
 
 router 
     .route('/teacher/timetable')

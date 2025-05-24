@@ -97,7 +97,7 @@ const Userschema =  mongoose.Schema ({
 
     school: {
         type : String,
-        required : [true, 'Please enter your school name'],
+        
     },
     teachers: [{ 
         name: String,
