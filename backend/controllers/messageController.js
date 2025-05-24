@@ -26,7 +26,9 @@ exports.sendMessage = catchError(async (req, res, next) => {
 });
 
 exports.getAllMessages = catchError(async (req,res,next) => {
-  const userId = req.user._id;
+  
+  
+  const userId = req.params.id;
         
           const messages = await Message.find({
           $or: [

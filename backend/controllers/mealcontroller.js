@@ -1,4 +1,4 @@
-const Meal = require("../models/mealmodel");
+const Meal = require("../Models/mealmodel");
 const catchError = require("../utils/catchError");
 const AppError = require("../utils/apperror");
 
@@ -16,7 +16,9 @@ exports.createMeal = catchError(async (req, res, next) => {
     daysOfWeek,
     startTime,
     endTime,
-    startRecur: startRecur || "2025-01-01",
+    startRecur: startRecur || '2025-01-01', 
+    school
+
   });
 
   res.status(201).send({
@@ -39,8 +41,10 @@ exports.removeMeal = catchError(async (req, res, next) => {
   });
 
 
-exports.getMeal = catchError(async (req, res, next) => {
-  const meal = await Meal.findById(req.params.id)
+exports.getAllMeals = catchError(async (req, res, next) => {
+
+
+  const meal = await Meal.find( {school : req.params.id} )
     
 
   if (!meal) {
