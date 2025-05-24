@@ -23,6 +23,7 @@ import Settings from "./Pages/Settings";
 import Teachers from "./Pages/Users/Teachers";
 import EditKidPage from "./Pages/editKidPage";
 import EmailVerification from "./Pages/emailVerif";
+import TeacherProfile from "./Pages/Users/TeacherProfile";
 
 function App() {
 

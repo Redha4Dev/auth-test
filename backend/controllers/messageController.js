@@ -30,21 +30,23 @@ exports.getAllMessages = catchError(async (req,res,next) => {
   
   const userId = req.params.id;
         
- 
-   const messages = await Message.find({
-      $or: [
-        { sender: userId },
-        { receiver: userId }
-      ]
-  }).sort({ createdAt: -1 })
-    .populate('sender receiver', 'name email');
+          const messages = await Message.find({
+          $or: [
+            { sender: userId },
+            { receiver: userId }
+          ]
+        })
+        .sort({ createdAt: -1 })
+        .populate('sender receiver', 'name email');
+      
+        res.status(200).json({
+          status: 'success',
+          messages
+          
+        });
+      });
 
-  res.status(200).send({
-    status: 'success',
-    messages          
-  });
-
-});
+    
 
 
 exports.getMessageDetails = catchError(async (req, res, next) => {

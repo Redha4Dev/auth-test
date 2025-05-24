@@ -14,8 +14,56 @@ import Muffins from "../assets/muffins.svg";
 import Rice from "../assets/rice.svg";
 import Smoothie from "../assets/smoothie.svg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from '@/components/ui/checkbox'
 
 function Meals() {
+  const [open, setOpen] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  const handleCardClick = (mealName: string) => {
+    setSelectedMeal(mealName);
+    setOpen(true);
+  };
+
+  const handleSubmit = () => {
+    console.log({
+      title: selectedMeal,
+      startTime,
+      endTime,
+      daysOfWeek: selectedDays
+    });
+    setOpen(false);
+    // Optional: clear inputs or push to calendar
+  };
+
+  const [selectedDays, setSelectedDays] = useState<number[]>([]);
+
+const toggleDay = (dayNumber: number) => {
+  setSelectedDays(prev =>
+    prev.includes(dayNumber)
+      ? prev.filter(day => day !== dayNumber)
+      : [...prev, dayNumber]
+  );
+  console.log(selectedDays);
+};
+
+const daysOfWeekMap = [
+  { label: "Sun", value: 0 },
+  { label: "Mon", value: 1 },
+  { label: "Tue", value: 2 },
+  { label: "Wed", value: 3 },
+  { label: "Thu", value: 4 },
+  { label: "Fri", value: 5 },
+  { label: "Sat", value: 6 },
+];
+
+
     
       return (
         <SidebarProvider>
@@ -59,7 +107,7 @@ function Meals() {
   ]}
 />
   <div className='h-fit my-4 text-center p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-    <Card>
+    <Card onClick={() => handleCardClick("Pancake")} className="cursor-pointer hover:shadow-lg transition-shadow">
       <CardHeader>
         <CardTitle className="text-2xl">Pancake</CardTitle>
         <CardDescription>Breakfast</CardDescription>
@@ -68,7 +116,7 @@ function Meals() {
         <img src={Pancake} alt="" />
       </CardContent>  
     </Card>
-    <Card>
+    <Card onClick={() => handleCardClick("Omelet")} className="cursor-pointer hover:shadow-lg transition-shadow">
   <CardHeader>
     <CardTitle className="text-2xl">Omelet</CardTitle>
     <CardDescription>Breakfast</CardDescription>
@@ -78,7 +126,7 @@ function Meals() {
   </CardContent>
 </Card>
 
-<Card>
+<Card onClick={() => handleCardClick("Chicken Wrap")} className="cursor-pointer hover:shadow-lg transition-shadow">
   <CardHeader>
     <CardTitle className="text-2xl">Chicken Wrap</CardTitle>
     <CardDescription>Lunch</CardDescription>
@@ -88,7 +136,7 @@ function Meals() {
   </CardContent>
 </Card>
 
-<Card>
+<Card onClick={() => handleCardClick("Mini Muffins")} className="cursor-pointer hover:shadow-lg transition-shadow">
   <CardHeader>
     <CardTitle className="text-2xl">Mini Muffins</CardTitle>
     <CardDescription>Breakfast Snack</CardDescription>
@@ -99,7 +147,7 @@ function Meals() {
 </Card>
 
 
-<Card>
+<Card onClick={() => handleCardClick("Rice")} className="cursor-pointer hover:shadow-lg transition-shadow">
   <CardHeader>
     <CardTitle className="text-2xl">Rice</CardTitle>
     <CardDescription>Lunch</CardDescription>
@@ -109,7 +157,7 @@ function Meals() {
   </CardContent>
 </Card>
 
-<Card>
+<Card onClick={() => handleCardClick("smoothie")} className="cursor-pointer hover:shadow-lg transition-shadow">
   <CardHeader>
     <CardTitle className="text-2xl">Smoothie</CardTitle>
     <CardDescription>Snack</CardDescription>
@@ -122,6 +170,46 @@ function Meals() {
   </div>
 
                 </div>
+
+  <Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent className="sm:max-w-[425px]">
+    <DialogHeader>
+      <DialogTitle>Add Meal Event</DialogTitle>
+      <DialogDescription>
+        Add a schedule for <strong>{selectedMeal}</strong>
+      </DialogDescription>
+    </DialogHeader>
+    <div className="grid gap-4 py-4">
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor="startTime" className="text-right">Start Time</Label>
+        <Input id="startTime" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} className="col-span-3" />
+      </div>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor="endTime" className="text-right">End Time</Label>
+        <Input id="endTime" type="time" value={endTime} onChange={e => setEndTime(e.target.value)} className="col-span-3" />
+      </div>
+      <div className="grid gap-2">
+  <Label>Select Days of Week</Label>
+  <div className="flex flex-wrap gap-2">
+    {daysOfWeekMap.map(day => (
+      <div key={day.value} className="flex items-center space-x-2">
+        <Checkbox
+          id={`day-${day.value}`}
+          checked={selectedDays.includes(day.value)}
+          onCheckedChange={() => toggleDay(day.value)}
+        />
+        <Label htmlFor={`day-${day.value}`}>{day.label}</Label>
+      </div>
+    ))}
+  </div>
+</div>
+
+    </div>
+    <DialogFooter>
+      <Button onClick={handleSubmit}>Add to Calendar</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
 
             </SidebarInset>
         </SidebarProvider>
