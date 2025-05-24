@@ -129,7 +129,7 @@ export const getParent = async (name, id) => {
 }
 export const getTeacher = async (name, id) => {
   try {
-    const response = await api.get(`/admin/teachers`, {
+    const response = await api.get(`/admin/teacher`, {
       params: { name, id }
     });
     return response.data;

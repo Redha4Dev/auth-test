@@ -133,7 +133,7 @@ router
     .delete()
 
     router
-    .route('/teachers')
+    .route('/teacher')
     .get(teacherController.getTeacher)
     .post()
     .patch()
