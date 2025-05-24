@@ -17,7 +17,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
-import { getAllTeacher } from '@/Services/api'; // 🧠 Make sure this exists!
+import { deleteTeacher, getAllTeacher } from '@/Services/api'; // 🧠 Make sure this exists!
 import { getCurrentUser } from '@/Services/authService';
 import { ChevronLeft, ChevronRight, MoreVertical } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -34,6 +34,8 @@ function Teachers() {
         const response = await getCurrentUser();
         setUsername(response.name);
         setUserId(response._id);
+        console.log(response);
+        setList(response.teachers);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -41,21 +43,17 @@ function Teachers() {
     fetchUser();
   }, []);
 
-  const handleGetTeachers = async () => {
+  const handleRemoveTeacher = async (teacher) => {
+    console.log(teacher);
     try {
-      const response = await getAllTeacher(username, userId);
-      console.log(response);
-      setList(response.teachers);
+      await deleteTeacher(teacher);
+      setList((prevList) => prevList.filter((item) => item.id !== teacher.id));
     } catch (error) {
-      console.error('Error fetching teachers:', error);
+      console.error("Error removing teacher:", error);
     }
   };
 
-  useEffect(() => {
-    if (username && userId) {
-      handleGetTeachers();
-    }
-  }, [username, userId]);
+
 
   return (
     <SidebarProvider>
@@ -89,7 +87,7 @@ function Teachers() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              { list ? ( list.map((teacher) => (
+              { list.length > 0 ? ( list.map((teacher) => (
                 <TableRow key={teacher.id}>
                   <TableCell>{teacher.id}</TableCell>
                   <TableCell>{teacher.name}</TableCell>
@@ -123,6 +121,11 @@ function Teachers() {
                           onClick={() => alert(`Editing ${teacher.name}`)}
                         >
                           Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => handleRemoveTeacher(teacher)}
+                        >
+                          Remove
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

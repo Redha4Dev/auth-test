@@ -94,7 +94,18 @@ router
     .get(teacherController.displayTeachers)
 
     router
+<<<<<<< HEAD
     .route('/teacher')
+=======
+    .route('/kid/:id')
+    .get()
+    .post()
+    .patch(kidControllers.updateMarks)
+    .delete()
+
+    router
+    .route('/teachers')
+>>>>>>> 31659db6b107317b4a1bf92dcb3754a1078b4662
     .get(teacherController.getTeacher)
 
     router.post('/send-email', async (req, res) => {

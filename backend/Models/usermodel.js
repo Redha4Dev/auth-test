@@ -117,9 +117,6 @@ const Userschema =  mongoose.Schema ({
         }],
         default: []
     },
-    subject: {
-        type: String,
-    },
     experience: {
         type: Number,
     },

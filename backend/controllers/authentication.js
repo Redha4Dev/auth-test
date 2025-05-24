@@ -10,10 +10,11 @@ const AppError = require('../utils/apperror.js');
 
 //signUp authentication
 exports.signUp = catchError (async (req,res, next) => {
+
+
   const newUser = await User.create(req.body)
-  
-  if(newUser.role === 'parent'){
-    const school = await User.findOne( { role : 'admin',name : req.body.school});
+   if(newUser.role === 'parent'){
+    const school = await User.findOne( { role : 'admin' , name : req.body.school});
                
   if (!school) {
       return res.status(404).send({ message: 'School not found' });

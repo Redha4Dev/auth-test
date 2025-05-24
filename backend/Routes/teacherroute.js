@@ -28,11 +28,11 @@ router
     .delete(kidcontroller.removeKid)
 
  router 
-    .route('/teacher/chats')
+    .route('/')
     .get()
     .post()
     .patch()
-    .delete()
+    .delete(teacherController.removeTeacher)
 
 router 
     .route('/teacher/timetable')
@@ -48,5 +48,12 @@ router
     .patch()
     .delete()
 
-    
+router
+    .route('/kid/:id')
+    .get()
+    .post()
+    .patch(kidcontroller.updateMarks)
+    .delete()
+
+
     module.exports = router
