@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/student_card.dart';
 import 'package:kidergarten/pages/chat_details_page.dart';
+import 'package:kidergarten/global.dart'; // Make sure this is imported
 
 class ChatPage extends StatelessWidget {
-  final List<Map<String, dynamic>> students = [
-    {"name": "Lisie Alexander", "age": 6, "gender": "Female"},
-    {"name": "Albert Flores", "age": 5, "gender": "Male"},
-    {"name": "Jerome Bell", "age": 6, "gender": "Male"},
-    {"name": "Theresa Webb", "age": 5, "gender": "Female"},
-    {"name": "Floyd Miles", "age": 5, "gender": "Male"},
-    {"name": "Camcron Williamson", "age": 6, "gender": "Male"},
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Get the kids list from the global state (same as teacher dashboard)
+    final kids = globalParentData?['PARENT']?['kids'] as List<dynamic>? ?? [];
+
     return Scaffold(
       appBar: AppBar(title: Text("Chat")),
       body: ListView.builder(
-        itemCount: students.length,
+        itemCount: kids.length,
         itemBuilder: (context, index) {
-          var student = students[index];
+          final student = kids[index] as Map<String, dynamic>;
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -30,9 +25,9 @@ class ChatPage extends StatelessWidget {
               );
             },
             child: StudentCard(
-              name: student['name'],
-              age: student['age'],
-              gender: student['gender'],
+              name: student['name'] ?? 'No name',
+              age: (student['age'] ?? '0').toString(),
+              gender: student['gender'] ?? 'Unknown',
             ),
           );
         },

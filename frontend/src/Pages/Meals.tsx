@@ -19,25 +19,41 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from '@/components/ui/checkbox'
+import { addMeal } from '@/Services/api'
+import { getCurrentUser } from '@/Services/authService'
+import { set } from 'date-fns'
 
 function Meals() {
   const [open, setOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<string | null>(null);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [username , setUsername] = useState('');
 
   const handleCardClick = (mealName: string) => {
     setSelectedMeal(mealName);
     setOpen(true);
   };
 
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     console.log({
       title: selectedMeal,
       startTime,
       endTime,
       daysOfWeek: selectedDays
     });
+    try {
+      const response = await addMeal({
+      title: selectedMeal,
+      startTime,
+      endTime,
+      daysOfWeek: selectedDays,
+      school : username
+    });
+    } catch (error) {
+      console.error("Error adding meal:", error);
+    }
     setOpen(false);
     // Optional: clear inputs or push to calendar
   };
@@ -62,6 +78,18 @@ const daysOfWeekMap = [
   { label: "Fri", value: 5 },
   { label: "Sat", value: 6 },
 ];
+  const handleGetUser = async () => {
+    try {
+      const response = await getCurrentUser();
+      setUsername(response.name);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  }
+
+  useEffect(() => {
+    handleGetUser();
+  }, []);
 
 
     
@@ -84,7 +112,7 @@ const daysOfWeekMap = [
   dateClick={(info) => alert(`Clicked on: ${info.dateStr}`)}
   events={[
     {
-      title: 'Breakfast',
+      title: 'Omelet',
       daysOfWeek: [0, 1, 2, 3, 4], // Sunday to Thursday
       startTime: '08:00:00',
       endTime: '09:00:00',

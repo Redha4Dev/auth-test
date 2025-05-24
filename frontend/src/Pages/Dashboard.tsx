@@ -65,7 +65,7 @@ function Dashboard() {
 
   const handleGetAllMessages = async () => {
     try {
-      const response = await getAllMessages(username);
+      const response = await getAllMessages(id);
       setMessages(response.messages.reverse());
     } catch (error) {
       console.error("Error fetching messages:", error);
