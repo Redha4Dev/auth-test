@@ -17,7 +17,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
-import { getAllTeacher } from '@/Services/api'; // 🧠 Make sure this exists!
+import { deleteTeacher, getAllTeacher } from '@/Services/api'; // 🧠 Make sure this exists!
 import { getCurrentUser } from '@/Services/authService';
 import { ChevronLeft, ChevronRight, MoreVertical } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -42,6 +42,16 @@ function Teachers() {
     };
     fetchUser();
   }, []);
+
+  const handleRemoveTeacher = async (teacher) => {
+    console.log(teacher);
+    try {
+      await deleteTeacher(teacher);
+      setList((prevList) => prevList.filter((item) => item.id !== teacher.id));
+    } catch (error) {
+      console.error("Error removing teacher:", error);
+    }
+  };
 
 
 
@@ -111,6 +121,11 @@ function Teachers() {
                           onClick={() => alert(`Editing ${teacher.name}`)}
                         >
                           Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => handleRemoveTeacher(teacher)}
+                        >
+                          Remove
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

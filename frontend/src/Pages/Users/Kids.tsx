@@ -50,6 +50,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
+import { set } from "date-fns";
 
 function Kids() {
   const [username, setUsername] = useState("");
@@ -57,11 +58,10 @@ function Kids() {
   const [childs, setChilds] = useState([]);
   const [kids, setKids] = useState({
     name: "",
-    code: "67890",
     parent: "",
     id: "",
-    school: "ESI",
-    teacher: "aaaa",
+    school: "",
+    teacher: "",
     age: 3,
     gender: "",
   });
@@ -108,7 +108,7 @@ function Kids() {
       alert("Please fill in all required fields.");
       return;
     }
-
+    setKids((prev) => ({ ...prev, school: username }));
     try {
       await addKid(kids);
       await handleListKids(); // refresh list
@@ -199,6 +199,14 @@ function Kids() {
                       <Input placeholder="Age" type="number" onChange={(e) => {
                            setKids({ ...kids, age: e.target.value });
                          }} />
+                    </div>
+                    <div className="grid w-full grid-cols-1 md:gird-cols-2 gap-2">
+                        <Input placeholder="Teacher name" onChange={(e) => {
+                           setKids({ ...kids, teacher: e.target.value });
+                        }} />
+                        <Input placeholder="Class" type="number" onChange={(e) => {
+                           setKids({ ...kids, classRoom: e.target.value });
+                        }} />
                     </div>
                   </div>
                   <DialogFooter className="sm:justify-start">
