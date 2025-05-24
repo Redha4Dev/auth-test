@@ -4,7 +4,7 @@ const router = express.Router();
 
 router
     .route('/:id')
-    .get(mealController.getMeal)
+    .get(mealController.getAllMeals)
     .post(mealController.createMeal)
 
 module.exports = router;

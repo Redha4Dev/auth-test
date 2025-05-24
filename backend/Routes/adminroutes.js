@@ -82,7 +82,7 @@ router
     router
     .route('/kid/:id')
     .get()
-    .post()
+    .post(kidControllers.updateSkills)
     .patch(kidControllers.updateMarks)
     .delete()
 
