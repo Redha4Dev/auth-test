@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/pages/navigator.dart';
-import 'package:kidergarten/pages/welcome_page.dart';
+import 'package:kidergarten/pages/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

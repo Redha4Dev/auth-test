@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kidergarten/components/my_button.dart';
 import 'package:kidergarten/components/textField.dart';
 import 'package:kidergarten/pages/login_page.dart';
-import 'package:kidergarten/pages/verification.dart';
+import 'package:kidergarten/pages/teacher_dashboard.dart';
 import 'package:kidergarten/services/api_service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -169,16 +169,20 @@ class _SignupPageState extends State<SignupPage> {
                                             try {
                                               // Step 1: Call createUser (which saves token in SharedPreferences)
                                               await apiService.createUser(
-                                                name: 'parent3',
-                                                email: 'exemple3@email.com',
-                                                phone: '0775000000',
-                                                role: 'parent',
-                                                gender: 'Male',
-                                                password: '000000',
-                                                confirmPassword: '000000',
-                                                school: 'redhaXD',
+                                                name: fullNameController.text,
+                                                email: emailController.text,
+                                                phone: phoneController.text,
+                                                role: role,
+                                                gender: gender,
+                                                password:
+                                                    passwordController.text,
+                                                confirmPassword:
+                                                    confirmPasswordController
+                                                        .text,
+                                                school: schoolController.text,
                                                 kids: [],
-                                                address: 'sba',
+                                                address:
+                                                    '', // No address controller available
                                               );
 
                                               // Step 2: Extract user ID from token
@@ -198,8 +202,7 @@ class _SignupPageState extends State<SignupPage> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        VerifyCodePage(
-                                                            userId: userId),
+                                                        LoginPage(),
                                                   ),
                                                 );
                                               } else {

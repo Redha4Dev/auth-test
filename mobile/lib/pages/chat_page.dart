@@ -121,15 +121,7 @@ class _ChatPageState extends State<ChatPage> {
           AdminCard(
             schoolName: school,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChatDetailPage(
-                    studentName: school,
-                    studentId: 'admin',
-                  ),
-                ),
-              );
+              print('no chat yet');
             },
           ),
           // Divider
@@ -166,8 +158,6 @@ class _ChatPageState extends State<ChatPage> {
                           },
                           child: StudentCard(
                             name: s['name'] ?? 'No name',
-                            age: (s['age'] ?? '0').toString(),
-                            gender: s['gender'] ?? 'Unknown',
                           ),
                         ),
                       );

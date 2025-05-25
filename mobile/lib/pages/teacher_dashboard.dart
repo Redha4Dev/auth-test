@@ -299,8 +299,6 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                         },
                         child: StudentCard(
                           name: s['name'] ?? 'No name',
-                          age: (s['age'] ?? '0').toString(),
-                          gender: s['gender'] ?? 'Unknown',
                         ),
                       );
                     }).toList(),

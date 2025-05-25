@@ -142,8 +142,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              StudentCard(name: "tfdct", age: "5", gender: "Mouaad"),
-              StudentCard(name: "Anis Boualdja", age: "4", gender: "Male"),
             ],
           ),
         ),

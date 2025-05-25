@@ -94,31 +94,18 @@ class ApiService {
     final url = Uri.parse('http://10.0.2.2:5000/parent/profile');
 
     try {
-      print('📤 Sending parent info request - ID: $id, Name: $name');
       final response = await http.post(
         url,
-        headers: {
-          'Content-Type': 'application/json',
-          ...(await _getAuthHeaders()),
-        },
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'id': id,
           'name': name,
         }),
       );
 
-      print('📥 Parent info response status: ${response.statusCode}');
-      print('📥 Parent info response body: ${response.body}');
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print('✅ Parent data received: $data');
-
-        if (data['PARENT'] != null && data['PARENT']['kids'] != null) {
-          print('👶 Kids found: ${data['PARENT']['kids']}');
-        } else {
-          print('⚠️ No kids data in response');
-        }
+        print('✅ Parent found: $data');
 
         // Store globally
         globalParentData = data;
@@ -126,6 +113,9 @@ class ApiService {
         // Optional: store persistently
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('parentData', jsonEncode(data));
+        data.forEach((key, value) {
+          print('$key: $value');
+        });
 
         return data;
       } else {
@@ -317,41 +307,23 @@ class ApiService {
     required String name,
     required String id,
   }) async {
-    // Validate inputs
-    if (id.isEmpty) {
-      print('❌ Invalid kid ID provided');
-      return null;
-    }
-
     final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
         .replace(queryParameters: {
       'name': name,
       'id': id,
-      't': DateTime.now().millisecondsSinceEpoch.toString(), // Prevent caching
     });
-
     try {
-      print('🔍 Fetching kid details for ID: $id');
-      final response = await http.get(
-        uri,
-        headers: {
-          ...await _getAuthHeaders(),
-          'Cache-Control': 'no-cache',
-        },
-      );
-
+      final response = await http.get(uri);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print('✅ Kid details fetched: ${data['kid']}');
         return data['kid'];
       } else {
         print('⚠️ Failed to fetch kid details: ${response.body}');
-        return null;
       }
     } catch (e) {
       print('❌ Error fetching kid details: $e');
-      return null;
     }
+    return null;
   }
 
   // Update kid info (PATCH)
@@ -428,131 +400,6 @@ class ApiService {
       }
     } catch (e) {
       print('❌ Error fetching meals: $e');
-      return null;
-    }
-  }
-
-  // Chat Services
-  Future<List<Map<String, dynamic>>?> getAllMessages(String userId) async {
-    final url = Uri.parse('http://10.0.2.2:5000/chat/$userId');
-    try {
-      final response = await http.get(
-        url,
-        headers: await _getAuthHeaders(),
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return List<Map<String, dynamic>>.from(data['messages']);
-      }
-      print('⚠️ Failed to fetch messages: ${response.body}');
-      return null;
-    } catch (e) {
-      print('❌ Error fetching messages: $e');
-      return null;
-    }
-  }
-
-  Future<bool> sendMessage({
-    required String senderId,
-    required String receiverId,
-    required String message,
-  }) async {
-    final url = Uri.parse('http://10.0.2.2:5000/chat/$receiverId');
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          ...(await _getAuthHeaders()),
-        },
-        body: jsonEncode({
-          'id': senderId,
-          'message': message,
-        }),
-      );
-      return response.statusCode == 201;
-    } catch (e) {
-      print('❌ Error sending message: $e');
-      return false;
-    }
-  }
-
-  Future<Map<String, dynamic>?> getMessageDetails(String messageId) async {
-    final url = Uri.parse('http://10.0.2.2:5000/chat/message/$messageId');
-    try {
-      final response = await http.get(
-        url,
-        headers: await _getAuthHeaders(),
-      );
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      }
-      return null;
-    } catch (e) {
-      print('❌ Error fetching message details: $e');
-      return null;
-    }
-  }
-
-  Future<bool> deleteMessage(String messageId) async {
-    final url = Uri.parse('http://10.0.2.2:5000/chat/message/$messageId');
-    try {
-      final response = await http.delete(
-        url,
-        headers: await _getAuthHeaders(),
-      );
-      return response.statusCode == 200;
-    } catch (e) {
-      print('❌ Error deleting message: $e');
-      return false;
-    }
-  }
-
-  // Helper method to get auth headers
-  Future<Map<String, String>> _getAuthHeaders() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    return {
-      'Authorization': 'Bearer $token',
-    };
-  }
-
-  Future<String?> getAdminIdForSchool(String schoolName) async {
-    // First get the school ID
-    final schoolUrl = Uri.parse('http://10.0.2.2:5000/school')
-        .replace(queryParameters: {'name': schoolName});
-
-    try {
-      final response = await http.get(
-        schoolUrl,
-        headers: await _getAuthHeaders(),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        print('✅ School data received: $data');
-        final schoolId = data['school']?['_id'];
-
-        if (schoolId != null) {
-          // Now get the admin for this school
-          final adminUrl =
-              Uri.parse('http://10.0.2.2:5000/school/$schoolId/admin');
-          final adminResponse = await http.get(
-            adminUrl,
-            headers: await _getAuthHeaders(),
-          );
-
-          if (adminResponse.statusCode == 200) {
-            final adminData = jsonDecode(adminResponse.body);
-            print('✅ Admin data received: $adminData');
-            return adminData['admin']?['_id']?.toString();
-          }
-        }
-      }
-      print('⚠️ Failed to get admin ID: ${response.body}');
-      return null;
-    } catch (e) {
-      print('❌ Error getting admin ID: $e');
       return null;
     }
   }
