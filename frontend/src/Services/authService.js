@@ -78,7 +78,7 @@ export const updateKidInfos = async (kidData) => {
 // Update Parent Information
 export const updateParentInfos = async (parentData) => {
   try {
-    const response = await axios.patch(`${API_URL}/updateParentData`, parentData, {
+    const response = await axios.patch(`${API_URL}/`, parentData, {
       withCredentials: true,
     });
     console.log(response);
@@ -92,7 +92,7 @@ export const updateParentInfos = async (parentData) => {
 // Update Teacher Information  
 export const updateTeacherInfos = async (teacherData) => {
   try {
-    const response = await axios.patch(`${API_URL}/updateTeacherData`, teacherData, {
+    const response = await axios.patch(`${API_URL}/`, teacherData, {
       withCredentials: true,
     });
     console.log(response);
