@@ -9,13 +9,13 @@ const router = express.Router();
 router
   .route("/profile")
   .get(parentControllers.getParentInfo)
-
+  .post(parentControllers.getParentInfo)
 
 router
   .route("/")
   .get()
   .post()
-  .patch()
+  .patch(parentControllers.updateParent)
   // .delete(parentControllers.removeParent);
 
 

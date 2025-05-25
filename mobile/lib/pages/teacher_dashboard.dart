@@ -123,7 +123,11 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(radius: 40, backgroundColor: Colors.grey[300]),
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.grey[300],
+                  backgroundImage: AssetImage('assets/educanest.png'),
+                ),
                 const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

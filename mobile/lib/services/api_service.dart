@@ -359,4 +359,29 @@ class ApiService {
       return false;
     }
   }
+
+  // Update kid skills
+  Future<bool> updateKidSkills({
+    required String kidId,
+    required Map<String, dynamic> skills,
+  }) async {
+    final url = Uri.parse('http://10.0.2.2:5000/admin/kid/$kidId');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'skills': skills}),
+      );
+      if (response.statusCode == 200) {
+        print('✅ Skills updated successfully: ${response.body}');
+        return true;
+      } else {
+        print('⚠️ Failed to update skills: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error updating skills: $e');
+      return false;
+    }
+  }
 }

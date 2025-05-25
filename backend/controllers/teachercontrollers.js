@@ -5,25 +5,25 @@ const catchError = require('../utils/catchError')
 const AppError = require('../utils/apperror.js');
 
 
-exports.updateMe = catchError(async (req,res,next)=>{
-    const user = await User.findById({_id: req.body.id})
-        //check if the user exists
-        if (!user) {
-            return next( new AppError('user not exists please signUp or LogIn to continue', 404))
-        }
+exports.updateTeacher = catchError(async (req, res , next) =>{
+    //get the user baesd on his unique id
+    const user = await User.findOne({ _id: req.body.id , role : 'teacher'})
 
-        //get update data
-        const updateData = req.body;
-        //update data
-        await User.findOneAndUpdate(
-            {_id : req.body.id},
-            {$set : updateData},
-            {new : true})
-            
-        //send the response
-        res.status(200).json({
-            user
-        })
+    if (!user) {
+        return next( new AppError('user not exists please signUp or LogIn to continue', 404))
+    }
+    //get updated data
+    const updateData = req.body;
+    //update data
+    await User.findOneAndUpdate(
+        { _id: req.body.id },
+        { $set: updateData },
+        { new: true }
+    )
+    //send the response
+    res.status(200).json({
+        user
+    })
 })
 exports.getTeacherInfo = catchError(async(req,res,next) =>{
     //get the user based on his unique id
