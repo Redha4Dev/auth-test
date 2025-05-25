@@ -55,7 +55,7 @@ export default function editKidPage() {
     try {
       
       const updateData = {
-        _id: profile.id,
+        _id: profile._id,
         name: profile.name,
         age: parseInt(profile.age),
         gender: profile.gender,
