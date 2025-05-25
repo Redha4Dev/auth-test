@@ -7,7 +7,7 @@ const api = axios.create({
 export const getKids = async (name, id) => {
   try {
     const response = await api.get(`/parent/kids`, {
-      params: { name, id }, // Send parameters in the query string
+      params: { name, id }, 
     });
     return response.data;
   } catch (error) {
@@ -22,7 +22,7 @@ export const getKids = async (name, id) => {
 export const getKid = async (name, id) => {
   try {
     const response = await api.get(`/admin/manage-kids/`, {
-      params: { name, id, t: new Date().getTime() }, // added timestamp to prevent caching
+      params: { name, id, t: new Date().getTime() }, 
       headers: {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
@@ -58,7 +58,6 @@ export const ForgotPassword = async (email) => {
         try {
           console.log('first')
           const res = await axios.post('http://localhost:5000/forgotPassword', { email });
-        //   const res = await axios.post('/api/v1/users/forgotPassword', { email });
           console.log('good')
         } catch (err) {
           console.log('bad')
@@ -102,7 +101,7 @@ export const updatePassword = async (userId, currentPassword, newPassword, confi
 export const getParents = async (name,id) => {
   try {
     const response = await api.get(`/admin/parent`, {
-      params: { name, id }, // Send parameters in the query string
+      params: { name, id },
     });
     return response.data;
   } catch (error) {
@@ -230,7 +229,7 @@ export const getAllMessages = async (id) => {
 
 export const SendMessage = async (sender, recevier, message) => {
   try {
-    const response = await api.post(`/chat/${recevier}`, { message , _id : sender});
+    const response = await api.post(`/chat/${recevier}`, { message , id : sender});
     return response.data;
   } catch {
     console.error(
@@ -318,5 +317,21 @@ export const removeMeal = async (id) => {
     throw error;
   }
 }
-
+export const getChartData = async (school) => {
+  try {
+    const response = await api.get('admin/chartData', {
+      params: {
+        school
+      }
+    });
+    console.log(response)
+    return response.data;
+    } catch (error) {
+    console.error(
+      "Error fetching chart data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
 

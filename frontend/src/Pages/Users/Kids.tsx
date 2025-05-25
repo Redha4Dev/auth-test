@@ -78,8 +78,7 @@ function Kids() {
         setUserId(response._id);
         setKids((prev) => ({
           ...prev,
-          parent: response.name,
-          id: response._id,
+          school: response.name,
         }));
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -263,7 +262,7 @@ function Kids() {
                           <DropdownMenuItem>
                             <Link
                               className="w-full"
-                              to={`/Users/Kids/${child.id}/${child.name}/edit?edit=1`}
+                              to={`/Users/Kids/${child.id}/${child.name}?edit=1`}
                             >
                               Edit
                             </Link>

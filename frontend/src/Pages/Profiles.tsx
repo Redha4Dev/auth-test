@@ -3,7 +3,6 @@ import React from 'react'
 
 function Profiles() {
   const [kids, setKids] = React.useState([]);
-  //fetch data using axios from the backend
   React.useEffect(() => {
     const fetchKids = async () => {
       try {

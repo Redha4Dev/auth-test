@@ -7,7 +7,6 @@ const API_URL = "http://localhost:5000"; // Adjust based on your backend
 export const signUpAdmin = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/signup`, userData);
-    localStorage.setItem("token", response.data.token); // Save token
     return response.data;
   } catch (error) {
     console.error(error);
@@ -75,12 +74,59 @@ export const updateKidInfos = async (kidData) => {
   }
 };
 
-// export const fetchUserData = () => {
-//   try {
-//     // this to get the user info but the "/user" not ready now
-//     const response = await api.get("/user");
-//     console.log(response.data);
-//   } catch (error) {
-//     console.error("Error fetching user data:", error.response?.data?.message);
-//   }
-// }
+
+
+// Update Parent Information
+export const updateParentInfos = async (parentData) => {
+  try {
+    console.log('Sending parent data:', parentData);
+    
+    const dataToSend = {
+      ...parentData,
+      id: parentData._id
+    };
+    delete dataToSend._id; 
+    
+    console.log('Data being sent:', dataToSend);
+    
+    const response = await axios.patch(`${API_URL}/parent`, dataToSend, {
+      withCredentials: true,
+    });
+    console.log('Full response:', response);
+    console.log('Response data:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating parent data:', error);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
+    throw error;
+  }
+};
+
+// Update Teacher Information
+export const updateTeacherInfos = async (teacherData) => {
+  try {
+    console.log('Sending teacher data:', teacherData);
+    
+    const dataToSend = {
+      ...teacherData,
+      id: teacherData._id 
+    };
+    delete dataToSend._id; 
+    
+    console.log('Data being sent:', dataToSend);
+    
+    const response = await axios.patch(`${API_URL}/teacher`, dataToSend, {
+      withCredentials: true,
+    });
+    console.log('Full response:', response);
+    console.log('Response data:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating teacher data:', error);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
+    throw error;
+  }
+};
+

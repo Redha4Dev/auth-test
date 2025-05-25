@@ -6,13 +6,7 @@ interface FormData {
   password: string;
   confirmPassword: string;
   gender: string;
-  Kindergarten: {
-    Name: string;
-    Adress: string;
-    Key: string;
-    Picture: string;
-    SpecialNeeds: string;
-  }
+
 }
 
 interface FormContextType {
@@ -20,10 +14,8 @@ interface FormContextType {
   setFormData: (data: FormData) => void;
 }
 
-// Create the context with default values
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
-// Custom hook to use the context
 export const useFormData = () => {
   const context = useContext(FormContext);
   if (!context) {
@@ -32,7 +24,6 @@ export const useFormData = () => {
   return context;
 };
 
-// Provider component
 interface FormProviderProps {
   children: ReactNode;
 }
@@ -44,13 +35,6 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     password: "",
     confirmPassword: "",
     gender: "Male",
-    Kindergarten: {
-      Name: "",
-      Adress: "",
-      Key: "",
-      Picture: "",
-      SpecialNeeds: ""
-    }
   });
 
   return (
