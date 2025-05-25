@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const eventSchema = new mongoose.Schema({
+const meal = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'An event must have a title'],
@@ -39,8 +39,14 @@ const eventSchema = new mongoose.Schema({
       const year = today.getFullYear();
       return `${day}-${month}-${year}`;
   }
-  }})
+  },
+  school : {
+    type : String,
+    required: [true, 'Specify when the recurrence starts'],
 
-const Meal = mongoose.model('Meal', eventSchema);
+  }
+});
+
+const Meal = mongoose.model('Meal', meal);
 
 module.exports = Meal;

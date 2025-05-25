@@ -80,9 +80,6 @@ function Teachers() {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Experience</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -91,21 +88,6 @@ function Teachers() {
                 <TableRow key={teacher.id}>
                   <TableCell>{teacher.id}</TableCell>
                   <TableCell>{teacher.name}</TableCell>
-                  <TableCell>{teacher.subject}</TableCell>
-                  <TableCell>{teacher.experience} yrs</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        teacher.status === "Active"
-                          ? "success"
-                          : teacher.status === "Inactive"
-                          ? "destructive"
-                          : "warning"
-                      }
-                    >
-                      {teacher.status}
-                    </Badge>
-                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

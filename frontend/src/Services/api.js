@@ -279,3 +279,44 @@ export const removeMessage = async (id) => {
     throw error;
   }
 }
+
+export const addMeal = async (meal) => {
+  try {
+    const response = await api.post(`/meals` , meal);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error adding meal:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+
+export const getMeals = async (name) => {
+  try {
+    const response = await api.get(`/meals/${name}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching meals:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+
+export const removeMeal = async (id) => {
+  try {
+    const response = await api.delete(`/meals/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error deleting meal:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+
+

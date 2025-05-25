@@ -82,7 +82,7 @@ router
     router
     .route('/kid/:id')
     .get()
-    .post()
+    .post(kidControllers.updateSkills)
     .patch(kidControllers.updateMarks)
     .delete()
 
@@ -90,28 +90,7 @@ router
     .route('/teacher')
     .get(teacherController.getTeacher)
 
-    router.post('/send-email', async (req, res) => {
-        try {
-          // Extract from request body
-          const { email, subject, text, } = req.body;
-          
-          // Validate required fields
-          if (!email || !text) {
-            return res.status(400).json({ error: 'Email and text content are required' });
-          }
-      
-          // Send email
-          await sendEmail({
-            email,
-            subject,
-            text,
-          });
-      
-          res.status(200).json({ message: 'Email sent successfully' });
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ error: 'Failed to send email' });
-        }
-      });
+    router.post('/send-email', sendEmail)
+       
 
     module.exports = router

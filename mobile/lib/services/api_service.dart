@@ -301,4 +301,62 @@ class ApiService {
       return false;
     }
   }
+
+  // Fetch kid details by name and id (for teacher)
+  Future<Map<String, dynamic>?> getKidDetails({
+    required String name,
+    required String id,
+  }) async {
+    final uri = Uri.parse('http://10.0.2.2:5000/admin/manage-kids')
+        .replace(queryParameters: {
+      'name': name,
+      'id': id,
+    });
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['kid'];
+      } else {
+        print('⚠️ Failed to fetch kid details: ${response.body}');
+      }
+    } catch (e) {
+      print('❌ Error fetching kid details: $e');
+    }
+    return null;
+  }
+
+  // Update kid info (PATCH)
+  Future<bool> updateKidInfo({
+    required String kidId,
+    required Map<String, dynamic> updateData,
+  }) async {
+    // Ensure we're sending the correct data structure
+    final Map<String, dynamic> formattedData = {};
+    if (updateData.containsKey('marks')) {
+      formattedData['marks'] = updateData['marks'];
+    }
+    if (updateData.containsKey('skills')) {
+      formattedData['skills'] = updateData['skills'];
+    }
+
+    final url = Uri.parse('http://10.0.2.2:5000/teacher/kid/$kidId');
+    try {
+      final response = await http.patch(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(formattedData),
+      );
+      if (response.statusCode == 200) {
+        print('✅ Update successful: ${response.body}');
+        return true;
+      } else {
+        print('⚠️ Failed to update kid info: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error updating kid info: $e');
+      return false;
+    }
+  }
 }

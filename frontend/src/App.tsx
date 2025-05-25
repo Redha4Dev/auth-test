@@ -65,7 +65,6 @@ function App() {
           <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
           <Route element={<Teachers/>} path="Users/Teachers" />
           <Route element={<TeacherProfile/>} path="Users/Teachers/:id/:name" />
-          <Route element={<Scheduling />} path="/Scheduling" />
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />
           <Route element={<Mail/>} path="/Inbox/:id"/>
