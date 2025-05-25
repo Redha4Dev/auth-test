@@ -30,7 +30,7 @@ function Inbox() {
       setUsername(user._id);
       const response = await getAllMessages(user._id);
       console.log("✅ getAllMessages response:", response);
-      setMessages(response.messages.reverse());
+      setMessages(response.messages);
     } catch (error) {
       console.error("Error:", error);
     }
