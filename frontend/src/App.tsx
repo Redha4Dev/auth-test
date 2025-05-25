@@ -12,8 +12,6 @@ import Parents from "./Pages/Users/Parents";
 import LandingPage from "./Pages/LandingPage";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
-import ClassScheduling from "./Pages/Scheduling";
-import Scheduling from "./Pages/Scheduling";
 import Meals from "./Pages/Meals";
 import KidProfile from "./Pages/Users/KidProfile";
 import ParentProfile from "./Pages/Users/ParentProfile";
@@ -50,13 +48,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<LandingPage />} path="/LandingPage" />
+        <Route element={<LandingPage />} path="/" />
         <Route element={<EmailVerification />} path="/verify/:code" />
         <Route element={<Login />} path="/Login" />
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
         <Route element={<ResetPassword />} path="/ResetPassword/:token" />
-        <Route element={<Home />} path="/" />
         <Route element={<ProtectedRouters />}>
           <Route element={<Profiles />} path="/Profiles" />
           <Route element={<Dashboard />} path="/Dashboard" />
@@ -76,7 +73,6 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-    // </div>
   );
 }
 
