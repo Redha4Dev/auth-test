@@ -52,46 +52,45 @@ export default function editKidPage() {
   }
   ////////////////////////////////
   const handleSave = async () => {
-    // try {
+    try {
       
-    //   const updateData = {
-    //     _id: profile._id,
-    //     name: profile.name,
-    //     age: parseInt(profile.age),
-    //     gender: profile.gender,
-    //     parent: profile.parent,
-    //   };
+      const updateData = {
+        _id: profile._id,
+        name: profile.name,
+        age: parseInt(profile.age),
+        gender: profile.gender,
+        parent: profile.parent,
+      };
       
-    //   const response = await updateKidInfos(updateData);
+      const response = await updateKidInfos(updateData);
       
-    //   if (response && response.kid) {
-    //     setProfile(response.kid);
+      if (response && response.kid) {
+        setProfile(response.kid);
         
-    //     setSearchParam({});
+        setSearchParam({});
         
-    //     alert('Profile updated successfully!');
+        alert('Profile updated successfully!');
         
-    //   } else if (response && response.message === 'updated') {
+      } else if (response && response.message === 'updated') {
 
-    //     setSearchParam({});
+        setSearchParam({});
         
-    //     alert('Profile updated successfully!');
+        alert('Profile updated successfully!');
         
-    //     await handleGetKidProfile();
+        await handleGetKidProfile();
         
-    //   } else {
-    //     throw new Error('Update failed - unexpected response');
-    //   }
+      } else {
+        throw new Error('Update failed - unexpected response');
+      }
       
-    // } catch (error) {
-    //   console.error('Error updating kid profile:', error);
+    } catch (error) {
+      console.error('Error updating kid profile:', error);
       
-    //   alert('Failed to update profile. Please try again.');
+      alert('Failed to update profile. Please try again.');
       
-    //   await handleGetKidProfile();
+      await handleGetKidProfile();
       
-    // }
-    alert('hi')
+    }
   };
   ///////////////////////////////
   function handleInputChange(i:String , j:String) {
