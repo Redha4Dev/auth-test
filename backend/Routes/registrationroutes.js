@@ -49,6 +49,7 @@ router.route("/getUserData").get(authController.getUserData);
 
 router.route("/updateUserData").patch(authController.updateUserData);
 router.route("/updateKidData/:id").patch(kidController.updatekidinfo);
+
 router.get("/logout", authController.logout);
 
 
