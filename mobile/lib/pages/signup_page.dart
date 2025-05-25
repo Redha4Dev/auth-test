@@ -169,14 +169,14 @@ class _SignupPageState extends State<SignupPage> {
                                             try {
                                               // Step 1: Call createUser (which saves token in SharedPreferences)
                                               await apiService.createUser(
-                                                name: 'ESI',
-                                                email: 'zadrojagne@gufum.com',
-                                                phone: '02222222',
-                                                role: 'teacher',
+                                                name: 'parent3',
+                                                email: 'exemple3@email.com',
+                                                phone: '0775000000',
+                                                role: 'parent',
                                                 gender: 'Male',
-                                                password: 'qwerty1',
-                                                confirmPassword: 'qwerty1',
-                                                school: 'ilyestest1234',
+                                                password: '000000',
+                                                confirmPassword: '000000',
+                                                school: 'redhaXD',
                                                 kids: [],
                                                 address: 'sba',
                                               );

@@ -7,7 +7,6 @@ const API_URL = "http://localhost:5000"; // Adjust based on your backend
 export const signUpAdmin = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/signup`, userData);
-    localStorage.setItem("token", response.data.token); // Save token
     return response.data;
   } catch (error) {
     console.error(error);

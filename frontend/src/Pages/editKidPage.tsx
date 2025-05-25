@@ -113,7 +113,7 @@ export default function editKidPage() {
     }
   } 
   const saving = false;
-  // const profile = {name : 'mouad' , gender : 'Boy' , age : 15 , parent : 'b' , _id : 189681 , school : 'hell noo'}
+    const firstLetter = profile?.name?.[0]?.toUpperCase() || "";
   return (
     <div className="w-full p-4 h-fit min-h-screen">
       <header className="flex items-center justify-between w-full">
@@ -148,7 +148,7 @@ export default function editKidPage() {
             className={`flex items-center justify-center w-20 h-20 rounded-full text-white text-4xl font-bold
               ${profile.gender === "Boy" ? "bg-blue-500" : profile.gender === "Girl" ? "bg-pink-500" : "bg-gray-400"}`}
           >
-            {/* {firstLetter} */}
+             {firstLetter} 
           </div>
         </div>
         

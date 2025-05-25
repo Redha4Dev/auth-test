@@ -230,7 +230,7 @@ export const getAllMessages = async (id) => {
 
 export const SendMessage = async (sender, recevier, message) => {
   try {
-    const response = await api.post(`/chat/${recevier}`, { message , _id : sender});
+    const response = await api.post(`/chat/${recevier}`, { message , id : sender});
     return response.data;
   } catch {
     console.error(
@@ -318,5 +318,21 @@ export const removeMeal = async (id) => {
     throw error;
   }
 }
-
+export const getChartData = async (school) => {
+  try {
+    const response = await api.get('admin/chartData', {
+      params: {
+        school
+      }
+    });
+    console.log(response)
+    return response.data;
+    } catch (error) {
+    console.error(
+      "Error fetching chart data:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
 

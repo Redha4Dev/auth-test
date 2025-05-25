@@ -6,13 +6,7 @@ interface FormData {
   password: string;
   confirmPassword: string;
   gender: string;
-  Kindergarten: {
-    Name: string;
-    Adress: string;
-    Key: string;
-    Picture: string;
-    SpecialNeeds: string;
-  }
+
 }
 
 interface FormContextType {
@@ -44,13 +38,6 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     password: "",
     confirmPassword: "",
     gender: "Male",
-    Kindergarten: {
-      Name: "",
-      Adress: "",
-      Key: "",
-      Picture: "",
-      SpecialNeeds: ""
-    }
   });
 
   return (
