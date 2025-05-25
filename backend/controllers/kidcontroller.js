@@ -230,3 +230,28 @@ exports.updateMarks = catchError(async (req, res, next) => {
     
   });
 });
+
+
+exports.updateSkills = catchError(async (req, res, next) => {
+  const kidId = req.params.id;
+  const { skills } = req.body;
+
+  const updatedKid = await Kid.findByIdAndUpdate(
+    kidId,
+    { $set: { skills } },  
+    { new: true }  
+  );
+
+  if (!updatedKid) {
+    return res.status(404).send({
+      status: 'fail',
+      message: 'No kid found with that ID'
+    });
+  }
+
+  res.status(200).send({
+    status: 'success',
+    kid: updatedKid
+    
+  });
+});

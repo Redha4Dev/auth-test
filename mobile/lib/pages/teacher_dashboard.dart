@@ -3,6 +3,7 @@ import 'package:kidergarten/components/student_card.dart';
 import 'package:kidergarten/components/timetable.dart';
 import 'package:kidergarten/global.dart';
 import 'package:kidergarten/services/api_service.dart';
+import 'package:kidergarten/pages/KidDetailPage.dart';
 
 class TeacherDashboard extends StatefulWidget {
   const TeacherDashboard({super.key});
@@ -240,26 +241,18 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                       return GestureDetector(
                         onTap: () async {
                           final name = s['name'];
-                          final id = int.tryParse(s['id'].toString());
-                          final gender = s['gender'] ??
-                              'male'; // Default to male if not provided
-
-                          // Navigate to the child profile page within the navigation spine
-                          /*Navigator.push(
+                          final id = s['id'].toString();
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ChildNotesPage(childData: {
-                                'name': 'Floyd',
-                                'familyName': 'Miles',
-                                'class': 'A3',
-                                // Add more fields if needed
-                              }),
+                              builder: (context) =>
+                                  KidDetailPage(name: name, id: id),
                             ),
-                          );*/
+                          );
                         },
                         child: StudentCard(
                           name: s['name'] ?? 'No name',
-                          age: s['age'] ?? 0,
+                          age: (s['age'] ?? '0').toString(),
                           gender: s['gender'] ?? 'Unknown',
                         ),
                       );
