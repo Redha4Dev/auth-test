@@ -31,7 +31,7 @@ router
     .route('/')
     .get()
     .post()
-    .patch()
+    .patch(teacherController.updateTeacher)
     .delete(teacherController.removeTeacher)
 
 router 
