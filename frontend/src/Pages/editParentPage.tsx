@@ -58,18 +58,23 @@ export default function EditParentPage() {
         code: profile.code,
       };
 
+      console.log('Sending update data:', updateData);
       const response = await updateParentInfos(updateData);
+      console.log('Received response:', response);
 
-      if (response && response.parent) {
-        setProfile(response.parent);
+      // Handle the actual response format from your backend
+      if (response && response.user) {
+        // Backend returns { user: updatedUser }
+        setProfile(response.user);
         setSearchParam({});
         alert('Profile updated successfully!');
-      } else if (response && response.message === 'updated') {
+      } else if (response) {
+        // Any other successful response
         setSearchParam({});
         alert('Profile updated successfully!');
-        await handleGetParentProfile();
+        await handleGetParentProfile(); // Refresh the data
       } else {
-        throw new Error('Update failed - unexpected response');
+        throw new Error('No response received');
       }
     } catch (error) {
       console.error('Error updating parent profile:', error);

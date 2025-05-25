@@ -75,33 +75,91 @@ export const updateKidInfos = async (kidData) => {
   }
 };
 
-// Update Parent Information
+// // Update Parent Information
+// export const updateParentInfos = async (parentData) => {
+//   try {
+//     const response = await axios.patch(`${API_URL}/parent`, parentData, {
+//       withCredentials: true,
+//     });
+//     console.log(response);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error updating parent data:', error);
+//     throw error;
+//   }
+// };
+
+// // Update Teacher Information  
+// export const updateTeacherInfos = async (teacherData) => {
+//   try {
+//     const response = await axios.patch(`${API_URL}/teacher`, teacherData, {
+//       withCredentials: true,
+//     });
+//     console.log(response);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error updating teacher data:', error);
+//     throw error;
+//   }
+// };
+
+
+// Update Parent Information - CORRECTED
 export const updateParentInfos = async (parentData) => {
   try {
-    const response = await axios.patch(`${API_URL}/parent`, parentData, {
+    console.log('Sending parent data:', parentData);
+    
+    // Send the data with 'id' field instead of '_id' to match backend expectation
+    const dataToSend = {
+      ...parentData,
+      id: parentData._id // Convert _id to id for backend
+    };
+    delete dataToSend._id; // Remove _id to avoid confusion
+    
+    console.log('Data being sent:', dataToSend);
+    
+    const response = await axios.patch(`${API_URL}/parent`, dataToSend, {
       withCredentials: true,
     });
-    console.log(response);
+    console.log('Full response:', response);
+    console.log('Response data:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error updating parent data:', error);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
     throw error;
   }
 };
 
-// Update Teacher Information  
+// Update Teacher Information - CORRECTED
 export const updateTeacherInfos = async (teacherData) => {
   try {
-    const response = await axios.patch(`${API_URL}/teacher`, teacherData, {
+    console.log('Sending teacher data:', teacherData);
+    
+    // Send the data with 'id' field instead of '_id' to match backend expectation
+    const dataToSend = {
+      ...teacherData,
+      id: teacherData._id // Convert _id to id for backend
+    };
+    delete dataToSend._id; // Remove _id to avoid confusion
+    
+    console.log('Data being sent:', dataToSend);
+    
+    const response = await axios.patch(`${API_URL}/teacher`, dataToSend, {
       withCredentials: true,
     });
-    console.log(response);
+    console.log('Full response:', response);
+    console.log('Response data:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error updating teacher data:', error);
+    console.error('Error response:', error.response?.data);
+    console.error('Error status:', error.response?.status);
     throw error;
   }
 };
+
 
 // export const fetchUserData = () => {
 //   try {
