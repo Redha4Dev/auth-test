@@ -9,7 +9,7 @@ const User = require('../Models/usermodel')
 exports.sendMessage = catchError(async (req, res, next) => {
   const { message } = req.body;
   const { id: receiverId } = req.params;
-  const senderId = req.user._id;
+  const senderId = req.body.id ;
   
   const newMessage = await Message.create({
     sender: senderId,
