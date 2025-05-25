@@ -15,7 +15,7 @@ router
   .route("/")
   .get()
   .post()
-  .patch(parentControllers.updateParent)
+  .patch(parentControllers.updateParent)  
   // .delete(parentControllers.removeParent);
 
 

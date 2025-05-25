@@ -63,7 +63,7 @@ exports.signUp = catchError (async (req,res, next) => {
     
   res.cookie('jwt', token, cookieOptions);
               
-
+  
     
   //send the response
   res.status(201).json({
