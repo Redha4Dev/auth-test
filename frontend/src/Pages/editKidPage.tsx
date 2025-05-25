@@ -1,8 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { getKid } from "@/Services/api";
 import { updateKidInfos } from "@/Services/authService";
-import { ChevronLeft, Edit2, Save, X } from "lucide-react";
-import React from "react";
+import { ChevronLeft, Edit2, Save, School, X } from "lucide-react";
+import React, { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,85 +13,107 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 
 export default function editKidPage() {
-  const { id, name } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const isEditMode = searchParams.get("edit") === "1";
+
+    const { id, name } = useParams();
+    const [profile, setProfile] = React.useState({});
+    const [searchParam , setSearchParam] = useSearchParams();
+    const [changedName,setChangedName] = useState('');
+    const [changedGender,setChangedGender] = useState('');
+    const [changedParent,setChangedParent] = useState('');
+    const [changedAge,setChangedAge] = useState(0);
+    const navigate = useNavigate();
+
+
+
+    const handleGetKidProfile = async () => {
+      try {
+        const kidProfile = await getKid(name, id);
+        console.log(kidProfile);
+        setProfile(kidProfile.kid);
+      } catch (error) {
+        console.error("Error fetching kid profile:", error);
+      }
+    };
   
-  const [profile, setProfile] = React.useState({});
-  const [loading, setLoading] = React.useState(true);
-  const [saving, setSaving] = React.useState(false);
-
-  const handleGetKidProfile = async () => {
-    try {
-      const kidProfile = await getKid(name, id);
-      console.log(kidProfile);
-      setProfile(kidProfile.kid);
-    } catch (error) {
-      console.error("Error fetching kid profile:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  React.useEffect(() => {
-    handleGetKidProfile();
-  }, []);
-
-  const handleInputChange = (field, value) => {
-    setProfile(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleSave = async () => {
-    if (!profile.name?.trim()) {
-      alert("Name is required");
-      return;
-    }
-
-    setSaving(true);
-    try {
-      await updateKidInfos(profile);
-      alert("Kid updated successfully!");
-      // Exit edit mode after successful save
-      setSearchParams({});
-    } catch (error) {
-      console.error("Error updating kid:", error);
-      alert("Error updating kid. Please try again.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleCancel = () => {
-    // Reload the original data and exit edit mode
-    handleGetKidProfile();
-    setSearchParams({});
-  };
-
-  const toggleEditMode = () => {
-    if (isEditMode) {
-      setSearchParams({});
-    } else {
-      setSearchParams({ edit: '1' });
-    }
-  };
-
-  const firstLetter = profile?.name?.[0]?.toUpperCase() || "";
-
-  if (loading) {
-    return (
-      <div className="w-full p-4 h-fit min-h-screen">
-        <div className="flex items-center justify-center h-64">
-          <div>Loading...</div>
-        </div>
-      </div>
-    );
+    React.useEffect(() => {
+      handleGetKidProfile();
+    }, []);
+  
+  const isEditMode = searchParam.get('edit');
+  function toggleEditMode() {
+    setSearchParam({edit : '1'});
   }
+  function handleCancel() {
+    handleGetKidProfile();
+    navigate(-1);
+  }
+  ////////////////////////////////
+  const handleSave = async () => {
+    try {
+      
+      const updateData = {
+        _id: profile._id,
+        name: profile.name,
+        age: parseInt(profile.age),
+        gender: profile.gender,
+        parent: profile.parent,
+      };
+      
+      const response = await updateKidInfos(updateData);
+      
+      if (response && response.kid) {
+        setProfile(response.kid);
+        
+        setSearchParam({});
+        
+        alert('Profile updated successfully!');
+        
+      } else if (response && response.message === 'updated') {
 
+        setSearchParam({});
+        
+        alert('Profile updated successfully!');
+        
+        await handleGetKidProfile();
+        
+      } else {
+        throw new Error('Update failed - unexpected response');
+      }
+      
+    } catch (error) {
+      console.error('Error updating kid profile:', error);
+      
+      alert('Failed to update profile. Please try again.');
+      
+      await handleGetKidProfile();
+      
+    }
+  };
+  ///////////////////////////////
+  function handleInputChange(i:String , j:String) {
+    switch (i) {
+      case 'gender':
+        setProfile({...profile , gender : j});
+        break;
+    
+      case 'name':
+        setProfile({...profile , name : j});
+        break;
+
+      case 'age':
+        setProfile({...profile , age : j});
+        break;
+
+      case 'parent':
+        setProfile({...profile , parent : j});
+        break;
+    }
+  } 
+  const saving = false;
+  // const profile = {name : 'mouad' , gender : 'Boy' , age : 15 , parent : 'b' , _id : 189681 , school : 'hell noo'}
   return (
     <div className="w-full p-4 h-fit min-h-screen">
       <header className="flex items-center justify-between w-full">
@@ -126,7 +148,7 @@ export default function editKidPage() {
             className={`flex items-center justify-center w-20 h-20 rounded-full text-white text-4xl font-bold
               ${profile.gender === "Boy" ? "bg-blue-500" : profile.gender === "Girl" ? "bg-pink-500" : "bg-gray-400"}`}
           >
-            {firstLetter}
+            {/* {firstLetter} */}
           </div>
         </div>
         
@@ -141,12 +163,12 @@ export default function editKidPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex gap-3 w-full bg-[#a075eb4a] items-center rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl min-w-fit">Name:</h1>
+              <h1 className="font-semibold text-white jomhuria-regular text-2xl min-w-fit">Name:</h1>
               {isEditMode ? (
                 <Input
                   value={profile.name || ""}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  className="bg-white"
+                  className="bg-transparent"
                 />
               ) : (
                 <p className="text-sm font-medium">{profile.name}</p>
@@ -154,13 +176,13 @@ export default function editKidPage() {
             </div>
             
             <div className="flex gap-3 w-full bg-[#a075eb4a] items-center rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl min-w-fit">Age:</h1>
+              <h1 className="font-semibold text-white jomhuria-regular text-2xl min-w-fit">Age:</h1>
               {isEditMode ? (
                 <Input
                   type="number"
                   value={profile.age || ""}
                   onChange={(e) => handleInputChange("age", e.target.value)}
-                  className="bg-white"
+                  className="bg-transparent"
                 />
               ) : (
                 <p className="text-sm font-medium">{profile.age}</p>
@@ -168,13 +190,13 @@ export default function editKidPage() {
             </div>
             
             <div className="flex gap-3 w-full bg-[#a075eb4a] items-center rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl min-w-fit">Gender:</h1>
+              <h1 className="font-semibold text-white jomhuria-regular text-2xl min-w-fit">Gender:</h1>
               {isEditMode ? (
                 <Select
                   value={profile.gender || ""}
                   onValueChange={(value) => handleInputChange("gender", value)}
                 >
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-transparent">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
@@ -188,12 +210,12 @@ export default function editKidPage() {
             </div>
             
             <div className="flex gap-3 w-full bg-[#a075eb4a] items-center rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl min-w-fit">Parent:</h1>
+              <h1 className="font-semibold text-white jomhuria-regular text-2xl min-w-fit">Parent:</h1>
               {isEditMode ? (
                 <Input
                   value={profile.parent || ""}
                   onChange={(e) => handleInputChange("parent", e.target.value)}
-                  className="bg-white"
+                  className="bg-transparent"
                 />
               ) : (
                 <p className="text-sm font-medium">{profile.parent}</p>
@@ -201,12 +223,12 @@ export default function editKidPage() {
             </div>
             
             <div className="flex gap-3 w-full bg-[#a075eb4a] items-center rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl min-w-fit">School:</h1>
+              <h1 className="font-semibold text-white jomhuria-regular text-2xl min-w-fit">School:</h1>
               {isEditMode ? (
                 <Input
                   value={profile.school || ""}
                   onChange={(e) => handleInputChange("school", e.target.value)}
-                  className="bg-white"
+                  className="bg-transparent"
                 />
               ) : (
                 <p className="text-sm font-medium">{profile.school}</p>
@@ -214,8 +236,8 @@ export default function editKidPage() {
             </div>
             
             <div className="flex gap-3 w-full bg-[#a075eb4a] items-center rounded-lg p-4">
-              <h1 className="font-semibold text-[#a075ebc2] jomhuria-regular text-2xl min-w-fit">ID:</h1>
-              <p className="text-sm font-medium">{profile._id}</p>
+              <h1 className="font-semibold text-white jomhuria-regular text-2xl min-w-fit">ID:</h1>
+              <Input value={profile._id} readOnly/>
             </div>
           </div>
         </div>

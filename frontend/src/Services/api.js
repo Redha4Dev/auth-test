@@ -293,4 +293,30 @@ export const addMeal = async (meal) => {
   }
 }
 
+export const getMeals = async (name) => {
+  try {
+    const response = await api.get(`/meals/${name}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching meals:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+
+export const removeMeal = async (id) => {
+  try {
+    const response = await api.delete(`/meals/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error deleting meal:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
+  }
+}
+
 

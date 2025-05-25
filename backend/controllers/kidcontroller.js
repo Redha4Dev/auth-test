@@ -180,24 +180,47 @@ exports.updatekidinfo = catchError(async (req,res,next) => {
 
 
 exports.getKidsGraph = catchError(async (req,res,next)=>{
-    const gen = req.body.gender;
+    const name = req.query.name;
     const kidslist = await Kid.aggregate([
- [
-  {
+        {
     $match: {
-      gender: gen,// filter,
-      age: { $gte: 3, $lte: 5 }
+      school: "ilyestest1234"
     }
   },
-  {
-    $group: {
-      _id: "$age",         // Group by age value
-      count: { $sum: 1 }   // Count number of boys in each age
+        {
+  $group: {
+    _id: "$age",
+    boys: {
+      $sum: {
+        $cond: [
+          {
+            $and: [
+              { $eq: ["$gender", "Boy"] },
+              
+            ]
+          },
+          1,
+          0
+        ]
+      }
+    },
+    girls: {
+      $sum: {
+        $cond: [
+          {
+            $and: [
+              { $eq: ["$gender", "Girl"] },
+            ]
+          },
+          1,
+          0
+        ]
+      }
     }
   }
-]
+}
 
-])
+    ])
 console.log(kidslist);
 
     res.status(200).send({
@@ -250,6 +273,7 @@ exports.updateSkills = catchError(async (req, res, next) => {
   }
 
   res.status(200).send({
+
     status: 'success',
     kid: updatedKid
     

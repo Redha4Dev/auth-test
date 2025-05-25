@@ -102,18 +102,16 @@ class _KidDetailPageState extends State<KidDetailPage> {
     final Map<String, int> updatedSkills = {};
     skillValues.forEach((skill, value) {
       if (value > 0) {
-        // Only include skills that have been set
         updatedSkills[skill] = value.round();
       }
     });
 
-    // Use the same API service that works for grades
-    final success = await api.updateKidInfo(
-      kidId: widget.id,
-      updateData: {'skills': updatedSkills},
-    );
-
     print('📤 Sending skills update: $updatedSkills');
+
+    final success = await api.updateKidSkills(
+      kidId: widget.id,
+      skills: updatedSkills,
+    );
 
     if (success) {
       setState(() => isEditingSkills = false);
