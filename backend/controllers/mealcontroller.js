@@ -1,13 +1,14 @@
-const Meal  = require('../models/mealmodel');
-const catchError = require('../utils/catchError');
-const AppError = require('../utils/apperror');
+const Meal = require("../Models/mealmodel");
+const catchError = require("../utils/catchError");
+const AppError = require("../utils/apperror");
 
 exports.createMeal = catchError(async (req, res, next) => {
-  const { title, daysOfWeek, startTime, endTime, startRecur} = req.body;
+  const { title, daysOfWeek, startTime, endTime, startRecur, school } = req.body;
 
-  
   if (!title || !daysOfWeek || !startTime || !endTime) {
-    return next(new AppError('Please provide title, days, start and end times', 400));
+    return next(
+      new AppError("Please provide title, days, start and end times", 400)
+    );
   }
 
   const newMeal = await Meal.create({
@@ -16,14 +17,14 @@ exports.createMeal = catchError(async (req, res, next) => {
     startTime,
     endTime,
     startRecur: startRecur || '2025-01-01', 
+    school
 
   });
 
   res.status(201).send({
-    status: 'success',
-    
-      meal: newMeal
+    status: "success",
 
+    meal: newMeal,
   });
 });
 
@@ -38,3 +39,21 @@ exports.removeMeal = catchError(async (req, res, next) => {
       status: 'success',
     });
   });
+
+
+exports.getAllMeals = catchError(async (req, res, next) => {
+
+
+  const meal = await Meal.find( {school : req.params.id} )
+    
+
+  if (!meal) {
+    return next(new AppError('Meal not found', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    meal
+    
+  });
+});

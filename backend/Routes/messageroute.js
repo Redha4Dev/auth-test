@@ -17,3 +17,14 @@ router
     .patch()
     .delete( messageController.deleteMessage, authController.protectroute )
 module.exports = router  
+
+
+
+
+
+
+
+
+
+
+

@@ -21,6 +21,8 @@ import Inbox from "./Pages/Inbox";
 import Mail from "./Pages/Mail";
 import Settings from "./Pages/Settings";
 import Teachers from "./Pages/Users/Teachers";
+import EditKidPage from "./Pages/editKidPage";
+import EmailVerification from "./Pages/emailVerif";
 import TeacherProfile from "./Pages/Users/TeacherProfile";
 
 function App() {
@@ -47,6 +49,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<LandingPage />} path="/LandingPage" />
+        <Route element={<EmailVerification />} path="/verify/:code" />
         <Route element={<Login />} path="/Login" />
         <Route element={<SignUp />} path="/SignUp" />
         <Route element={<ForgotPassword />} path="/ForgotPassword" />
@@ -62,10 +65,10 @@ function App() {
           <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
           <Route element={<Teachers/>} path="Users/Teachers" />
           <Route element={<TeacherProfile/>} path="Users/Teachers/:id/:name" />
-          <Route element={<Scheduling />} path="/Scheduling" />
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />
           <Route element={<Mail/>} path="/Inbox/:id"/>
+          {/* <Route element={<EditKidPage />} path="/Users/Kids/:id/:name" /> */}
         </Route>
       </Routes>
     </BrowserRouter>

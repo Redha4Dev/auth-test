@@ -163,6 +163,8 @@ exports.removeKid = catchError(async (req, res, next) => {
 
 //to update kid info in the db
 exports.updatekidinfo = catchError(async (req,res,next) => {
+
+
     const updateData = req.body;
     const kid = await Kid.findOneAndUpdate(
         { _id : req.params.id},
@@ -239,13 +241,38 @@ exports.updateMarks = catchError(async (req, res, next) => {
   );
 
   if (!updatedKid) {
-    return res.status(404).json({
+    return res.status(404).send({
       status: 'fail',
       message: 'No kid found with that ID'
     });
   }
 
-  res.status(200).json({
+  res.status(200).send({
+    status: 'success',
+    kid: updatedKid
+    
+  });
+});
+
+
+exports.updateSkills = catchError(async (req, res, next) => {
+  const kidId = req.params.id;
+  const { skills } = req.body;
+
+  const updatedKid = await Kid.findByIdAndUpdate(
+    kidId,
+    { $set: { skills } },  
+    { new: true }  
+  );
+
+  if (!updatedKid) {
+    return res.status(404).send({
+      status: 'fail',
+      message: 'No kid found with that ID'
+    });
+  }
+
+  res.status(200).send({
     status: 'success',
     kid: updatedKid
     
