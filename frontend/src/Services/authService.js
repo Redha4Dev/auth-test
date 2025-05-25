@@ -7,7 +7,6 @@ const API_URL = "http://localhost:5000"; // Adjust based on your backend
 export const signUpAdmin = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/signup`, userData);
-    localStorage.setItem("token", response.data.token); // Save token
     return response.data;
   } catch (error) {
     console.error(error);
@@ -75,12 +74,14 @@ export const updateKidInfos = async (kidData) => {
   }
 };
 
-// export const fetchUserData = () => {
-//   try {
-//     // this to get the user info but the "/user" not ready now
-//     const response = await api.get("/user");
-//     console.log(response.data);
-//   } catch (error) {
-//     console.error("Error fetching user data:", error.response?.data?.message);
-//   }
-// }
+export const verfieCode = async () => {
+  try {
+    const response = await axios.post(`${API_URL}/verifyCode` , {
+      withCredentials : true,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

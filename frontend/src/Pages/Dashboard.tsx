@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllMessages, getKids } from "@/Services/api";
+import { getAllMessages, getChartData, getKids } from "@/Services/api";
 import { useAuth } from "@/context/AuthContext";
 import { getCurrentUser } from "@/Services/authService";
 
@@ -36,6 +36,10 @@ function Dashboard() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalTeachers, setTotalTeachers] = useState(0);
   const [totalParents, setTotalParents] = useState(0);
+  const [chartData, setChartData] = useState([
+    { grade: "3", boys: 7, girls: 8 },
+    { grade: "4", boys: 7, girls: 7 },
+  ]);
 
   const { user } = useAuth();
 
@@ -43,7 +47,6 @@ function Dashboard() {
     try {
       const response = await getKids(username, id);
       setKids(response.data);
-      setKidsNumber(40);
     } catch (error) {
       console.error("Error fetching kids:", error);
     }
@@ -58,6 +61,7 @@ function Dashboard() {
       setTotalParents(response.parents.length || 0);
       setTotalTeachers(response.teachers.length || 0);
       setTotalUsers(response.kids.length + response.parents.length + response.teachers.length || 0);
+      handleGetChatData();
     } catch (error) {
       console.error("Error fetching user:", error);
     }
@@ -71,22 +75,46 @@ function Dashboard() {
       console.error("Error fetching messages:", error);
     }
   };
+const handleGetChatData = async () => {
+  try {
+    const response = await getChartData(username);
 
-  useEffect(() => {
-    handleGetUser();
-  }, []);
+    console.log(chartData); // ❌ this will still log the old (empty) chartData
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  }
+};
 
-  useEffect(() => {
-    if (id) {
-      ListKids();
-    }
-  }, [id]);
+useEffect(() => {
+  console.log("Updated chartData:", chartData);
+}, [chartData]);
 
-  useEffect(() => {
-    if (username) {
-      handleGetAllMessages();
-    }
-  }, [username]);
+useEffect(() => {
+  handleGetUser(); // sets username
+}, []);
+
+useEffect(() => {
+  if (username) {
+    handleGetAllMessages();
+    handleGetChatData(); // ✅ safe now
+  }
+}, [username]);
+
+useEffect(() => {
+  if (id) {
+    ListKids();
+  }
+}, [id]);
+
+useEffect(() => {
+  const today = new Date().toISOString().substring(0, 10);
+  const count = messages.filter((msg) => msg.sentAt?.startsWith(today)).length;
+  setDailyMessages(count);
+}, [messages]);
+
+useEffect(() => {
+  console.log("Updated chartData:", chartData);
+}, [chartData]);
 
   useEffect(() => {
     const today = new Date().toISOString().substring(0, 10);
@@ -115,16 +143,16 @@ function Dashboard() {
     { browser: "Kids", visitors: kidsNumber, fill: "var(--color-blue)" },
   ];
 
-  const chartData = [
-    { grade: "3", boys: 7, girls: 8 },
-    { grade: "4", boys: 7, girls: 7 },
-    { grade: "5", boys: 8, girls: 8 },
-  ];
 
   const chartConfig = {
     boys: { label: "Boys", color: "hsl(var(--chart-1))" },
     girls: { label: "Girls", color: "hsl(var(--chart-2))" },
   };
+    const chartData1 = [
+    { grade: "3", boys: 7, girls: 8 },
+    { grade: "4", boys: 7, girls: 7 },
+  ];
+
 
   return (
     <FormProvider>
@@ -156,15 +184,16 @@ function Dashboard() {
                 <div className="col-span-3 grid gap-3 grid-cols-1 md:grid-cols-5">
                   <div className="md:col-span-3 col-span-5">
                     <MultipleBar
-                      chartData={chartData}
-                      chartConfig={chartConfig}
-                      xAxisKey="grade"
-                      bars={[{ dataKey: "boys" }, { dataKey: "girls" }]}
-                      title="Average Age of Kids"
-                      description="Per age group"
-                      footerTrendText="Age trend is consistent"
-                      footerNote="Ages for boys and girls from 3 to 6 years old"
-                    />
+  chartData={chartData}
+  chartConfig={chartConfig}
+  xAxisKey="grade"
+  bars={[{ dataKey: "boys" }, { dataKey: "girls" }]}
+  title="Average Age of Kids"
+  description="Per age group"
+  footerTrendText="Age trend is consistent"
+  footerNote="Ages for boys and girls from 3 to 6 years old"
+/>
+
                   </div>
 
                   <div className="md:col-span-2 col-span-5">

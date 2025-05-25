@@ -78,8 +78,7 @@ function Kids() {
         setUserId(response._id);
         setKids((prev) => ({
           ...prev,
-          parent: response.name,
-          id: response._id,
+          school: response.name,
         }));
       } catch (error) {
         console.error("Error fetching user:", error);

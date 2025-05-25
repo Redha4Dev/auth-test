@@ -17,7 +17,6 @@ const StepDescription = [
 function SignUp() {
   const { step, currentStepIndex, prevStep, nextStep } = useMultistepForm([
     <Step1 />,
-    <Step2 />,
     <Step3 />,
   ]);
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -54,18 +53,6 @@ function SignUp() {
               variant="outline"
               disabled={currentStepIndex < 1}
             >
-              <School />
-            </Button>
-            <Progress value={currentStepIndex >= 2 ? 100 : 0} />
-            <Button
-              className={`rounded-full z-10  p-2 ${
-                currentStepIndex >= 2
-                  ? "border-[3px] border-violet-600"
-                  : "border-none"
-              }`}
-              variant="outline"
-              disabled={currentStepIndex < 2}
-            >
               <Shield />
             </Button>
           </div>
@@ -86,9 +73,9 @@ function SignUp() {
           <Button
             type="submit"
             className="flex-1"
-            disabled={currentStepIndex === 2}
+            disabled={currentStepIndex === 1}
           >
-            {currentStepIndex === 2 ? "Finish" : "Next"}
+            {currentStepIndex === 1 ? "Finish" : "Next"}
           </Button>
         </div>
       </form>
