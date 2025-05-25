@@ -30,11 +30,8 @@ const kidschema = mongoose.Schema({
     },
     classRoom:{
         type: Number,
-<<<<<<< HEAD
         // required: [true, 'Please enter you class please'],
 
-=======
->>>>>>> 1646a6d8f68182549bdf09d253e69d50f3987170
         min: [1, 'class must be greater than 0'],
     },
     
