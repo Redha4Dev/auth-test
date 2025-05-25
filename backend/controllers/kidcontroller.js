@@ -273,6 +273,7 @@ exports.updateSkills = catchError(async (req, res, next) => {
   }
 
   res.status(200).send({
+
     status: 'success',
     kid: updatedKid
     
