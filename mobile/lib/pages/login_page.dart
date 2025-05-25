@@ -12,14 +12,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final ApiService _apiService = ApiService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width; // Gives the width
     double screenHeight = MediaQuery.of(context).size.height;
-
-    final ApiService apiService = ApiService();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -67,55 +69,29 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: screenHeight * .01,
                 ),
-                myTextField(
-                  labelText: 'Email',
-                  icon: Icons.email,
-                  controller: emailController,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      myTextField(
+                        labelText: 'Email',
+                        icon: Icons.email,
+                        controller: _emailController,
+                      ),
+                      SizedBox(
+                        height: screenHeight * .01,
+                      ),
+                      myTextField(
+                          labelText: 'Password',
+                          controller: _passwordController,
+                          icon: Icons.password),
+                    ],
+                  ),
                 ),
-                SizedBox(
-                  height: screenHeight * .01,
-                ),
-                myTextField(
-                    labelText: 'Password',
-                    controller: passwordController,
-                    icon: Icons.password),
                 SizedBox(
                   height: screenHeight * .05,
                 ),
-                myOutlinedButton(
-                    text: "Submit",
-                    onTap: () async {
-                      print('🔐 Attempting to log in...');
-                      final response = await apiService.loginUser(
-                          'direction@esi-sba.dz', 'querty');
-
-                      if (response != null) {
-                        print('✅ Login successful, token saved.');
-
-                        final userData = await apiService.getUserFromToken();
-                        if (userData != null) {
-                          print(
-                              '🧾 User extracted from token: ${userData['id']}, ${userData['name']}');
-
-                          final parentInfo = await apiService.getParentInfo(
-                              userData['id'], userData['name']);
-                          print('👨‍👩‍👧 Parent Info: $parentInfo');
-                        } else {
-                          print('❌ Failed to extract user info from token.');
-                        }
-
-                        if (mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NavigationSpine()),
-                          );
-                        }
-                      } else {
-                        print('❌ Login failed, cannot fetch parent info.');
-                        // You could show a snackbar here to alert the user
-                      }
-                    }),
+                myOutlinedButton(text: "Submit", onTap: _handleLogin),
                 SizedBox(
                   height: screenHeight * .02,
                 ),
@@ -151,5 +127,62 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final response = await _apiService.loginUser(
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (!mounted) return;
+
+      if (response != null) {
+        if (response['error'] == true) {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response['message'] ?? 'Login failed'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (response['token'] != null) {
+          // Login successful
+          final userData = await _apiService.getUserFromToken();
+          if (userData != null) {
+            final parentData = await _apiService.getParentInfo(
+              userData['id'],
+              userData['name'],
+            );
+
+            if (parentData != null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavigationSpine(),
+                ),
+              );
+            }
+          }
+        }
+      } else {
+        // Show generic error
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
