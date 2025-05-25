@@ -24,6 +24,8 @@ import Teachers from "./Pages/Users/Teachers";
 import EditKidPage from "./Pages/editKidPage";
 import EmailVerification from "./Pages/emailVerif";
 import TeacherProfile from "./Pages/Users/TeacherProfile";
+import EditParentPage from "./Pages/editParentPage";
+import EditTeacherPage from "./Pages/editTeacherPage";
 
 function App() {
 
@@ -60,15 +62,17 @@ function App() {
           <Route element={<Dashboard />} path="/Dashboard" />
           <Route element={<Settings />} path="/settings"  />
           <Route element={<Kids />} path="Users/Kids" />
-          <Route element={<KidProfile />} path="Users/Kids/:id/:name" />
+          {/* <Route element={<KidProfile />} path="Users/Kids/:id/:name" /> */}
           <Route element={<Parents />} path="Users/Parents" />
           <Route element={<ParentProfile/>} path="Users/Parents/:id/:name" />
+          <Route element={<EditParentPage/>} path="Users/Parents/:id/:name/edit" />
           <Route element={<Teachers/>} path="Users/Teachers" />
           <Route element={<TeacherProfile/>} path="Users/Teachers/:id/:name" />
+          <Route element={<EditTeacherPage/>} path="Users/Teachers/:id/:name/edit" />
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />
           <Route element={<Mail/>} path="/Inbox/:id"/>
-          <Route element={<EditKidPage />} path="/Users/Kids/:id/:name/edit" /> 
+          <Route element={<EditKidPage />} path="/Users/Kids/:id/:name" /> 
         </Route>
       </Routes>
     </BrowserRouter>

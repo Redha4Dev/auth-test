@@ -99,10 +99,8 @@ function Teachers() {
                         <DropdownMenuItem>
                           <Link className="w-full" to={`/Users/Teachers/${teacher.id}/${teacher.name}`}>View</Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => alert(`Editing ${teacher.name}`)}
-                        >
-                          Edit
+                        <DropdownMenuItem>
+                        <Link className="w-full" to={`/Users/Teachers/${teacher.id}/${teacher.name}/edit`}>Edit</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={() => handleRemoveTeacher(teacher)}

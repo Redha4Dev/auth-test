@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const User = require('../Models/usermodel');
 const Kid = require('../Models/kidmodel');
 const catchError = require('../utils/catchError.js')
+const AppError = require('../utils/apperror.js')
 
 
-exports.updateme = catchError(async (req, res , next) =>{
+exports.updateParent = catchError(async (req, res , next) =>{
     //get the user baesd on his unique id
-    const user = await User.findById({ _id: req.body.id })
+    const user = await User.findOne({ _id: req.body.id , role : 'parent'})
 
     if (!user) {
         return next( new AppError('user not exists please signUp or LogIn to continue', 404))

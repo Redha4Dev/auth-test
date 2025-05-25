@@ -262,7 +262,7 @@ function Kids() {
                           <DropdownMenuItem>
                             <Link
                               className="w-full"
-                              to={`/Users/Kids/${child.id}/${child.name}/edit?edit=1`}
+                              to={`/Users/Kids/${child.id}/${child.name}?edit=1`}
                             >
                               Edit
                             </Link>

@@ -359,4 +359,48 @@ class ApiService {
       return false;
     }
   }
+
+  // Update kid skills
+  Future<bool> updateKidSkills({
+    required String kidId,
+    required Map<String, dynamic> skills,
+  }) async {
+    final url = Uri.parse('http://10.0.2.2:5000/admin/kid/$kidId');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'skills': skills}),
+      );
+      if (response.statusCode == 200) {
+        print('✅ Skills updated successfully: ${response.body}');
+        return true;
+      } else {
+        print('⚠️ Failed to update skills: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error updating skills: $e');
+      return false;
+    }
+  }
+
+  // Fetch meals for a school
+  Future<List<Map<String, dynamic>>?> getMeals(String schoolId) async {
+    final url = Uri.parse('http://10.0.2.2:5000/meals/$schoolId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('✅ Meals fetched successfully: ${data['meal']}');
+        return List<Map<String, dynamic>>.from(data['meal']);
+      } else {
+        print('⚠️ Failed to fetch meals: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('❌ Error fetching meals: $e');
+      return null;
+    }
+  }
 }
