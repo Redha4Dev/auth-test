@@ -9,7 +9,7 @@ const router = express.Router();
 router
   .route("/profile")
   .get(parentControllers.getParentInfo)
-
+  .post(parentControllers.getParentInfo)
 
 router
   .route("/")
