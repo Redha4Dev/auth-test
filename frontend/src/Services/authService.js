@@ -75,6 +75,34 @@ export const updateKidInfos = async (kidData) => {
   }
 };
 
+// Update Parent Information
+export const updateParentInfos = async (parentData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/updateParentData`, parentData, {
+      withCredentials: true,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating parent data:', error);
+    throw error;
+  }
+};
+
+// Update Teacher Information  
+export const updateTeacherInfos = async (teacherData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/updateTeacherData`, teacherData, {
+      withCredentials: true,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating teacher data:', error);
+    throw error;
+  }
+};
+
 // export const fetchUserData = () => {
 //   try {
 //     // this to get the user info but the "/user" not ready now
