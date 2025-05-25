@@ -68,7 +68,7 @@ function App() {
           <Route element={<Meals />} path="/Meals" />
           <Route element={<Inbox/>} path="/Inbox" />
           <Route element={<Mail/>} path="/Inbox/:id"/>
-          {/* <Route element={<EditKidPage />} path="/Users/Kids/:id/:name" /> */}
+          <Route element={<EditKidPage />} path="/Users/Kids/:id/:name/edit" /> 
         </Route>
       </Routes>
     </BrowserRouter>
