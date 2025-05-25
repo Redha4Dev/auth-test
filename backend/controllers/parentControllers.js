@@ -56,3 +56,18 @@ exports.getParents = catchError(async (req, res, next) => {
         parents : admin.parents
     });
 });
+
+exports.getParentId = catchError(async (req,res) => {
+    const name = req.params.id;
+    
+    const user = await User.findOne({name , role : 'parent'})
+
+    if (!user) {
+    return res.status(401).json({ message: 'Parent do not exist' });
+  }
+    const id = user.id
+res.status(200).json({
+    status: 'success',
+    id
+  });
+})

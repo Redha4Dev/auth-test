@@ -122,3 +122,19 @@ exports.removeTeacher= catchError(async (req, res, next) => {
             message: 'teacher deleted successfully',
         });
 })
+
+
+exports.getTeacherId = catchError(async (req,res) => {
+    const name = req.params.id;
+    
+    const user = await User.findOne({name , role : 'teacher'})
+
+    if (!user) {
+    return res.status(401).json({ message: 'User name does not exist!' });
+  }
+    const id = user.id
+    res.status(200).json({
+    status: 'success',
+    id
+  });
+})

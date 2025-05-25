@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('../controllers/authentication');
 const teacherController = require('../controllers/teachercontrollers');
 const kidcontroller = require('../controllers/kidcontroller');
+const { route } = require('./mealroute');
 
 //start the route
 const router = express.Router()
@@ -54,6 +55,10 @@ router
     .post()
     .patch(kidcontroller.updateMarks)
     .delete()
+
+router
+    .route('/:id')
+    .get(teacherController.getTeacherId)
 
 
     module.exports = router

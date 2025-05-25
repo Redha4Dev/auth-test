@@ -39,3 +39,18 @@ exports.updateSchoolInfo = catchError(async(req,res,next) =>{
         message : 'user info updated'
     })
 })
+
+exports.getSchoolId = catchError(async (req,res) => {
+    const name = req.params.id;
+    
+    const user = await User.findOne({name , role : 'admin'})
+
+    if (!user) {
+    return res.status(401).json({ message: 'School do not exist!' });
+  }
+    const id = user.id
+res.status(200).json({
+    status: 'success',
+    id
+  });
+})

@@ -14,7 +14,7 @@ const router = express.Router()
 
 router
     .route('/dashboard')
-    .get(adminControllers.getschoolinfo )
+    .get(adminControllers.getschoolinfo)
     .post()
     .patch()
     .delete()
@@ -91,6 +91,13 @@ router
     .get(teacherController.getTeacher)
 
     router.post('/send-email', sendEmail)
+
+    router
+    .route('/:id')
+    .get(adminControllers.getSchoolId)
+    .post()
+    .patch()
+    .delete()
        
 
     module.exports = router

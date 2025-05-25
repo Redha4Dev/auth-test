@@ -18,6 +18,11 @@ router
   .patch(parentControllers.updateParent)  
   // .delete(parentControllers.removeParent);
 
+router
+  .route("/:id")
+  .get(parentControllers.getParentId)
+  .post()
+
 
 router  
   .route("/kids")
