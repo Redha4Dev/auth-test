@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kidergarten/components/student_card.dart';
 import 'package:kidergarten/components/timetable.dart';
+import 'package:kidergarten/components/meal_table.dart';
 import 'package:kidergarten/global.dart';
 import 'package:kidergarten/services/api_service.dart';
 import 'package:kidergarten/pages/KidDetailPage.dart';
@@ -15,9 +16,11 @@ class TeacherDashboard extends StatefulWidget {
 class _TeacherDashboardState extends State<TeacherDashboard> {
   bool showTimetable = false;
   bool showStudentList = false;
+  bool showMealTable = false;
   int selectedClassIndex = 0;
   String searchQuery = "";
   String selectedSearchCriterion = "name";
+  List<Map<String, dynamic>>? meals;
 
   final apiService = ApiService();
 
@@ -103,6 +106,21 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _fetchMeals();
+  }
+
+  Future<void> _fetchMeals() async {
+    final mealData = await apiService.getMeals('ilyestest1234');
+    if (mealData != null) {
+      setState(() {
+        meals = mealData;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> filteredStudents =
         studentsPerClass[selectedClassIndex]
@@ -182,6 +200,31 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 setState(() => showTimetable = expanded),
             children: [
               MyTimeTable(days: days, timeSlots: timeSlots, schedule: schedule)
+            ],
+          ),
+          ExpansionTile(
+            backgroundColor:
+                showMealTable ? const Color(0xFF7B61FF) : Colors.white,
+            collapsedBackgroundColor: Colors.white,
+            title: Text(
+              "Meal Schedule",
+              style: TextStyle(
+                color: showMealTable ? Colors.white : Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onExpansionChanged: (expanded) =>
+                setState(() => showMealTable = expanded),
+            children: [
+              if (meals != null)
+                MealTable(meals: meals!)
+              else
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
             ],
           ),
           ExpansionTile(

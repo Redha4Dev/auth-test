@@ -384,4 +384,23 @@ class ApiService {
       return false;
     }
   }
+
+  // Fetch meals for a school
+  Future<List<Map<String, dynamic>>?> getMeals(String schoolId) async {
+    final url = Uri.parse('http://10.0.2.2:5000/meals/$schoolId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('✅ Meals fetched successfully: ${data['meal']}');
+        return List<Map<String, dynamic>>.from(data['meal']);
+      } else {
+        print('⚠️ Failed to fetch meals: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('❌ Error fetching meals: $e');
+      return null;
+    }
+  }
 }
