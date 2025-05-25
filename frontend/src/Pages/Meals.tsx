@@ -33,6 +33,9 @@ import Wrap from "../assets/wrap.svg";
 import Muffins from "../assets/muffins.svg";
 import Rice from "../assets/rice.svg";
 import Smoothie from "../assets/smoothie.svg";
+import Bourak from "../assets/bourak.svg";
+import Soup from "../assets/Soup.svg";
+import { title } from "process";
 
 const daysOfWeekMap = [
   { label: "Sun", value: 0 },
@@ -51,6 +54,8 @@ const mealsData = [
   { title: "Mini Muffins", desc: "Snack", img: Muffins },
   { title: "Rice", desc: "Lunch", img: Rice },
   { title: "Smoothie", desc: "Snack", img: Smoothie },
+  { title: "Bourak", desc: "Lunch", img: Bourak },
+  { title: "Soup", desc: "Breakfast", img: Soup },
 ];
 
 function Meals() {

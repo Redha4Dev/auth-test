@@ -64,10 +64,6 @@ function Parents() {
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Parents List</h2>
-            <Input
-              placeholder="Search Parents..."
-              className="w-64"
-            />
           </div>
 
           {/* Table */}
