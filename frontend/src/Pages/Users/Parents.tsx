@@ -114,10 +114,8 @@ function Parents() {
                           <DropdownMenuItem>
                             <Link className="w-full" to={`/Users/Parents/${parent.id}/${parent.name}`}>View</Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => alert(`Editing ${parent.name}`)}
-                          >
-                            Edit
+                          <DropdownMenuItem>
+                          <Link className="w-full" to={`/Users/Parents/${parent.id}/${parent.name}/edit`}>Edit </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleRemoveParent(parent)}
