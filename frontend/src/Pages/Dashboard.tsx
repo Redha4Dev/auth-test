@@ -30,7 +30,7 @@ function Dashboard() {
   const [id, setId] = useState(""); 
   const [kids, setKids] = useState({});
   const [kidsNumber, setKidsNumber] = useState(0);
-  const [UsersNumber, setUsersNumber] = useState(0); // Update with actual value if available
+  const [UsersNumber, setUsersNumber] = useState(0); 
   const [messages, setMessages] = useState([]);
   const [dailyMessages, setDailyMessages] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -79,7 +79,7 @@ const handleGetChatData = async () => {
   try {
     const response = await getChartData(username);
 
-    console.log(chartData); // ❌ this will still log the old (empty) chartData
+    console.log(chartData); 
   } catch (error) {
     console.error("Error fetching messages:", error);
   }
@@ -90,13 +90,13 @@ useEffect(() => {
 }, [chartData]);
 
 useEffect(() => {
-  handleGetUser(); // sets username
+  handleGetUser(); 
 }, []);
 
 useEffect(() => {
   if (username) {
     handleGetAllMessages();
-    handleGetChatData(); // ✅ safe now
+    handleGetChatData();
   }
 }, [username]);
 

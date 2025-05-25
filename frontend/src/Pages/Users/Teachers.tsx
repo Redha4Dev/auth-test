@@ -17,7 +17,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
-import { deleteTeacher, getAllTeacher } from '@/Services/api'; // 🧠 Make sure this exists!
+import { deleteTeacher, getAllTeacher } from '@/Services/api'; 
 import { getCurrentUser } from '@/Services/authService';
 import { ChevronLeft, ChevronRight, MoreVertical } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

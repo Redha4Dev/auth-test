@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { getTeacher } from "@/Services/api"; // ✅ Use getTeacher instead
+import { getTeacher } from "@/Services/api";
 import { ChevronLeft } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";

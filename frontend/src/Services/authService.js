@@ -74,46 +74,18 @@ export const updateKidInfos = async (kidData) => {
   }
 };
 
-// // Update Parent Information
-// export const updateParentInfos = async (parentData) => {
-//   try {
-//     const response = await axios.patch(`${API_URL}/parent`, parentData, {
-//       withCredentials: true,
-//     });
-//     console.log(response);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error updating parent data:', error);
-//     throw error;
-//   }
-// };
-
-// // Update Teacher Information  
-// export const updateTeacherInfos = async (teacherData) => {
-//   try {
-//     const response = await axios.patch(`${API_URL}/teacher`, teacherData, {
-//       withCredentials: true,
-//     });
-//     console.log(response);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error updating teacher data:', error);
-//     throw error;
-//   }
-// };
 
 
-// Update Parent Information - CORRECTED
+// Update Parent Information
 export const updateParentInfos = async (parentData) => {
   try {
     console.log('Sending parent data:', parentData);
     
-    // Send the data with 'id' field instead of '_id' to match backend expectation
     const dataToSend = {
       ...parentData,
-      id: parentData._id // Convert _id to id for backend
+      id: parentData._id
     };
-    delete dataToSend._id; // Remove _id to avoid confusion
+    delete dataToSend._id; 
     
     console.log('Data being sent:', dataToSend);
     
@@ -131,17 +103,16 @@ export const updateParentInfos = async (parentData) => {
   }
 };
 
-// Update Teacher Information - CORRECTED
+// Update Teacher Information
 export const updateTeacherInfos = async (teacherData) => {
   try {
     console.log('Sending teacher data:', teacherData);
     
-    // Send the data with 'id' field instead of '_id' to match backend expectation
     const dataToSend = {
       ...teacherData,
-      id: teacherData._id // Convert _id to id for backend
+      id: teacherData._id 
     };
-    delete dataToSend._id; // Remove _id to avoid confusion
+    delete dataToSend._id; 
     
     console.log('Data being sent:', dataToSend);
     
@@ -159,13 +130,3 @@ export const updateTeacherInfos = async (teacherData) => {
   }
 };
 
-
-// export const fetchUserData = () => {
-//   try {
-//     // this to get the user info but the "/user" not ready now
-//     const response = await api.get("/user");
-//     console.log(response.data);
-//   } catch (error) {
-//     console.error("Error fetching user data:", error.response?.data?.message);
-//   }
-// }

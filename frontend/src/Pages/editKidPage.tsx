@@ -50,7 +50,6 @@ export default function editKidPage() {
     handleGetKidProfile();
     navigate(-1);
   }
-  ////////////////////////////////
   const handleSave = async () => {
     try {
       
@@ -92,7 +91,6 @@ export default function editKidPage() {
       
     }
   };
-  ///////////////////////////////
   function handleInputChange(i:String , j:String) {
     switch (i) {
       case 'gender':

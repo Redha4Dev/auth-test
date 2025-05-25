@@ -7,7 +7,7 @@ const api = axios.create({
 export const getKids = async (name, id) => {
   try {
     const response = await api.get(`/parent/kids`, {
-      params: { name, id }, // Send parameters in the query string
+      params: { name, id }, 
     });
     return response.data;
   } catch (error) {
@@ -22,7 +22,7 @@ export const getKids = async (name, id) => {
 export const getKid = async (name, id) => {
   try {
     const response = await api.get(`/admin/manage-kids/`, {
-      params: { name, id, t: new Date().getTime() }, // added timestamp to prevent caching
+      params: { name, id, t: new Date().getTime() }, 
       headers: {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
@@ -58,7 +58,6 @@ export const ForgotPassword = async (email) => {
         try {
           console.log('first')
           const res = await axios.post('http://localhost:5000/forgotPassword', { email });
-        //   const res = await axios.post('/api/v1/users/forgotPassword', { email });
           console.log('good')
         } catch (err) {
           console.log('bad')
@@ -102,7 +101,7 @@ export const updatePassword = async (userId, currentPassword, newPassword, confi
 export const getParents = async (name,id) => {
   try {
     const response = await api.get(`/admin/parent`, {
-      params: { name, id }, // Send parameters in the query string
+      params: { name, id },
     });
     return response.data;
   } catch (error) {

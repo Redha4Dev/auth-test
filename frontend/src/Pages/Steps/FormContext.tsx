@@ -14,10 +14,8 @@ interface FormContextType {
   setFormData: (data: FormData) => void;
 }
 
-// Create the context with default values
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
-// Custom hook to use the context
 export const useFormData = () => {
   const context = useContext(FormContext);
   if (!context) {
@@ -26,7 +24,6 @@ export const useFormData = () => {
   return context;
 };
 
-// Provider component
 interface FormProviderProps {
   children: ReactNode;
 }

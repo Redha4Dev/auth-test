@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { getTeacher } from "@/Services/api";
 import { updateTeacherInfos } from "@/Services/authService";
 import { ChevronLeft, Edit2, Save, X } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,15 +65,13 @@ export default function EditTeacherPage() {
 
       // Handle the actual response format from your backend
       if (response && response.user) {
-        // Backend returns { user: updatedUser }
         setProfile(response.user);
         setSearchParam({});
         alert('Profile updated successfully!');
       } else if (response) {
-        // Any other successful response
         setSearchParam({});
         alert('Profile updated successfully!');
-        await handleGetTeacherProfile(); // Refresh the data
+        await handleGetTeacherProfile(); 
       } else {
         throw new Error('No response received');
       }

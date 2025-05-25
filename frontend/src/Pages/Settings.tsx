@@ -29,10 +29,7 @@ import { Button } from "@/components/ui/button";
 import { 
   User, 
   Lock, 
-  Bell, 
-  Palette, 
-  Shield,
-  Mail
+  Bell,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
