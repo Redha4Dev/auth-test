@@ -3,7 +3,7 @@ const catchError = require("../utils/catchError");
 const AppError = require("../utils/apperror");
 
 exports.createMeal = catchError(async (req, res, next) => {
-  const { title, daysOfWeek, startTime, endTime, startRecur } = req.body;
+  const { title, daysOfWeek, startTime, endTime, startRecur, school } = req.body;
 
   if (!title || !daysOfWeek || !startTime || !endTime) {
     return next(
